@@ -1,5 +1,6 @@
+import 'package:app/views/inventory.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'package:app/views/home.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _SearchPageState extends State<SearchPage> {
           {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const SearchPage()),
+              MaterialPageRoute(builder: (context) => const InventoryPage()),
             );
           }
           break;
