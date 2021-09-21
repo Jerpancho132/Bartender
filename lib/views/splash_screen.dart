@@ -3,6 +3,8 @@ import 'dart:async';
 import 'home.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key key}) : super(key: key);
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -15,23 +17,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTime() async {
-    var duration = Duration(seconds: 3);
+    var duration = const Duration(seconds: 3);
     return Timer(duration, navigateToDeviceScreen);
   }
 
   navigateToDeviceScreen() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: new Color(0xFFD98C82),
+        backgroundColor: const Color(0xFFD98C82),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const <Widget>[
               Text("Bartender's",
                   style: TextStyle(
                       color: Colors.white, fontSize: 24, fontFamily: "Roboto")),
