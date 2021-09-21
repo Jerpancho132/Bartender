@@ -3,23 +3,47 @@ import 'package:app/views/search.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      switch (index) {
+        case 1:
+          {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchPage()),
+            );
+          }
+          break;
+        case 2:
+          {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchPage()),
+            );
+          }
+          break;
+        case 3:
+          {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchPage()),
+            );
+          }
+          break;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 0;
-    void _onItemTapped(int index) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SearchPage()),
-      );
-    }
-
     return Scaffold(
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
@@ -107,21 +131,21 @@ class _HomePageState extends State<HomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            label: ('Home'),
             backgroundColor: Color(0xffA63542),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
+              icon: Icon(Icons.search),
+              label: ('Search'),
+              backgroundColor: Color(0xffA63542)),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            title: Text('Favorites'),
-          ),
+              icon: Icon(Icons.star),
+              label: ('Favorites'),
+              backgroundColor: Color(0xffA63542)),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            title: Text('IDK'),
-          ),
+              icon: Icon(Icons.shopping_cart),
+              label: ('Inventory'),
+              backgroundColor: Color(0xffA63542)),
         ],
         currentIndex: _selectedIndex,
         unselectedItemColor: const Color(0xffE8DFDA),
