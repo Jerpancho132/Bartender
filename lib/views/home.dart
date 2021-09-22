@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                children: [
+                children: const [
                   RecipeCard(
                     title: 'Cocktail 2',
                     rating: '4.9',
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                children: [
+                children: const [
                   RecipeCard(
                     title: 'Cocktail 2',
                     rating: '4.9',
