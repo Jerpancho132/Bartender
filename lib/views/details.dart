@@ -4,10 +4,10 @@ class Details extends StatefulWidget {
   const Details({Key? key}) : super(key: key);
 
   @override
-  _DetailState createState() => _DetailState();
+  _DetailsState createState() => _DetailsState();
 }
 
-class _DetailState extends State<Details> {
+class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
     return Container();

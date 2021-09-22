@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/views/search.dart';
 import 'package:app/models/inventory_model.dart';
+import 'package:app/views/Widgets/inventory_card.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class InventoryPage extends StatefulWidget {
 
 class _InventoryState extends State<InventoryPage> {
   final int _selectedIndex = 3;
+
+  get onPressed => null;
   void _onItemTapped(int index) {
     setState(() {
       switch (index) {
@@ -43,7 +46,10 @@ class _InventoryState extends State<InventoryPage> {
     });
   }
 
-  List<MyInventory> items = <MyInventory>[];
+  List<MyInventory> items = <MyInventory>[
+    MyInventory("orange", 3),
+    MyInventory("lemon", 2)
+  ];
   String ing = "";
   int amnt = 0;
   final TextEditingController iCtrl = TextEditingController();
@@ -58,44 +64,23 @@ class _InventoryState extends State<InventoryPage> {
             Row(children: [
               Expanded(
                   flex: 3,
-                  child: TextField(
-                    decoration: const InputDecoration(hintText: "Ingredient"),
-                    controller: iCtrl,
-                    onChanged: (text) {
-                      setState(() {
-                        ing = text;
-                      });
-                    },
-                  )),
+                  child:
+                      ingredientsTextField()), //refactored widget for inputting ingredients
               const Padding(
                   padding: EdgeInsets.only(
                       right: 10)), //seperate ingredient and amount
               Expanded(
-                  child: TextField(
-                decoration: const InputDecoration(hintText: "0"),
-                controller: aCtrl,
-                onChanged: (text) {
-                  setState(() {
-                    amnt = text.isNotEmpty ? int.parse(text) : 0;
-                  });
-                },
-              )),
+                  child:
+                      amountTextfield()), //refactored widget for amount of items in bottom
               Expanded(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          iCtrl.clear();
-                          aCtrl.clear();
-                          items.add(MyInventory(ing, amnt));
-                        });
-                      },
-                      child: const Icon(Icons.add)))
+                  child: insertItemButton()) //refactored widget find in bottom
             ]),
             Expanded(
                 child: ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      return InventoryList(
+                      return InventoryCard(
+                          //imported from views/Widgets/inventory_card.dart
                           item: items[index].getIngredient,
                           amount: items[index].getAmount);
                     })),
@@ -127,28 +112,35 @@ class _InventoryState extends State<InventoryPage> {
           onTap: _onItemTapped,
         ));
   }
-}
 
-//template for adding an inventory
-class InventoryList extends StatefulWidget {
-  final String item;
-  final int amount;
-  const InventoryList({
-    Key? key,
-    required this.item,
-    required this.amount,
-  }) : super(key: key);
-  @override
-  _InventoryListState createState() => _InventoryListState();
-}
-
-class _InventoryListState extends State<InventoryList> {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text('${widget.item} with amount ${widget.amount}'),
-      ),
-    );
-  }
+  //widget to insert ingredients you own.
+  Widget ingredientsTextField() => TextField(
+        decoration: const InputDecoration(hintText: "Ingredient"),
+        controller: iCtrl,
+        onChanged: (text) {
+          setState(() {
+            ing = text;
+          });
+        },
+      );
+  //widget to insert given amount of ingredient.
+  Widget amountTextfield() => TextField(
+        decoration: const InputDecoration(hintText: "0"),
+        controller: aCtrl,
+        onChanged: (text) {
+          setState(() {
+            amnt = text.isNotEmpty ? int.parse(text) : 0;
+          });
+        },
+      );
+  //widget to output given ingredient and amount in list.
+  Widget insertItemButton() => ElevatedButton(
+      onPressed: () {
+        setState(() {
+          iCtrl.clear();
+          aCtrl.clear();
+          items.add(MyInventory(ing, amnt));
+        });
+      },
+      child: const Icon(Icons.add));
 }
