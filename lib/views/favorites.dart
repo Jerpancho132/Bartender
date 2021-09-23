@@ -1,17 +1,17 @@
-import 'package:app/views/favorites.dart';
+import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+class FavoritesPage extends StatefulWidget {
+  const FavoritesPage({Key? key}) : super(key: key);
 
   @override
-  _SearchPageState createState() => _SearchPageState();
+  FavoritesPageState createState() => FavoritesPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
-  final int _selectedIndex = 1;
+class FavoritesPageState extends State<FavoritesPage> {
+  final int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,11 +24,11 @@ class _SearchPageState extends State<SearchPage> {
             );
           }
           break;
-        case 2:
+        case 1:
           {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const FavoritesPage()),
+              MaterialPageRoute(builder: (context) => const SearchPage()),
             );
           }
           break;
@@ -54,25 +54,9 @@ class _SearchPageState extends State<SearchPage> {
           children: const [
             Icon(Icons.local_drink),
             SizedBox(width: 10),
-            Text('Search Page'),
+            Text('Favorites'),
           ],
         ),
-      ),
-      body: ListView(
-        children: const [
-          Text("Filter",
-              style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 36,
-                  letterSpacing: 2,
-                  color: Color(0xffA63542))),
-          Text("Popular",
-              style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 36,
-                  letterSpacing: 2,
-                  color: Color(0xffA63542))),
-        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xffA63542),

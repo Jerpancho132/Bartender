@@ -3,6 +3,7 @@ import 'package:app/views/home.dart';
 import 'package:app/views/search.dart';
 import 'package:app/models/inventory_model.dart';
 import 'package:app/views/Widgets/inventory_card.dart';
+import 'package:app/views/favorites.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _InventoryState extends State<InventoryPage> {
           {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const SearchPage()),
+              MaterialPageRoute(builder: (context) => const FavoritesPage()),
             );
           }
           break;
