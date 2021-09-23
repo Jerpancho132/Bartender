@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class Details extends StatefulWidget {
@@ -13,6 +15,7 @@ class _DetailsState extends State<Details> {
   String imgUrl =
       "https://www.thecocktaildb.com/images/media/drink/3xgldt1513707271.jpg";
   List<String> ingredients = ["Gin", "Lime Juice", "Sugar Syrup", "Lime"];
+  List<String> instructions = ["step1", "step2", "step3", "step4"];
   //
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class _DetailsState extends State<Details> {
             icon: const Icon(Icons.arrow_back)),
         title: Row(
           children: [
-            const Expanded(child: Text("Test")),
+            Expanded(child: Text(title)),
             Expanded(
                 child: IconButton(
               onPressed: () {},
@@ -36,6 +39,7 @@ class _DetailsState extends State<Details> {
         ),
       ),
       body: Column(
+        //image detail
         children: [
           Expanded(
               child: Container(
@@ -43,17 +47,65 @@ class _DetailsState extends State<Details> {
                 image: DecorationImage(
                     fit: BoxFit.fill, image: NetworkImage(imgUrl))),
           )),
+          //ingredients section
+          Padding(
+              padding: EdgeInsets.all(20),
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "Ingredients",
+                  style: TextStyle(
+                      color: Color(0xFF2A8676),
+                      fontSize: 24,
+                      fontFamily: 'Roboto'),
+                ),
+              )),
+          //list of ingredients
           Expanded(
               child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Container(
-                    color: Colors.blue,
-                    child: Column(
-                      children: [Text("data")],
-                    ),
-                  )))
+            padding: EdgeInsets.only(left: 20),
+            child: ListView.builder(
+                itemCount: ingredients.length,
+                itemBuilder: (context, index) {
+                  //for the
+                  return ingredientsCard(ingredients[index]);
+                }),
+          )),
+          Padding(
+              padding: EdgeInsets.all(20),
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "Instructions",
+                  style: TextStyle(
+                      color: Color(0xFF2A8676),
+                      fontSize: 24,
+                      fontFamily: 'Roboto'),
+                ),
+              )),
+          Expanded(
+              child: ListView.builder(
+                  itemCount: instructions.length,
+                  itemBuilder: (context, index) {
+                    return ingredientsCard(instructions[index]);
+                  }))
         ],
       ),
     );
   }
+
+  Widget ingredientsCard(String ing) => Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.4),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 7),
+            Text(ing), //takes in the ingredients  and places em on a card
+          ],
+        ),
+      );
 }
