@@ -67,7 +67,7 @@ class _DetailsState extends State<Details> {
             child: ListView.builder(
                 itemCount: ingredients.length,
                 itemBuilder: (context, index) {
-                  //for the
+                  //change this into a gridview instead
                   return ingredientsCard(ingredients[index]);
                 }),
           )),
@@ -87,6 +87,7 @@ class _DetailsState extends State<Details> {
               child: ListView.builder(
                   itemCount: instructions.length,
                   itemBuilder: (context, index) {
+                    //change widget to its own design.
                     return ingredientsCard(instructions[index]);
                   }))
         ],
