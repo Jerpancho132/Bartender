@@ -2,6 +2,7 @@ import 'package:app/views/Widgets/cocktail_card.dart';
 import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
 import 'package:flutter/material.dart';
+import 'package:app/views/details.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,9 +26,9 @@ class _HomePageState extends State<HomePage> {
           break;
         case 2:
           {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SearchPage()),
+              MaterialPageRoute(builder: (context) => const Details()),
             );
           }
           break;
