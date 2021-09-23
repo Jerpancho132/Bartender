@@ -14,7 +14,12 @@ class _DetailsState extends State<Details> {
   String title = "Gimlet";
   String imgUrl =
       "https://www.thecocktaildb.com/images/media/drink/3xgldt1513707271.jpg";
-  List<String> ingredients = ["Gin", "Lime Juice", "Sugar Syrup", "Lime"];
+  List<String> ingredients = [
+    "Gin",
+    "Lime Juice",
+    "Sugar Syrup",
+    "Lime",
+  ];
   List<String> instructions = ["step1", "step2", "step3", "step4"];
   //
   @override
@@ -42,11 +47,12 @@ class _DetailsState extends State<Details> {
         //image detail
         children: [
           Expanded(
+              flex: 2,
               child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.fill, image: NetworkImage(imgUrl))),
-          )),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.fill, image: NetworkImage(imgUrl))),
+              )),
           //ingredients section
           Padding(
               padding: EdgeInsets.all(20),
@@ -63,13 +69,14 @@ class _DetailsState extends State<Details> {
           //list of ingredients
           Expanded(
               child: Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: ListView.builder(
-                itemCount: ingredients.length,
-                itemBuilder: (context, index) {
-                  //change this into a gridview instead
-                  return ingredientsCard(ingredients[index]);
-                }),
+            padding: EdgeInsets.only(left: 10),
+            child: GridView.count(
+              crossAxisCount: 3,
+              childAspectRatio: 3,
+              //creates a map of the ingredients array to iterate
+              //through each element and then converts it to list.
+              children: ingredients.map((e) => ingredientsCard(e)).toList(),
+            ),
           )),
           Padding(
               padding: EdgeInsets.all(20),
@@ -84,6 +91,7 @@ class _DetailsState extends State<Details> {
                 ),
               )),
           Expanded(
+              flex: 1,
               child: ListView.builder(
                   itemCount: instructions.length,
                   itemBuilder: (context, index) {
