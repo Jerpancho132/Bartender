@@ -53,7 +53,6 @@ class _InventoryState extends State<InventoryPage> {
     MyInventory("Lemon Juice", 2, 'oz')
   ];
   //this could also be grabbed from a database
-
   static List ingredients = [
     "Orange Juice",
     "Lime Juice",
@@ -61,13 +60,10 @@ class _InventoryState extends State<InventoryPage> {
     "Angostura Bitters",
     "Ice"
   ];
-  static List ingmeasure = [
-    "oz",
-    "oz",
-    "oz",
-    "oz",
-    "",
-  ];
+  //this list matches directly with the ingredients. this could be
+  //replaced when database is implemented
+  static List msrment = ["Oz", "Oz", "Oz", "dash", ""];
+
   //the index should match the index of the ingredients list
   //the general measurement used in cocktails are ounces but could be ml too
   String ing = ingredients.first;
@@ -160,7 +156,7 @@ class _InventoryState extends State<InventoryPage> {
       onPressed: () {
         setState(() {
           aCtrl.clear();
-          items.add(MyInventory(ing, amnt, 'oz'));
+          items.add(MyInventory(ing, amnt, msrment[ingredients.indexOf(ing)]));
           amnt = 0;
         });
       },
