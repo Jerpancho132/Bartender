@@ -47,13 +47,23 @@ class _InventoryState extends State<InventoryPage> {
     });
   }
 
+  // these data should be grabbed from a database when implemented
   List<MyInventory> items = <MyInventory>[
-    MyInventory("orange", 3),
-    MyInventory("lemon", 2)
+    MyInventory("Orange Juice", 3, 'oz'),
+    MyInventory("Lemon Juice", 2, 'oz')
   ];
-  String ing = "";
+  //this could also be grabbed from a database
+  static List ingredients = [
+    "Orange Juice",
+    "Lime Juice",
+    "Gin",
+    "Angostura Bitters",
+    "Ice"
+  ];
+  //the index should match the index of the ingredients list
+  //the general measurement used in cocktails are ounces but could be ml too
+  String ing = ingredients.first;
   int amnt = 0;
-  final TextEditingController iCtrl = TextEditingController();
   final TextEditingController aCtrl = TextEditingController();
 
   @override
@@ -66,7 +76,7 @@ class _InventoryState extends State<InventoryPage> {
               Expanded(
                   flex: 3,
                   child:
-                      ingredientsTextField()), //refactored widget for inputting ingredients
+                      ingredientsDropdownField()), //refactored widget for inputting ingredients
               const Padding(
                   padding: EdgeInsets.only(
                       right: 10)), //seperate ingredient and amount
@@ -80,10 +90,28 @@ class _InventoryState extends State<InventoryPage> {
                 child: ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      return InventoryCard(
-                          //imported from views/Widgets/inventory_card.dart
-                          item: items[index].getIngredient,
-                          amount: items[index].getAmount);
+                      return Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                              flex: 3,
+                              child: InventoryCard(
+                                //imported from views/Widgets/inventory_card.dart
+                                item: items[index].getIngredient,
+                                amount: items[index].getAmount,
+                                measurement: items[index].getMeasurement,
+                              )),
+                          Expanded(
+                              child: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              setState(() {
+                                items.removeAt(index);
+                              });
+                            },
+                          ))
+                        ],
+                      );
                     })),
           ],
         ),
@@ -115,22 +143,28 @@ class _InventoryState extends State<InventoryPage> {
   }
 
   //widget to insert ingredients you own.
-  Widget ingredientsTextField() => TextField(
-        decoration: const InputDecoration(hintText: "Ingredient"),
-        controller: iCtrl,
-        onChanged: (text) {
-          setState(() {
-            ing = text;
-          });
-        },
-      );
+  Widget ingredientsDropdownField() => DropdownButton(
+      value: ing,
+      onChanged: (nval) {
+        setState(() {
+          ing = nval.toString();
+        });
+      },
+      items: ingredients.map((valItem) {
+        return DropdownMenuItem(
+          value: valItem,
+          child: Text(valItem),
+        );
+      }).toList());
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
         decoration: const InputDecoration(hintText: "0"),
         controller: aCtrl,
         onChanged: (text) {
           setState(() {
-            amnt = text.isNotEmpty ? int.parse(text) : 0;
+            if (isNumeric(text)) {
+              amnt = text.isNotEmpty ? int.parse(text) : 0;
+            }
           });
         },
       );
@@ -138,10 +172,17 @@ class _InventoryState extends State<InventoryPage> {
   Widget insertItemButton() => ElevatedButton(
       onPressed: () {
         setState(() {
-          iCtrl.clear();
           aCtrl.clear();
-          items.add(MyInventory(ing, amnt));
+          items.add(MyInventory(ing, amnt, 'oz'));
         });
       },
       child: const Icon(Icons.add));
+}
+
+bool isNumeric(String s) {
+  // ignore: unnecessary_null_comparison
+  if (s == null) {
+    return false;
+  }
+  return double.tryParse(s) != null;
 }

@@ -1,8 +1,8 @@
 class MyInventory {
   String ingredient;
   int amount;
-
-  MyInventory(this.ingredient, this.amount);
+  String measurement;
+  MyInventory(this.ingredient, this.amount, this.measurement);
 
   String get getIngredient {
     return ingredient;
@@ -10,5 +10,9 @@ class MyInventory {
 
   int get getAmount {
     return amount;
+  }
+
+  String get getMeasurement {
+    return measurement;
   }
 }
