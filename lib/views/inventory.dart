@@ -53,12 +53,20 @@ class _InventoryState extends State<InventoryPage> {
     MyInventory("Lemon Juice", 2, 'oz')
   ];
   //this could also be grabbed from a database
+
   static List ingredients = [
     "Orange Juice",
     "Lime Juice",
     "Gin",
     "Angostura Bitters",
     "Ice"
+  ];
+  static List ingmeasure = [
+    "oz",
+    "oz",
+    "oz",
+    "oz",
+    "",
   ];
   //the index should match the index of the ingredients list
   //the general measurement used in cocktails are ounces but could be ml too
@@ -90,28 +98,7 @@ class _InventoryState extends State<InventoryPage> {
                 child: ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                              flex: 3,
-                              child: InventoryCard(
-                                //imported from views/Widgets/inventory_card.dart
-                                item: items[index].getIngredient,
-                                amount: items[index].getAmount,
-                                measurement: items[index].getMeasurement,
-                              )),
-                          Expanded(
-                              child: IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              setState(() {
-                                items.removeAt(index);
-                              });
-                            },
-                          ))
-                        ],
-                      );
+                      return listOfIngredients(index);
                     })),
           ],
         ),
@@ -174,9 +161,33 @@ class _InventoryState extends State<InventoryPage> {
         setState(() {
           aCtrl.clear();
           items.add(MyInventory(ing, amnt, 'oz'));
+          amnt = 0;
         });
       },
       child: const Icon(Icons.add));
+
+  Widget listOfIngredients(int i) => Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+              flex: 3,
+              child: InventoryCard(
+                //imported from views/Widgets/inventory_card.dart
+                item: items[i].getIngredient,
+                amount: items[i].getAmount,
+                measurement: items[i].getMeasurement,
+              )),
+          Expanded(
+              child: IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              setState(() {
+                items.removeAt(i);
+              });
+            },
+          ))
+        ],
+      );
 }
 
 bool isNumeric(String s) {
