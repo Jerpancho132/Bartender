@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/views/search.dart';
@@ -73,23 +71,49 @@ class _InventoryState extends State<InventoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Inventory")),
+        backgroundColor: const Color(0xFFA4BFB3),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          title: const Text(
+            "Inventory",
+            style: TextStyle(fontFamily: 'Roboto', fontSize: 32),
+          ),
+          elevation: 0,
+        ),
         body: Column(
           children: [
-            Row(children: [
-              Expanded(
-                  flex: 3,
-                  child:
-                      ingredientsDropdownField()), //refactored widget for inputting ingredients
-              const Padding(
-                  padding: EdgeInsets.only(
-                      right: 10)), //seperate ingredient and amount
-              Expanded(
-                  child:
-                      amountTextfield()), //refactored widget for amount of items in bottom
-              Expanded(
-                  child: insertItemButton()) //refactored widget find in bottom
-            ]),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                color: Color(0xFF2A8676),
+                child: ListTile(
+                    title: Row(children: [
+                  Expanded(
+                    flex: 3,
+                    child: SizedBox(
+                      child: ingredientsDropdownField(),
+                      height: 50,
+                    ),
+                  ),
+                  //refactored widget for inputting ingredients
+                  const Padding(
+                      padding: EdgeInsets.only(
+                          right: 10)), //seperate ingredient and amount
+                  Expanded(
+                    child: SizedBox(
+                      child: amountTextfield(),
+                      height: 30,
+                    ),
+                  ),
+
+                  //refactored widget for amount of items in bottom
+                  Expanded(
+                      child:
+                          insertItemButton()) //refactored widget find in bottom
+                ])),
+              ),
+            ),
             Expanded(
                 child: ListView.builder(
                     itemCount: items.length,
@@ -127,6 +151,9 @@ class _InventoryState extends State<InventoryPage> {
 
   //widget to insert ingredients you own.
   Widget ingredientsDropdownField() => DropdownButton(
+      style: TextStyle(color: Colors.white),
+      dropdownColor: Color(0xFFA4BFB3),
+      isExpanded: true,
       value: ing,
       onChanged: (nval) {
         setState(() {
@@ -141,8 +168,10 @@ class _InventoryState extends State<InventoryPage> {
       }).toList());
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
+        textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
-        decoration: const InputDecoration(hintText: "0"),
+        decoration: const InputDecoration(
+            hintText: "0", hintStyle: TextStyle(color: Colors.white)),
         controller: aCtrl,
         onChanged: (text) {
           setState(() {
@@ -154,6 +183,9 @@ class _InventoryState extends State<InventoryPage> {
       );
   //widget to output given ingredient and amount in list.
   Widget insertItemButton() => ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Color(0xFF31A471)),
+          shape: MaterialStateProperty.all(const CircleBorder())),
       onPressed: () {
         setState(() {
           aCtrl.clear();
@@ -167,31 +199,34 @@ class _InventoryState extends State<InventoryPage> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
-              flex: 3,
+              flex: 5,
               child: listCard(items[i].getIngredient, items[i].getAmount,
                   items[i].getMeasurement, i)),
-          Expanded(
-              child: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              setState(() {
-                items.removeAt(i);
-              });
-            },
-          ))
         ],
       );
   Widget listCard(String i, int a, String m, int index) => Card(
+        color: const Color(0xFF2A8676),
         child: ListTile(
             title: Row(
           children: [
-            Expanded(child: Text(i)),
             Expanded(
+                flex: 3,
+                child: Text(
+                  i,
+                  style: TextStyle(color: Colors.white),
+                )),
+            Expanded(
+              flex: 1,
               child: GestureDetector(
                 child: editable
                     ? TextField(
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.go,
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(color: Colors.white),
+                            hintText: items[index].getAmount.toString()),
                         onSubmitted: (val) {
                           setState(() {
                             //changes the amount of already placed tile
@@ -202,7 +237,11 @@ class _InventoryState extends State<InventoryPage> {
                           editable = false;
                         },
                       )
-                    : Text('$a'),
+                    : Text(
+                        '$a',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
                 onTap: () {
                   setState(() {
                     editable = true;
@@ -210,7 +249,22 @@ class _InventoryState extends State<InventoryPage> {
                 },
               ),
             ),
-            Expanded(child: Text(m))
+            Expanded(
+                flex: 1,
+                child: Text(
+                  m,
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                )),
+            Expanded(
+                child: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                setState(() {
+                  items.removeAt(index);
+                });
+              },
+            ))
           ],
         )),
       );
