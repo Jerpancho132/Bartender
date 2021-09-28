@@ -49,7 +49,6 @@ class _InventoryState extends State<InventoryPage> {
   // these data should be grabbed from a database when implemented
   List<MyInventory> items = <MyInventory>[
     MyInventory("Orange Juice", 3, 'Oz'),
-    MyInventory("Lemon Juice", 2, 'Oz')
   ];
   //this could also be grabbed from a database
   static List ingredients = [
@@ -151,6 +150,7 @@ class _InventoryState extends State<InventoryPage> {
 
   //widget to insert ingredients you own.
   Widget ingredientsDropdownField() => DropdownButton(
+      key: const Key("Dropdownlist"), //test key
       style: TextStyle(color: Colors.white),
       dropdownColor: Color(0xFFA4BFB3),
       isExpanded: true,
@@ -168,6 +168,7 @@ class _InventoryState extends State<InventoryPage> {
       }).toList());
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
+        key: const Key("amountText"),
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         decoration: const InputDecoration(
@@ -176,13 +177,16 @@ class _InventoryState extends State<InventoryPage> {
         onChanged: (text) {
           setState(() {
             if (isNumeric(text) && isInteger(num.parse(text))) {
-              amnt = text.isNotEmpty ? int.parse(text) : 0;
+              amnt = int.parse(text);
+            } else {
+              amnt = 0;
             }
           });
         },
       );
   //widget to output given ingredient and amount in list.
   Widget insertItemButton() => ElevatedButton(
+      key: const Key("insertButton"),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Color(0xFF31A471)),
           shape: MaterialStateProperty.all(const CircleBorder())),
@@ -205,6 +209,7 @@ class _InventoryState extends State<InventoryPage> {
         ],
       );
   Widget listCard(String i, int a, String m, int index) => Card(
+        key: Key('List$index'),
         color: const Color(0xFF2A8676),
         child: ListTile(
             title: Row(
@@ -231,8 +236,9 @@ class _InventoryState extends State<InventoryPage> {
                           setState(() {
                             //changes the amount of already placed tile
                             if (isNumeric(val) && isInteger(num.parse(val))) {
-                              items[index].changeAmount(int.parse(val));
+                              items[index].amount = int.parse(val);
                             }
+                            print(items[index].getAmount);
                           });
                           editable = false;
                         },
@@ -258,6 +264,7 @@ class _InventoryState extends State<InventoryPage> {
                 )),
             Expanded(
                 child: IconButton(
+              key: const Key("deleteButton"),
               icon: const Icon(Icons.delete),
               onPressed: () {
                 setState(() {
@@ -275,7 +282,7 @@ bool isNumeric(String s) {
   if (s == null) {
     return false;
   }
-  return double.tryParse(s) != null;
+  return int.tryParse(s) != null;
 }
 
 bool isInteger(num value) {
