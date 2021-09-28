@@ -1,9 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/views/search.dart';
 import 'package:app/models/inventory_model.dart';
-import 'package:app/views/Widgets/inventory_card.dart';
 import 'package:app/views/favorites.dart';
+import 'package:flutter/services.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key}) : super(key: key);
@@ -14,8 +16,7 @@ class InventoryPage extends StatefulWidget {
 
 class _InventoryState extends State<InventoryPage> {
   final int _selectedIndex = 3;
-
-  get onPressed => null;
+  bool editable = false;
   void _onItemTapped(int index) {
     setState(() {
       switch (index) {
@@ -49,8 +50,8 @@ class _InventoryState extends State<InventoryPage> {
 
   // these data should be grabbed from a database when implemented
   List<MyInventory> items = <MyInventory>[
-    MyInventory("Orange Juice", 3, 'oz'),
-    MyInventory("Lemon Juice", 2, 'oz')
+    MyInventory("Orange Juice", 3, 'Oz'),
+    MyInventory("Lemon Juice", 2, 'Oz')
   ];
   //this could also be grabbed from a database
   static List ingredients = [
@@ -69,7 +70,6 @@ class _InventoryState extends State<InventoryPage> {
   String ing = ingredients.first;
   int amnt = 0;
   final TextEditingController aCtrl = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,11 +141,12 @@ class _InventoryState extends State<InventoryPage> {
       }).toList());
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
+        keyboardType: TextInputType.number,
         decoration: const InputDecoration(hintText: "0"),
         controller: aCtrl,
         onChanged: (text) {
           setState(() {
-            if (isNumeric(text)) {
+            if (isNumeric(text) && isInteger(num.parse(text))) {
               amnt = text.isNotEmpty ? int.parse(text) : 0;
             }
           });
@@ -167,12 +168,8 @@ class _InventoryState extends State<InventoryPage> {
         children: [
           Expanded(
               flex: 3,
-              child: InventoryCard(
-                //imported from views/Widgets/inventory_card.dart
-                item: items[i].getIngredient,
-                amount: items[i].getAmount,
-                measurement: items[i].getMeasurement,
-              )),
+              child: listCard(items[i].getIngredient, items[i].getAmount,
+                  items[i].getMeasurement, i)),
           Expanded(
               child: IconButton(
             icon: const Icon(Icons.delete),
@@ -184,6 +181,39 @@ class _InventoryState extends State<InventoryPage> {
           ))
         ],
       );
+  Widget listCard(String i, int a, String m, int index) => Card(
+        child: ListTile(
+            title: Row(
+          children: [
+            Expanded(child: Text(i)),
+            Expanded(
+              child: GestureDetector(
+                child: editable
+                    ? TextField(
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.go,
+                        onSubmitted: (val) {
+                          setState(() {
+                            //changes the amount of already placed tile
+                            if (isNumeric(val) && isInteger(num.parse(val))) {
+                              items[index].changeAmount(int.parse(val));
+                            }
+                          });
+                          editable = false;
+                        },
+                      )
+                    : Text('$a'),
+                onTap: () {
+                  setState(() {
+                    editable = true;
+                  });
+                },
+              ),
+            ),
+            Expanded(child: Text(m))
+          ],
+        )),
+      );
 }
 
 bool isNumeric(String s) {
@@ -192,4 +222,11 @@ bool isNumeric(String s) {
     return false;
   }
   return double.tryParse(s) != null;
+}
+
+bool isInteger(num value) {
+  if (value is int) {
+    return true;
+  }
+  return false;
 }
