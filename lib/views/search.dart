@@ -116,12 +116,14 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
+                child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: 1),
                     shrinkWrap: true,
                     itemCount: result.length,
                     itemBuilder: (context, index) {
-                      // ignore: non_constant_identifier_names
-                      return buildList(result[index]);
+                      return buildContainer(result[index]);
                     })),
           ],
         ),
@@ -196,7 +198,17 @@ class _SearchPageState extends State<SearchPage> {
         ),
         title: Text(c.title),
       );
-
+  Widget buildContainer(Cocktail c) => Column(
+        children: [
+          SizedBox(
+              width: 150,
+              height: 150,
+              child: Image.network(
+                c.imageUrl,
+              )),
+          Text(c.title)
+        ],
+      );
   void searchCocktails(String s) {
     final filteredsearch = cocktailList.where((cocktail) {
       final titleLower = cocktail.title.toLowerCase();
