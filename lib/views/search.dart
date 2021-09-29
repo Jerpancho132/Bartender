@@ -58,6 +58,7 @@ class _SearchPageState extends State<SearchPage> {
       home: Scaffold(
         backgroundColor: const Color(0xFFE8DFDA),
         appBar: AppBar(
+          backgroundColor: const Color(0xffA63542),
           title: Row(
             children: const [
               Text('Search Page'),
