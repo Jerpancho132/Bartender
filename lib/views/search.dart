@@ -185,19 +185,11 @@ class _SearchPageState extends State<SearchPage> {
           child: Text(
             f,
             textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       );
 
-  Widget buildList(Cocktail c) => ListTile(
-        leading: Image.network(
-          c.imageUrl,
-          fit: BoxFit.fill,
-          width: 50,
-          height: 50,
-        ),
-        title: Text(c.title),
-      );
   Widget buildContainer(Cocktail c) => Column(
         children: [
           SizedBox(
