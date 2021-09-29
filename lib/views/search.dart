@@ -66,12 +66,6 @@ class _SearchPageState extends State<SearchPage> {
                   fontSize: 36,
                   letterSpacing: 2,
                   color: Color(0xffA63542))),
-          Text("Popular",
-              style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 36,
-                  letterSpacing: 2,
-                  color: Color(0xffA63542))),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
