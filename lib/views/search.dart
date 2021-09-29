@@ -98,32 +98,31 @@ class _SearchPageState extends State<SearchPage> {
                     },
                   ),
                 ]))),
-        body: ListView(
+        body: Column(
           children: [
-            ListTile(
-              title: Container(
-                margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                      hintText: "Search for Cocktail",
-                      contentPadding: EdgeInsets.only(left: 10)),
-                  onChanged: searchCocktails,
-                ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                    hintText: "Search for Cocktail",
+                    contentPadding: EdgeInsets.only(left: 10)),
+                onChanged: searchCocktails,
               ),
             ),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: result.length,
-                itemBuilder: (context, index) {
-                  // ignore: non_constant_identifier_names
-                  return buildList(result[index]);
-                }),
+            Expanded(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: result.length,
+                    itemBuilder: (context, index) {
+                      // ignore: non_constant_identifier_names
+                      return buildList(result[index]);
+                    })),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
