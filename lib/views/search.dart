@@ -117,15 +117,19 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-                child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, childAspectRatio: 1),
-                    shrinkWrap: true,
-                    itemCount: result.length,
-                    itemBuilder: (context, index) {
-                      return buildContainer(result[index]);
-                    })),
+                child: result.isNotEmpty
+                    ? GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, childAspectRatio: 1),
+                        shrinkWrap: true,
+                        itemCount: result.length,
+                        itemBuilder: (context, index) {
+                          return buildContainer(result[index]);
+                        })
+                    : const Center(
+                        child: Text("No Results"),
+                      )),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
