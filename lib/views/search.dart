@@ -181,7 +181,6 @@ class _SearchPageState extends State<SearchPage> {
               filterindex.remove(i);
               filter.remove(f);
             }
-            print(filter);
           });
         },
         child: Container(
