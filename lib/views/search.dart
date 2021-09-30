@@ -109,6 +109,8 @@ class _SearchPageState extends State<SearchPage> {
                 color: Colors.white,
               ),
               child: TextField(
+                key: const Key("searchbar"),
+                //this is the search bar that will filter out the dataset
                 controller: _controller,
                 decoration: const InputDecoration(
                     hintText: "Search for Cocktail",
@@ -128,6 +130,8 @@ class _SearchPageState extends State<SearchPage> {
                           return buildContainer(result[index]);
                         })
                     : const Center(
+                        //when you come across nothing in your search
+                        key: Key("NoResults"),
                         child: Text("No Results"),
                       )),
           ],
@@ -164,7 +168,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  //the filter item built from the dataset of ingredients
+  //the container for the filter options
   Widget spiritsCard(String f, int i) => GestureDetector(
         onTap: () {
           setState(() {
@@ -181,6 +185,7 @@ class _SearchPageState extends State<SearchPage> {
           });
         },
         child: Container(
+          key: const Key("Filters"),
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -196,8 +201,11 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       );
-  //the card container for each item
+
+  //the item built from the dataset of ingredients
   Widget buildContainer(Cocktail c) => Column(
+        //should expect to see all items before searching
+        key: const Key("items"),
         children: [
           SizedBox(
               width: 150,
