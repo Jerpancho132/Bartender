@@ -1,7 +1,4 @@
-import 'package:app/views/favorites.dart';
-import 'package:app/views/inventory.dart';
 import 'package:flutter/material.dart';
-import 'package:app/views/home.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -11,43 +8,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final int _selectedIndex = 1;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      switch (index) {
-        case 0:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
-            );
-          }
-          break;
-        case 2:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const FavoritesPage()),
-            );
-          }
-          break;
-        case 3:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const InventoryPage()),
-            );
-          }
-          break;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8DFDA),
+      backgroundColor: const Color(0xFFD6E5F2),
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -73,34 +37,6 @@ class _SearchPageState extends State<SearchPage> {
                   letterSpacing: 2,
                   color: Color(0xffA63542))),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xffA63542),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: ('Home'),
-            backgroundColor: Color(0xffA63542),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: ('Search'),
-            backgroundColor: Color(0xffA63542),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: ('Favorites'),
-            backgroundColor: Color(0xffA63542),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: ('Inventory'),
-            backgroundColor: Color(0xffA63542),
-          ),
-        ],
-        onTap: _onItemTapped,
-        currentIndex: _selectedIndex,
-        unselectedItemColor: const Color(0xffE8DFDA),
       ),
     );
   }

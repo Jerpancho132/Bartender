@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:app/views/details.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class RecipeCard extends StatelessWidget {
-  final String title;
-  final String rating;
-  final String cookTime;
+class CocktailCard extends StatelessWidget {
+  final String cocktailName;
   final String thumbnailUrl;
-  const RecipeCard({
+  const CocktailCard({
     Key? key,
-    required this.title,
-    required this.cookTime,
-    required this.rating,
+    required this.cocktailName,
     required this.thumbnailUrl,
   }) : super(key: key);
   @override
@@ -23,7 +20,7 @@ class RecipeCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
         width: MediaQuery.of(context).size.width,
         height: 180,
         decoration: BoxDecoration(
@@ -41,76 +38,23 @@ class RecipeCard extends StatelessWidget {
             ),
           ],
           image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.35),
-              BlendMode.multiply,
-            ),
             image: NetworkImage(thumbnailUrl),
-            fit: BoxFit.cover,
+            //cant decide between cover or fill on this one
+            fit: BoxFit.fill,
           ),
         ),
         child: Stack(
           children: [
             Align(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 19,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              alignment: Alignment.center,
-            ),
-            Align(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                          size: 18,
-                        ),
-                        const SizedBox(width: 7),
-                        Text(rating),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.schedule,
-                          color: Colors.yellow,
-                          size: 18,
-                        ),
-                        const SizedBox(width: 7),
-                        Text(cookTime),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              alignment: Alignment.bottomLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(cocktailName,
+                      style: GoogleFonts.sansita(
+                          textStyle: const TextStyle(
+                              color: Color(0xff9BB34F),
+                              letterSpacing: .5,
+                              fontSize: 20)))),
+              alignment: Alignment.bottomCenter,
             ),
           ],
         ),

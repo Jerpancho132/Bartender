@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Details extends StatefulWidget {
   const Details({Key? key}) : super(key: key);
@@ -11,61 +11,63 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   //variables to be replaced by database implementation
-  String title = "Gimlet";
+  String title = "Margarita";
   String imgUrl =
-      "https://www.thecocktaildb.com/images/media/drink/3xgldt1513707271.jpg";
+      "https://www.hangoverweekends.co.uk/media/15502/margarita.jpg?width=298px&height=412px";
   List<String> ingredients = [
-    "Gin",
+    "Tequila",
+    "Triple Sec",
+    "Sour Mix",
+    "Simple Syrup",
     "Lime Juice",
-    "Sugar Syrup",
-    "Lime",
+    "Lime Garnish",
   ];
   List<String> instructions = ["step1", "step2", "step3", "step4"];
   //
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8DFDA),
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back)),
-        title: Row(
-          children: [
-            Expanded(child: Text(title)),
-            Expanded(
-                child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.star_border),
-            ))
-          ],
-        ),
-      ),
+      backgroundColor: const Color(0xffD6E5F2),
       body: Column(
         //image detail
         children: [
-          Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.fill, image: NetworkImage(imgUrl))),
-              )),
-          //ingredients section
-          Padding(
-              padding: EdgeInsets.all(20),
-              child: SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "Ingredients",
-                  style: TextStyle(
-                      color: Color(0xFF2A8676),
-                      fontSize: 24,
-                      fontFamily: 'Roboto'),
+          Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back))),
+          Align(
+              alignment: Alignment.topLeft,
+              child: Text(title,
+                  style: GoogleFonts.sansita(
+                      textStyle: const TextStyle(
+                          color: Color(0xff9BB34F),
+                          letterSpacing: .5,
+                          fontSize: 40)))),
+          Container(
+            width: 350,
+            height: 300,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: Color(0xffDADFC7),
+                  width: 6,
                 ),
-              )),
+                image: DecorationImage(
+                    image: NetworkImage(imgUrl), fit: BoxFit.fill)),
+          ),
+          //Make new container here so the rest of the view scrolls together
+          //ingredients section
+          Align(
+              alignment: Alignment.topLeft,
+              child: Text("Ingredients",
+                  style: GoogleFonts.sansita(
+                      textStyle: const TextStyle(
+                          color: Color(0xff9BB34F),
+                          letterSpacing: .5,
+                          fontSize: 30)))),
           //list of ingredients
           Expanded(
               child: Padding(
@@ -78,18 +80,14 @@ class _DetailsState extends State<Details> {
               children: ingredients.map((e) => ingredientsCard(e)).toList(),
             ),
           )),
-          Padding(
-              padding: EdgeInsets.all(20),
-              child: SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "Instructions",
-                  style: TextStyle(
-                      color: Color(0xFF2A8676),
-                      fontSize: 24,
-                      fontFamily: 'Roboto'),
-                ),
-              )),
+          Align(
+              alignment: Alignment.topLeft,
+              child: Text("Instructions",
+                  style: GoogleFonts.sansita(
+                      textStyle: const TextStyle(
+                          color: Color(0xff9BB34F),
+                          letterSpacing: .5,
+                          fontSize: 30)))),
           Expanded(
               flex: 1,
               child: ListView.builder(
@@ -104,8 +102,8 @@ class _DetailsState extends State<Details> {
   }
 
   Widget ingredientsCard(String ing) => Container(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(2),
+        margin: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.4),
           borderRadius: BorderRadius.circular(15),

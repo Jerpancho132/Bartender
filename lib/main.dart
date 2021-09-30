@@ -1,4 +1,4 @@
-import 'package:app/views/splash_screen.dart';
+import 'package:app/views/Widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           bodyText2: TextStyle(color: Colors.white),
         ),
       ),
-      home: const SplashScreen(),
+      home: NavBar(),
     );
   }
 }

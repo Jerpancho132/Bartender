@@ -1,7 +1,4 @@
 import 'package:app/views/Widgets/cocktail_card.dart';
-import 'package:app/views/search.dart';
-import 'package:app/views/inventory.dart';
-import 'package:app/views/favorites.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,147 +9,57 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final int _selectedIndex = 0;
-  void _onItemTapped(int index) {
-    setState(() {
-      switch (index) {
-        case 1:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const SearchPage()),
-            );
-          }
-          break;
-        case 2:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const FavoritesPage()),
-            );
-          }
-          break;
-        case 3:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const InventoryPage()),
-            );
-          }
-          break;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8DFDA),
+      backgroundColor: const Color(0xFFD6E5F2),
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.local_drink),
+            Icon(Icons.whatshot),
             SizedBox(width: 10),
-            Text('Home Page'),
+            Text('Popular Drinks'),
           ],
         ),
       ),
-      body: Column(
-          //local drinks
-          children: [
-            Row(
-              children: const [
-                Text("Local Drinks",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 36,
-                        letterSpacing: 2,
-                        color: Color(0xffA63542))),
-              ],
+      body: GridView(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, mainAxisSpacing: 16),
+          children: const [
+            //A function will be inserted here to grab drinks from database instead of harcoding
+            //cocktail cards.
+            CocktailCard(
+              cocktailName: 'Long Island Ice Tea',
+              thumbnailUrl:
+                  'https://www.hangoverweekends.co.uk/media/15498/long-island-iced-tea.jpg?width=236px&height=418px',
             ),
-            SizedBox(
-              height: 200,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  RecipeCard(
-                    title: 'Cocktail 1',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                  RecipeCard(
-                    title: 'Cocktail 2',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                ],
-              ),
+            CocktailCard(
+              cocktailName: 'Pina Colada',
+              thumbnailUrl:
+                  'https://www.hangoverweekends.co.uk/media/15501/pina_colada_cocktail.png?width=243&height=350',
             ),
-            Row(
-              children: const [
-                Text("Popular Drinks",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 36,
-                        letterSpacing: 2,
-                        color: Color(0xffA63542))),
-              ],
+            CocktailCard(
+              cocktailName: 'Margarita',
+              thumbnailUrl:
+                  'https://www.hangoverweekends.co.uk/media/15502/margarita.jpg?width=298px&height=412px',
             ),
-            SizedBox(
-              height: 200,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  RecipeCard(
-                    title: 'Cocktail 3',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                  RecipeCard(
-                    title: 'Cocktail 4',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                ],
-              ),
-            )
+            CocktailCard(
+              cocktailName: 'Mai Tai',
+              thumbnailUrl:
+                  'https://www.hangoverweekends.co.uk/media/15506/mm-cocktail-guide-maitai-590x375.jpg?width=434px&height=276px',
+            ),
+            CocktailCard(
+              cocktailName: 'Mojito',
+              thumbnailUrl:
+                  'https://www.hangoverweekends.co.uk/media/15505/mojito.jpg?width=500&height=375',
+            ),
+            CocktailCard(
+              cocktailName: 'Cosmopolitan',
+              thumbnailUrl:
+                  'https://www.hangoverweekends.co.uk/media/15507/gallery-1430408520-dmg-cosmopolitan-cocktail-001.jpg?width=330px&height=407px',
+            ),
           ]),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xffA63542),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: ('Home'),
-            backgroundColor: Color(0xffA63542),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: ('Search'),
-              backgroundColor: Color(0xffA63542)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.star),
-              label: ('Favorites'),
-              backgroundColor: Color(0xffA63542)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: ('Inventory'),
-              backgroundColor: Color(0xffA63542)),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: const Color(0xffE8DFDA),
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
