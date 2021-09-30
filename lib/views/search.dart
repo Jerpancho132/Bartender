@@ -14,13 +14,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final int _selectedIndex = 1;
-  final _controller = TextEditingController();
-  List<Cocktail> result = cocktailList;
-  List<String> spirits = ["Vodka", "Gin", "Tequila", "Whiskey", "Rum"];
-  String search = "";
-
-  List<String> filter = [];
-  List<int> filterindex = [];
   void _onItemTapped(int index) {
     setState(() {
       switch (index) {
@@ -52,6 +45,14 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  final _controller = TextEditingController();
+  //these variables are only for local dataset and not from database
+  List<Cocktail> result = cocktailList;
+  List<String> spirits = ["Vodka", "Gin", "Tequila", "Whiskey", "Rum"];
+  List<String> filter = [];
+  List<int> filterindex = [];
+  //
+  String search = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -159,6 +160,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
+  //the filter item built from the dataset of ingredients
   Widget spiritsCard(String f, int i) => GestureDetector(
         onTap: () {
           setState(() {
@@ -171,6 +173,7 @@ class _SearchPageState extends State<SearchPage> {
               filterindex.remove(i);
               filter.remove(f);
             }
+            print(filter);
           });
         },
         child: Container(
@@ -189,7 +192,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       );
-
+  //the card container for each item
   Widget buildContainer(Cocktail c) => Column(
         children: [
           SizedBox(
@@ -201,6 +204,7 @@ class _SearchPageState extends State<SearchPage> {
           Text(c.title)
         ],
       );
+  //the function that filters the dataset according to name of cocktail
   void searchCocktails(String s) {
     final filteredsearch = cocktailList.where((cocktail) {
       final titleLower = cocktail.title.toLowerCase();
