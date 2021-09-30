@@ -85,7 +85,7 @@ class _InventoryState extends State<InventoryPage> {
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Card(
-                color: Color(0xFF2A8676),
+                color: const Color(0xFF2A8676),
                 child: ListTile(
                     title: Row(children: [
                   Expanded(
@@ -151,8 +151,8 @@ class _InventoryState extends State<InventoryPage> {
   //widget to insert ingredients you own.
   Widget ingredientsDropdownField() => DropdownButton(
       key: const Key("Dropdownlist"), //test key
-      style: TextStyle(color: Colors.white),
-      dropdownColor: Color(0xFFA4BFB3),
+      style: const TextStyle(color: Colors.white),
+      dropdownColor: const Color(0xFFA4BFB3),
       isExpanded: true,
       value: ing,
       onChanged: (nval) {
@@ -188,7 +188,7 @@ class _InventoryState extends State<InventoryPage> {
   Widget insertItemButton() => ElevatedButton(
       key: const Key("insertButton"),
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Color(0xFF31A471)),
+          backgroundColor: MaterialStateProperty.all(const Color(0xFF31A471)),
           shape: MaterialStateProperty.all(const CircleBorder())),
       onPressed: () {
         setState(() {
@@ -218,19 +218,19 @@ class _InventoryState extends State<InventoryPage> {
                 flex: 3,
                 child: Text(
                   i,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 )),
             Expanded(
               flex: 1,
               child: GestureDetector(
                 child: editable
                     ? TextField(
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.go,
                         decoration: InputDecoration(
-                            hintStyle: TextStyle(color: Colors.white),
+                            hintStyle: const TextStyle(color: Colors.white),
                             hintText: items[index].getAmount.toString()),
                         onSubmitted: (val) {
                           setState(() {
@@ -238,7 +238,6 @@ class _InventoryState extends State<InventoryPage> {
                             if (isNumeric(val) && isInteger(num.parse(val))) {
                               items[index].amount = int.parse(val);
                             }
-                            print(items[index].getAmount);
                           });
                           editable = false;
                         },
@@ -246,7 +245,7 @@ class _InventoryState extends State<InventoryPage> {
                     : Text(
                         '$a',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                 onTap: () {
                   setState(() {
@@ -259,7 +258,7 @@ class _InventoryState extends State<InventoryPage> {
                 flex: 1,
                 child: Text(
                   m,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 )),
             Expanded(
