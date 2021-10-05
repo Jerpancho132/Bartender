@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/views/search.dart';
@@ -46,6 +47,19 @@ class _InventoryState extends State<InventoryPage> {
     });
   }
 
+  final firestoreInstance = FirebaseFirestore.instance;
+
+    void add() { //code to add data to the firebase
+      firestoreInstance.collection("Inventory").add(
+        {
+          "Ingredient": ing,
+          "amount": amnt,
+        }
+      ).then((value){
+        print(value.id);
+      });
+    }
+
   List<MyInventory> items = <MyInventory>[
     MyInventory("orange", 3),
     MyInventory("lemon", 2)
@@ -57,6 +71,7 @@ class _InventoryState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(title: const Text("Inventory")),
         body: Column(
@@ -136,6 +151,7 @@ class _InventoryState extends State<InventoryPage> {
   //widget to output given ingredient and amount in list.
   Widget insertItemButton() => ElevatedButton(
       onPressed: () {
+        add();  //function to add data to the firebase database
         setState(() {
           iCtrl.clear();
           aCtrl.clear();
