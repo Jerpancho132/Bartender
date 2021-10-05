@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/views/search.dart';
@@ -50,21 +51,15 @@ class _InventoryState extends State<InventoryPage> {
   List<MyInventory> items = <MyInventory>[
     MyInventory("Orange Juice", 3, 'Oz'),
   ];
-  //this could also be grabbed from a database
-  static List ingredients = [
-    "Orange Juice",
-    "Lime Juice",
-    "Gin",
-    "Angostura Bitters",
-    "Ice"
-  ];
-  //this list matches directly with the ingredients. this could be
-  //replaced when database is implemented
-  static List msrment = ["Oz", "Oz", "Oz", "dash", ""];
+  //grabs the entire database get collection by .collection
+  final db = FirebaseFirestore.instance;
 
   //the index should match the index of the ingredients list
   //the general measurement used in cocktails are ounces but could be ml too
-  String ing = ingredients.first;
+  // ignore: prefer_typing_uninitialized_variables
+  var selectedIngredient;
+  // ignore: prefer_typing_uninitialized_variables
+  var relatedMeasurement;
   int amnt = 0;
   final TextEditingController aCtrl = TextEditingController();
   @override
@@ -149,23 +144,43 @@ class _InventoryState extends State<InventoryPage> {
   }
 
   //widget to insert ingredients you own.
-  Widget ingredientsDropdownField() => DropdownButton(
-      key: const Key("Dropdownlist"), //test key
-      style: const TextStyle(color: Colors.white),
-      dropdownColor: const Color(0xFFA4BFB3),
-      isExpanded: true,
-      value: ing,
-      onChanged: (nval) {
-        setState(() {
-          ing = nval.toString();
-        });
-      },
-      items: ingredients.map((valItem) {
-        return DropdownMenuItem(
-          value: valItem,
-          child: Text(valItem),
-        );
-      }).toList());
+  Widget ingredientsDropdownField() => StreamBuilder<QuerySnapshot>(
+        //grabs data from inventory collection
+        stream: db.collection("Inventory").snapshots(),
+        builder: (context, snapshot) {
+          List<String> ingredients = [];
+          List<String> measure = [];
+          if (!snapshot.hasData) {
+            return const Text("Loading");
+          } else {
+            for (int i = 0; i < snapshot.data!.docs.length; i++) {
+              DocumentSnapshot s = snapshot.data!.docs[i];
+              ingredients.add(s.id);
+              measure.add(s.get("type"));
+            }
+            return DropdownButton(
+              dropdownColor: const Color(0xFF31A471),
+              style: const TextStyle(color: Colors.white),
+              items: ingredients.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                    child: Text(value), value: value);
+              }).toList(),
+              value: selectedIngredient,
+              onChanged: (dynamic val) {
+                setState(() {
+                  selectedIngredient = val;
+                  relatedMeasurement = measure[ingredients.indexOf(val)];
+                });
+              },
+              isExpanded: true,
+              hint: const Text(
+                "Choose Ingredient",
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }
+        },
+      );
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
         key: const Key("amountText"),
@@ -193,7 +208,10 @@ class _InventoryState extends State<InventoryPage> {
       onPressed: () {
         setState(() {
           aCtrl.clear();
-          items.add(MyInventory(ing, amnt, msrment[ingredients.indexOf(ing)]));
+          selectedIngredient != null
+              ? items.add(
+                  MyInventory(selectedIngredient, amnt, relatedMeasurement))
+              : null;
           amnt = 0;
         });
       },
