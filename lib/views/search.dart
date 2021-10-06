@@ -48,11 +48,10 @@ class _SearchPageState extends State<SearchPage> {
   final _controller = TextEditingController();
   //these variables are only for local dataset and not from database
   List<Cocktail> result = cocktailList;
+
   List<String> spirits = ["Vodka", "Gin", "Tequila", "Whiskey", "Rum"];
   List<String> filter = [];
   List<int> filterindex = [];
-  //
-  String search = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -224,7 +223,6 @@ class _SearchPageState extends State<SearchPage> {
     }).toList();
 
     setState(() {
-      search = s;
       result = filteredsearch;
     });
   }
