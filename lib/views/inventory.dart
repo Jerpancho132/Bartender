@@ -49,7 +49,7 @@ class _InventoryState extends State<InventoryPage> {
 
   // these data should be grabbed from a database when implemented
   List<MyInventory> items = <MyInventory>[
-    MyInventory("Orange Juice", 3, 'Oz'),
+    MyInventory("Orange Juice", 3, 'oz'),
   ];
   //grabs the entire database get collection by .collection
   final db = FirebaseFirestore.instance;
@@ -100,7 +100,16 @@ class _InventoryState extends State<InventoryPage> {
                       height: 30,
                     ),
                   ),
-
+                  Expanded(
+                      child: SizedBox(
+                    child: relatedMeasurement != null
+                        ? Text(
+                            relatedMeasurement,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        : const Text(""),
+                  )),
                   //refactored widget for amount of items in bottom
                   Expanded(
                       child:
