@@ -1,8 +1,8 @@
 import 'package:app/views/favorites.dart';
 import 'package:app/views/inventory.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
-import 'package:app/testdata/cocktail_listdata.dart';
 import 'package:app/models/cocktail.dart';
 
 class SearchPage extends StatefulWidget {
@@ -46,12 +46,37 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   final _controller = TextEditingController();
-  //these variables are only for local dataset and not from database
-  List<Cocktail> result = cocktailList;
+  final db = FirebaseFirestore.instance.collection("Drinks");
 
+  void addCocktail(QuerySnapshot qs, List<Cocktail> l) {
+    for (int i = 0; i < qs.docs.length; i++) {
+      DocumentSnapshot snap = qs.docs[i];
+      l.add(Cocktail(snap.id, snap.get("Ingredients"), snap.get("Instructions"),
+          snap.get("Picture")));
+    }
+  }
+
+  //when this page is initiallized, this will be called and place the
+  //collection of cocktails into the results variable
+  Future<void> getData() async {
+    final d = FirebaseFirestore.instance.collection("Drinks");
+    QuerySnapshot snapshot = await d.get();
+    addCocktail(snapshot, result);
+  }
+
+  List<Cocktail> result = [];
+
+  //drawer variables
   List<String> spirits = ["Vodka", "Gin", "Tequila", "Whiskey", "Rum"];
   List<String> filter = [];
   List<int> filterindex = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -118,21 +143,8 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-                child: result.isNotEmpty
-                    ? GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, childAspectRatio: 1),
-                        shrinkWrap: true,
-                        itemCount: result.length,
-                        itemBuilder: (context, index) {
-                          return buildContainer(result[index]);
-                        })
-                    : const Center(
-                        //when you come across nothing in your search
-                        key: Key("NoResults"),
-                        child: Text("No Results"),
-                      )),
+              child: cocktailBuilder(),
+            )
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -214,16 +226,30 @@ class _SearchPageState extends State<SearchPage> {
           Text(c.title)
         ],
       );
+  Widget cocktailBuilder() => result.isNotEmpty
+      ? GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1),
+          shrinkWrap: true,
+          itemCount: result.length,
+          itemBuilder: (context, index) {
+            return buildContainer(result[index]);
+          })
+      : const Center(
+          //when you come across nothing in your search
+          key: Key("NoResults"),
+          child: Text("No Results"),
+        );
   //the function that filters the dataset according to name of cocktail
-  void searchCocktails(String s) {
-    final filteredsearch = cocktailList.where((cocktail) {
-      final titleLower = cocktail.title.toLowerCase();
-      final searchLower = s.toLowerCase();
-      return titleLower.contains(searchLower);
-    }).toList();
-
+  void searchCocktails(String s) async {
+    List<Cocktail> searchResult = [];
+    final QuerySnapshot searchDB = await FirebaseFirestore.instance
+        .collection("Drinks")
+        .where("casetitle", arrayContains: s)
+        .get();
+    addCocktail(searchDB, searchResult);
     setState(() {
-      result = filteredsearch;
+      result = searchResult;
     });
   }
 }
