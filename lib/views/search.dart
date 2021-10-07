@@ -242,14 +242,16 @@ class _SearchPageState extends State<SearchPage> {
         );
   //the function that filters the dataset according to name of cocktail
   void searchCocktails(String s) async {
-    List<Cocktail> searchResult = [];
     final QuerySnapshot searchDB = await FirebaseFirestore.instance
         .collection("Drinks")
-        .where("casetitle", arrayContains: s)
+        .where("title", isGreaterThanOrEqualTo: s.toLowerCase())
+        .where("title", isLessThanOrEqualTo: s.toLowerCase() + '\uf8ff')
         .get();
-    addCocktail(searchDB, searchResult);
+
     setState(() {
-      result = searchResult;
+      //removes everything from the list and add the new queried result
+      result.removeRange(0, result.length);
+      addCocktail(searchDB, result);
     });
   }
 }
