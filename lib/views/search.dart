@@ -48,6 +48,7 @@ class _SearchPageState extends State<SearchPage> {
   final _controller = TextEditingController();
   final db = FirebaseFirestore.instance.collection("Drinks");
 
+  //gets the cocktail data from the snapshot and place them into a list
   void addCocktail(QuerySnapshot qs, List<Cocktail> l) {
     for (int i = 0; i < qs.docs.length; i++) {
       DocumentSnapshot snap = qs.docs[i];
@@ -61,18 +62,37 @@ class _SearchPageState extends State<SearchPage> {
   Future<void> getData() async {
     final d = FirebaseFirestore.instance.collection("Drinks");
     QuerySnapshot snapshot = await d.get();
-    addCocktail(snapshot, result);
+    setState(() {
+      addCocktail(snapshot, result);
+    });
   }
+
+  //gets the filter options for spirits
+  Future<void> getSpirits() async {
+    await FirebaseFirestore.instance
+        .collection("Ingredients")
+        .doc("Spirits")
+        .get()
+        .then((value) {
+      setState(() {
+        for (var element in List.from(value.get("name"))) {
+          spirits.add(element);
+        }
+      });
+    });
+  }
+  //get dataset for regions + local
 
   List<Cocktail> result = [];
 
   //drawer variables
-  List<String> spirits = ["Vodka", "Gin", "Tequila", "Whiskey", "Rum"];
+  List<String> spirits = [];
   List<String> filter = [];
   List<int> filterindex = [];
   @override
   void initState() {
-    // TODO: implement initState
+    //initialize filter for regions + local
+    getSpirits();
     getData();
     super.initState();
   }
@@ -192,6 +212,8 @@ class _SearchPageState extends State<SearchPage> {
               filterindex.remove(i);
               filter.remove(f);
             }
+            filterCocktails(filter);
+            print(filter);
           });
         },
         child: Container(
@@ -253,5 +275,22 @@ class _SearchPageState extends State<SearchPage> {
       result.removeRange(0, result.length);
       addCocktail(searchDB, result);
     });
+  }
+
+  void filterCocktails(List<String> f) async {
+    if (f.isNotEmpty) {
+      final QuerySnapshot filterDB = await FirebaseFirestore.instance
+          .collection("Drinks")
+          .where("Ingredients", arrayContainsAny: f)
+          .get();
+      setState(() {
+        result.removeRange(0, result.length);
+        addCocktail(filterDB, result);
+      });
+    } else {
+      //if you unclick all filter reset the page
+      result.removeRange(0, result.length);
+      getData();
+    }
   }
 }
