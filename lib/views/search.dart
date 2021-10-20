@@ -1,7 +1,11 @@
-import 'package:app/views/favorites.dart';
-import 'package:app/views/inventory.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
+import 'package:app/views/inventory.dart';
+import 'package:app/views/favorites.dart';
+//import cocktail model package
+import 'package:app/models/cocktail.dart';
+//install firestore package
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -11,8 +15,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final int _selectedIndex = 1;
-
+  final _selectedIndex = 1;
   void _onItemTapped(int index) {
     setState(() {
       switch (index) {
@@ -44,34 +47,50 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  void addCocktail(QuerySnapshot qs, List<Cocktail> c) {}
+  //when this page is initiallized, this will be called and place the
+  //collection of cocktails into the results variable
+  Future<void> getData() async {
+    final d = FirebaseFirestore.instance.collection("Drinks");
+    QuerySnapshot snapshot = await d.get();
+    setState(() {
+      addCocktail(snapshot, result);
+    });
+  }
+
+  //initialize list with every cocktail in database
+  List<Cocktail> result = [];
+  //text editing controller
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.local_drink),
-            SizedBox(width: 10),
-            Text('Search Page'),
-          ],
-        ),
+        title: Text("Search"),
       ),
-      body: ListView(
-        children: const [
-          Text("Filter",
-              style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 36,
-                  letterSpacing: 2,
-                  color: Color(0xffA63542))),
-          Text("Popular",
-              style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 36,
-                  letterSpacing: 2,
-                  color: Color(0xffA63542))),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                  hintText: "Search for a Cocktail",
+                  contentPadding: EdgeInsets.only(left: 10)),
+              onSubmitted: (string) {
+                //if string is empty, show result of all cocktails again or choose to show none
+
+                //make it so when you submit a new string
+                //results show cocktails of that string
+                print(string);
+              },
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -83,25 +102,26 @@ class _SearchPageState extends State<SearchPage> {
             backgroundColor: Color(0xffA63542),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: ('Search'),
-            backgroundColor: Color(0xffA63542),
-          ),
+              icon: Icon(Icons.search),
+              label: ('Search'),
+              backgroundColor: Color(0xffA63542)),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: ('Favorites'),
-            backgroundColor: Color(0xffA63542),
-          ),
+              icon: Icon(Icons.star),
+              label: ('Favorites'),
+              backgroundColor: Color(0xffA63542)),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: ('Inventory'),
-            backgroundColor: Color(0xffA63542),
-          ),
+              icon: Icon(Icons.shopping_cart),
+              label: ('Inventory'),
+              backgroundColor: Color(0xffA63542)),
         ],
-        onTap: _onItemTapped,
         currentIndex: _selectedIndex,
         unselectedItemColor: const Color(0xffE8DFDA),
+        onTap: _onItemTapped,
       ),
     );
   }
+
+  //this function will go onSubmitted of textfield and change the
+  //results of the cocktail based on the string
+  void searchResult(String s) {}
 }
