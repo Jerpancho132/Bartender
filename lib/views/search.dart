@@ -113,9 +113,10 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
               child: search.isNotEmpty
                   ? cocktailBuilder()
-                  : Center(
+                  : const Center(
                       //when no data shows
-                      child: Text("No Results"),
+                      child: Text("No Results",
+                          style: TextStyle(color: Colors.black)),
                     ))
         ],
       ),
@@ -186,6 +187,7 @@ class _SearchPageState extends State<SearchPage> {
 
           return name.contains(search);
         }).toList();
+        //sets search to new filtered search by name
         search = filteredSearch;
       }
     });
