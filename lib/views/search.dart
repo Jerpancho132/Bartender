@@ -47,7 +47,15 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  void addCocktail(QuerySnapshot qs, List<Cocktail> c) {}
+  //collect data from snapshot and place them into list
+  void addCocktail(QuerySnapshot qs, List<Cocktail> c) {
+    for (int i = 0; i < qs.docs.length; i++) {
+      DocumentSnapshot snap = qs.docs[i];
+      c.add(Cocktail(snap.id, snap.get("Ingredients"), snap.get("Instructions"),
+          snap.get("Picture")));
+    }
+  }
+
   //when this page is initiallized, this will be called and place the
   //collection of cocktails into the results variable
   Future<void> getData() async {
@@ -58,8 +66,18 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  //initialize database when state starts
+  @override
+  void initState() {
+    //initialize filter for regions + local
+    getData();
+    super.initState();
+  }
+
   //initialize list with every cocktail in database
+  //it should never be changed
   List<Cocktail> result = [];
+
   //text editing controller
   final _controller = TextEditingController();
   @override
