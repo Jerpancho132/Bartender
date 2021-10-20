@@ -89,6 +89,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
         title: Text("Search"),
       ),
@@ -106,13 +107,7 @@ class _SearchPageState extends State<SearchPage> {
               decoration: const InputDecoration(
                   hintText: "Search for a Cocktail",
                   contentPadding: EdgeInsets.only(left: 10)),
-              onSubmitted: (string) {
-                //if string is empty, show result of all cocktails again or choose to show none
-
-                //make it so when you submit a new string
-                //results show cocktails of that string
-                print(string);
-              },
+              onSubmitted: searchResult,
             ),
           ),
           Expanded(
@@ -169,10 +164,30 @@ class _SearchPageState extends State<SearchPage> {
             height: 150,
             child: Image.network(c.picture),
           ),
-          Text(c.name)
+          Text(
+            c.name,
+            style: TextStyle(color: Colors.black),
+          )
         ],
       );
   //this function will go onSubmitted of textfield and change the
   //results of the cocktail based on the string
-  void searchResult(String s) {}
+  void searchResult(String s) {
+    //if string is empty, show result of all cocktails again or choose to show none
+    setState(() {
+      if (s.isEmpty) {
+        search = result;
+      } else {
+        //make it so when you submit a new string
+        //results show cocktails of that string
+        final filteredSearch = result.where((e) {
+          final name = e.name.toLowerCase();
+          final search = s.toLowerCase();
+
+          return name.contains(search);
+        }).toList();
+        search = filteredSearch;
+      }
+    });
+  }
 }
