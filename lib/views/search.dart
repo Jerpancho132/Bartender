@@ -68,12 +68,26 @@ class _SearchPageState extends State<SearchPage> {
     //set the editable list
   }
 
+  Future<void> getSpirits() async {
+    final s = await FirebaseFirestore.instance
+        .collection("Ingredients")
+        .doc("Spirits")
+        .get();
+    setState(() {
+      //gets the array of names for spirits
+      spirits = s.get("name").cast<String>();
+    });
+  }
+
   //initialize database when state starts
   @override
   void initState() {
     //initialize filter for regions + local
     super.initState();
     //sets all the data when calling the function is complete
+    getSpirits().whenComplete(() {
+      setState(() {});
+    });
     getData().whenComplete(() {
       setState(() {});
     });
@@ -84,6 +98,11 @@ class _SearchPageState extends State<SearchPage> {
   List<Cocktail> result = [];
   //editable List
   List<Cocktail> search = [];
+  //initialize list of spirits filter
+  List<String> spirits = [];
+  //the container for what items we need to filter
+  List<String> filter = [];
+  List<int> filterIndex = [];
   //text editing controller
   final _controller = TextEditingController();
   @override
@@ -91,7 +110,29 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
-        title: Text("Search"),
+        backgroundColor: const Color(0xffA63542),
+        title: const Text("Search"),
+      ),
+      drawer: Drawer(
+        child: Container(
+          height: 100,
+          color: Colors.red[200],
+          child: ListView(
+            children: [
+              SizedBox(
+                  height: 50,
+                  child: DrawerHeader(
+                    padding: EdgeInsets.all(0),
+                    child: Text(
+                      "Filter",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontFamily: "Roboto", fontSize: 30),
+                    ),
+                  )),
+              spiritsFilter()
+            ],
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -147,6 +188,31 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
+
+  //Widget builder for the spirits filter
+  Widget spiritsFilter() => GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, childAspectRatio: 3),
+      shrinkWrap: true,
+      itemCount: spirits.length,
+      itemBuilder: (context, index) {
+        return filterButtonContainer(spirits[index], index);
+      });
+  Widget filterButtonContainer(String i, int index) => Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: filterIndex.contains(index)
+              ? const Color(0xFFA63542)
+              : Colors.black.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Text(
+          i,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: Colors.white),
+        ),
+      );
 
   //widget builder for the cocktails
   Widget cocktailBuilder() => GridView.builder(
