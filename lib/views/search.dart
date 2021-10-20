@@ -63,21 +63,27 @@ class _SearchPageState extends State<SearchPage> {
     QuerySnapshot snapshot = await d.get();
     setState(() {
       addCocktail(snapshot, result);
+      search = result;
     });
+    //set the editable list
   }
 
   //initialize database when state starts
   @override
   void initState() {
     //initialize filter for regions + local
-    getData();
     super.initState();
+    //sets all the data when calling the function is complete
+    getData().whenComplete(() {
+      setState(() {});
+    });
   }
 
   //initialize list with every cocktail in database
   //it should never be changed
   List<Cocktail> result = [];
-
+  //editable List
+  List<Cocktail> search = [];
   //text editing controller
   final _controller = TextEditingController();
   @override
@@ -109,6 +115,13 @@ class _SearchPageState extends State<SearchPage> {
               },
             ),
           ),
+          Expanded(
+              child: search.isNotEmpty
+                  ? cocktailBuilder()
+                  : Center(
+                      //when no data shows
+                      child: Text("No Results"),
+                    ))
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -139,6 +152,26 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
+  //widget builder for the cocktails
+  Widget cocktailBuilder() => GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, childAspectRatio: 1),
+      shrinkWrap: true,
+      itemCount: search.length,
+      itemBuilder: (context, index) {
+        return buildContainer(search[index]);
+      });
+  //widget container for the cocktails
+  Widget buildContainer(Cocktail c) => Column(
+        children: [
+          SizedBox(
+            width: 150,
+            height: 150,
+            child: Image.network(c.picture),
+          ),
+          Text(c.name)
+        ],
+      );
   //this function will go onSubmitted of textfield and change the
   //results of the cocktail based on the string
   void searchResult(String s) {}
