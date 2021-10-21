@@ -123,11 +123,23 @@ class _SearchPageState extends State<SearchPage> {
                   height: 50,
                   child: DrawerHeader(
                     padding: EdgeInsets.all(0),
-                    child: Text(
-                      "Filter",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: "Roboto", fontSize: 30),
-                    ),
+                    child: Row(children: [
+                      Expanded(
+                        child: Text(
+                          "Filter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: "Roboto", fontSize: 30),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Icon(Icons.search),
+                        onPressed: () {
+                          setState(() {
+                            filterOptions(filter);
+                          });
+                        },
+                      )
+                    ]),
                   )),
               spiritsFilter()
             ],
@@ -198,19 +210,32 @@ class _SearchPageState extends State<SearchPage> {
       itemBuilder: (context, index) {
         return filterButtonContainer(spirits[index], index);
       });
-  Widget filterButtonContainer(String i, int index) => Container(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: filterIndex.contains(index)
-              ? const Color(0xFFA63542)
-              : Colors.black.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Text(
-          i,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white),
+  Widget filterButtonContainer(String i, int index) => GestureDetector(
+        onTap: () {
+          setState(() {
+            if (!filterIndex.contains(index)) {
+              filter.add(i);
+              filterIndex.add(index);
+            } else {
+              filter.remove(i);
+              filterIndex.remove(index);
+            }
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          margin: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: filterIndex.contains(index)
+                ? const Color(0xFFA63542)
+                : Colors.black.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Text(
+            i,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       );
 
@@ -257,5 +282,26 @@ class _SearchPageState extends State<SearchPage> {
         search = filteredSearch;
       }
     });
+  }
+
+  //add a function that filters further the current search list by filter
+  //takes in parameter of the filter
+  void filterOptions(List<String> f) async {
+    //for now show how you would filter the spirits sections
+    List<Cocktail> proxy = [];
+    //this grabs the database drink and filters where the ingredients contains array filter
+    if (f.isNotEmpty) {
+      final QuerySnapshot filterDB = await FirebaseFirestore.instance
+          .collection("Drinks")
+          .where("Ingredients", arrayContainsAny: f)
+          .get();
+      addCocktail(filterDB, proxy);
+      setState(() {
+        search = proxy;
+      });
+    } else {
+      search = result;
+      print(result.map((e) => e.name).toList());
+    }
   }
 }
