@@ -137,6 +137,8 @@ class _SearchPageState extends State<SearchPage> {
                           setState(() {
                             filterOptions(filter);
                           });
+                          //this closes the drawer on Press.
+                          Navigator.pop(context);
                         },
                       )
                     ]),
