@@ -50,9 +50,12 @@ class _SearchPageState extends State<SearchPage> {
   //collect data from snapshot and place them into list
   void addCocktail(QuerySnapshot qs, List<Cocktail> c) {
     for (int i = 0; i < qs.docs.length; i++) {
-      DocumentSnapshot snap = qs.docs[i];
-      c.add(Cocktail(snap.id, snap.get("Ingredients"), snap.get("Instructions"),
-          snap.get("Picture")));
+      DocumentSnapshot snap = qs.docs.first;
+      List ref = snap["Ingredients"];
+      print(ref.map((e) => e.id).toList());
+
+      // c.add(Cocktail(snap.id, snap.get("Ingredients"), snap.get("Instructions"),
+      //     snap.get("Picture")));
     }
   }
 
@@ -124,7 +127,7 @@ class _SearchPageState extends State<SearchPage> {
                   child: DrawerHeader(
                     padding: EdgeInsets.all(0),
                     child: Row(children: [
-                      Expanded(
+                      const Expanded(
                         child: Text(
                           "Filter",
                           textAlign: TextAlign.center,
@@ -306,4 +309,8 @@ class _SearchPageState extends State<SearchPage> {
       print(result.map((e) => e.name).toList());
     }
   }
+
+  //alternative filter which should attempt to reduce
+  //the options fo the list
+  void alternativeFilter() {}
 }
