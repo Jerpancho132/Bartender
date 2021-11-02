@@ -4,8 +4,6 @@ import 'package:app/views/inventory.dart';
 import 'package:app/views/favorites.dart';
 //import cocktail model package
 import 'package:app/models/cocktail.dart';
-//install firestore package
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -47,65 +45,6 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  //collect data from snapshot and place them into list
-  void addCocktail(QuerySnapshot qs, List<Cocktail> c) {
-    for (int i = 0; i < qs.docs.length; i++) {
-      DocumentSnapshot snap = qs.docs.first;
-      List ref = snap["Ingredients"];
-      print(ref.map((e) => e.id).toList());
-
-      // c.add(Cocktail(snap.id, snap.get("Ingredients"), snap.get("Instructions"),
-      //     snap.get("Picture")));
-    }
-  }
-
-  //when this page is initiallized, this will be called and place the
-  //collection of cocktails into the results variable
-  Future<void> getData() async {
-    final d = FirebaseFirestore.instance.collection("Drinks");
-    QuerySnapshot snapshot = await d.get();
-    setState(() {
-      addCocktail(snapshot, result);
-      search = result;
-    });
-    //set the editable list
-  }
-
-  Future<void> getSpirits() async {
-    final s = await FirebaseFirestore.instance
-        .collection("Ingredients")
-        .doc("Spirits")
-        .get();
-    setState(() {
-      //gets the array of names for spirits
-      spirits = s.get("name").cast<String>();
-    });
-  }
-
-  //initialize database when state starts
-  @override
-  void initState() {
-    //initialize filter for regions + local
-    super.initState();
-    //sets all the data when calling the function is complete
-    getSpirits().whenComplete(() {
-      setState(() {});
-    });
-    getData().whenComplete(() {
-      setState(() {});
-    });
-  }
-
-  //initialize list with every cocktail in database
-  //it should never be changed
-  List<Cocktail> result = [];
-  //editable List
-  List<Cocktail> search = [];
-  //initialize list of spirits filter
-  List<String> spirits = [];
-  //the container for what items we need to filter
-  List<String> filter = [];
-  List<int> filterIndex = [];
   //text editing controller
   final _controller = TextEditingController();
   @override
@@ -115,41 +54,6 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xffA63542),
         title: const Text("Search"),
-      ),
-      drawer: Drawer(
-        child: Container(
-          height: 100,
-          color: Colors.red[200],
-          child: ListView(
-            children: [
-              SizedBox(
-                  height: 50,
-                  child: DrawerHeader(
-                    padding: EdgeInsets.all(0),
-                    child: Row(children: [
-                      const Expanded(
-                        child: Text(
-                          "Filter",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: "Roboto", fontSize: 30),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Icon(Icons.search),
-                        onPressed: () {
-                          setState(() {
-                            filterOptions(filter);
-                          });
-                          //this closes the drawer on Press.
-                          Navigator.pop(context);
-                        },
-                      )
-                    ]),
-                  )),
-              spiritsFilter()
-            ],
-          ),
-        ),
       ),
       body: Column(
         children: [
@@ -165,17 +69,9 @@ class _SearchPageState extends State<SearchPage> {
               decoration: const InputDecoration(
                   hintText: "Search for a Cocktail",
                   contentPadding: EdgeInsets.only(left: 10)),
-              onSubmitted: searchResult,
+              onSubmitted: (e) {},
             ),
           ),
-          Expanded(
-              child: search.isNotEmpty
-                  ? cocktailBuilder()
-                  : const Center(
-                      //when no data shows
-                      child: Text("No Results",
-                          style: TextStyle(color: Colors.black)),
-                    ))
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -205,112 +101,4 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-
-  //Widget builder for the spirits filter
-  Widget spiritsFilter() => GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, childAspectRatio: 3),
-      shrinkWrap: true,
-      itemCount: spirits.length,
-      itemBuilder: (context, index) {
-        return filterButtonContainer(spirits[index], index);
-      });
-  Widget filterButtonContainer(String i, int index) => GestureDetector(
-        onTap: () {
-          setState(() {
-            if (!filterIndex.contains(index)) {
-              filter.add(i);
-              filterIndex.add(index);
-            } else {
-              filter.remove(i);
-              filterIndex.remove(index);
-            }
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.all(5),
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: filterIndex.contains(index)
-                ? const Color(0xFFA63542)
-                : Colors.black.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(
-            i,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-      );
-
-  //widget builder for the cocktails
-  Widget cocktailBuilder() => GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, childAspectRatio: 1),
-      shrinkWrap: true,
-      itemCount: search.length,
-      itemBuilder: (context, index) {
-        return buildContainer(search[index]);
-      });
-  //widget container for the cocktails
-  Widget buildContainer(Cocktail c) => Column(
-        children: [
-          SizedBox(
-            width: 150,
-            height: 150,
-            child: Image.network(c.picture),
-          ),
-          Text(
-            c.name,
-            style: TextStyle(color: Colors.black),
-          )
-        ],
-      );
-  //this function will go onSubmitted of textfield and change the
-  //results of the cocktail based on the string
-  void searchResult(String s) {
-    //if string is empty, show result of all cocktails again or choose to show none
-    setState(() {
-      if (s.isEmpty) {
-        search = result;
-      } else {
-        //make it so when you submit a new string
-        //results show cocktails of that string
-        final filteredSearch = result.where((e) {
-          final name = e.name.toLowerCase();
-          final search = s.toLowerCase();
-
-          return name.contains(search);
-        }).toList();
-        //sets search to new filtered search by name
-        search = filteredSearch;
-      }
-    });
-  }
-
-  //add a function that filters further the current search list by filter
-  //takes in parameter of the filter
-  void filterOptions(List<String> f) async {
-    //for now show how you would filter the spirits sections
-    List<Cocktail> proxy = [];
-    //this grabs the database drink and filters where the ingredients contains array filter
-    if (f.isNotEmpty) {
-      final QuerySnapshot filterDB = await FirebaseFirestore.instance
-          .collection("Drinks")
-          .where("Ingredients", arrayContainsAny: f)
-          .get();
-      addCocktail(filterDB, proxy);
-      setState(() {
-        search = proxy;
-      });
-    } else {
-      search = result;
-      print(result.map((e) => e.name).toList());
-    }
-  }
-
-  //alternative filter which should attempt to reduce
-  //the options fo the list
-  void alternativeFilter() {}
 }
