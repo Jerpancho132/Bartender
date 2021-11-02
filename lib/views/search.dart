@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:app/views/favorites.dart';
 import 'package:app/views/inventory.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/models/cocktail.dart';
+import 'package:http/http.dart' as http;
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -44,8 +47,34 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  final _controller = TextEditingController();
+  Future<List<Cocktail>> getCocktails() async {
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/'));
+    //gets json turn it to a iterable list
+    Iterable list = json.decode(response.body);
+    if (response.statusCode == 200) {
+      return list.map((e) => Cocktail.fromJson(e)).toList();
+    } else {
+      throw Exception('did not get response');
+    }
+  }
 
+  void setCocktails() async {
+    final result = await getCocktails();
+    setState(() {
+      test = result;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setCocktails();
+  }
+
+  List<Cocktail> test = [];
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -77,6 +106,21 @@ class _SearchPageState extends State<SearchPage> {
                       contentPadding: EdgeInsets.only(left: 10)),
                   onChanged: (e) {}),
             ),
+            //should create a grid view here that builds the
+            //list but shows nothing if the api call gets nothing.
+            Expanded(
+                child: test.isNotEmpty
+                    ? GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, childAspectRatio: 1),
+                        itemCount: test.length,
+                        itemBuilder: (BuildContext c, i) {
+                          return cocktailContainer(test[i]);
+                        })
+                    : const Center(
+                        child: Text("Nothing"),
+                      ))
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -110,4 +154,16 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
+
+  Widget cocktailContainer(Cocktail c) => Column(
+        key: UniqueKey(),
+        children: [
+          SizedBox(
+            width: 150,
+            height: 150,
+            child: Image.network(c.image),
+          ),
+          Text(c.title)
+        ],
+      );
 }
