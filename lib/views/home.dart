@@ -76,22 +76,7 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                children: const [
-                  RecipeCard(
-                    title: 'Cocktail 1',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                  RecipeCard(
-                    title: 'Cocktail 2',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                ],
+                children: const [],
               ),
             ),
             Row(
@@ -109,22 +94,7 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                children: const [
-                  RecipeCard(
-                    title: 'Cocktail 3',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                  RecipeCard(
-                    title: 'Cocktail 4',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                ],
+                children: const [],
               ),
             )
           ]),

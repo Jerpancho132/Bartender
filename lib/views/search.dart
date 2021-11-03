@@ -101,6 +101,8 @@ class _SearchPageState extends State<SearchPage> {
 
   //list of every possible ingredients in the database;
   List ingredients = [];
+  //added list of ingredients to filter by;
+  List filterIngredientsList = ['lmao'];
   //main only for reference
   List<Cocktail> cocktailList = [];
   //this is used for searching the list
@@ -139,22 +141,12 @@ class _SearchPageState extends State<SearchPage> {
             ),
             //should create a grid view here that builds the
             //list but shows nothing if the api call gets nothing.
-            Expanded(
-                child: searchList.isNotEmpty
-                    ? GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, childAspectRatio: 1),
-                        itemCount: searchList.length,
-                        itemBuilder: (BuildContext c, i) {
-                          return cocktailContainer(searchList[i]);
-                        })
-                    : const Center(
-                        child: Text("Nothing"),
-                      )),
             ElevatedButton(
                 onPressed: () {
-                  if (searchList.isNotEmpty) {
+                  //condition if the textfield has an input
+                  //or if the filter buttons have been pressed
+                  if (_controller.text.isNotEmpty ||
+                      filterIngredientsList.isNotEmpty) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -198,22 +190,10 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget cocktailContainer(Cocktail c) => Column(
-        key: UniqueKey(),
-        children: [
-          SizedBox(
-            width: 150,
-            height: 150,
-            child: Image.network(c.image),
-          ),
-          Text(c.title),
-          //for development purpose only
-          Text(c.id.toString())
-        ],
-      );
   //searches for the
   void searchFunction(String s) {
     //starts the searchList with the full list
+    print(ingredients);
     searchList = cocktailList;
 
     final filteredSearch = searchList.where((cocktail) {
