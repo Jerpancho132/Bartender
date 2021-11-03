@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:app/views/favorites.dart';
 import 'package:app/views/inventory.dart';
+import 'package:app/views/results.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/models/cocktail.dart';
@@ -50,15 +50,29 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<Cocktail>> getCocktails() async {
     final response =
         await http.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/'));
-    //gets json turn it to a iterable list
-    Iterable list = json.decode(response.body);
+
     if (response.statusCode == 200) {
+      //gets json turn it to a iterable list
+      Iterable list = json.decode(response.body);
       return list.map((e) => Cocktail.fromJson(e)).toList();
     } else {
       throw Exception('did not get response');
     }
   }
 
+  //gets all the list of possible ingredients from the database
+  Future<List> getIngredients() async {
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/'));
+    if (response.statusCode == 200) {
+      Iterable data = json.decode(response.body);
+      return data.map((e) => e['title']).toList();
+    } else {
+      throw Exception('could not get ingredients');
+    }
+  }
+
+  //places the promise object into a list
   void setCocktails() async {
     final result = await getCocktails();
     setState(() {
@@ -68,13 +82,25 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  //places the promise ingredient into a list
+  void setIngredients() async {
+    final result = await getIngredients();
+    setState(() {
+      //initialize ingredients list
+      ingredients = result;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     setCocktails();
+    setIngredients();
   }
 
+  //list of every possible ingredients in the database;
+  List ingredients = [];
   //main only for reference
   List<Cocktail> cocktailList = [];
   //this is used for searching the list
@@ -125,7 +151,19 @@ class _SearchPageState extends State<SearchPage> {
                         })
                     : const Center(
                         child: Text("Nothing"),
-                      ))
+                      )),
+            ElevatedButton(
+                onPressed: () {
+                  if (searchList.isNotEmpty) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Results(result: searchList)));
+                  } else {
+                    print('list is empty');
+                  }
+                },
+                child: Text('Search'))
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -168,7 +206,9 @@ class _SearchPageState extends State<SearchPage> {
             height: 150,
             child: Image.network(c.image),
           ),
-          Text(c.title)
+          Text(c.title),
+          //for development purpose only
+          Text(c.id.toString())
         ],
       );
   //searches for the
