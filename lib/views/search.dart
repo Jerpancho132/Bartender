@@ -155,7 +155,30 @@ class _SearchPageState extends State<SearchPage> {
                     print('list is empty');
                   }
                 },
-                child: Text('Search'))
+                child: Text('Search')),
+            //set up a list view for each type of filter categories
+            //first category is ingredients, then age-range, then location
+            ListView(
+              shrinkWrap: true,
+              children: [
+                //setup a grid view of ingredient options
+                ingredients.isNotEmpty
+                    ? GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3, childAspectRatio: 3),
+                        itemCount: ingredients.length,
+                        itemBuilder: (BuildContext c, index) {
+                          //replace this with buttons that will add
+                          //them to the filter list
+                          return Text(ingredients[index]);
+                        })
+                    : const Center(
+                        child: Text('No Ingredients'),
+                      )
+              ],
+            )
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
