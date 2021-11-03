@@ -62,7 +62,9 @@ class _SearchPageState extends State<SearchPage> {
   void setCocktails() async {
     final result = await getCocktails();
     setState(() {
-      test = result;
+      //initialize both base
+      cocktailList = result;
+      searchList = result;
     });
   }
 
@@ -73,7 +75,10 @@ class _SearchPageState extends State<SearchPage> {
     setCocktails();
   }
 
-  List<Cocktail> test = [];
+  //main only for reference
+  List<Cocktail> cocktailList = [];
+  //this is used for searching the list
+  List<Cocktail> searchList = [];
   final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -104,19 +109,19 @@ class _SearchPageState extends State<SearchPage> {
                   decoration: const InputDecoration(
                       hintText: "Search for Cocktail",
                       contentPadding: EdgeInsets.only(left: 10)),
-                  onChanged: (e) {}),
+                  onSubmitted: searchFunction),
             ),
             //should create a grid view here that builds the
             //list but shows nothing if the api call gets nothing.
             Expanded(
-                child: test.isNotEmpty
+                child: searchList.isNotEmpty
                     ? GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2, childAspectRatio: 1),
-                        itemCount: test.length,
+                        itemCount: searchList.length,
                         itemBuilder: (BuildContext c, i) {
-                          return cocktailContainer(test[i]);
+                          return cocktailContainer(searchList[i]);
                         })
                     : const Center(
                         child: Text("Nothing"),
@@ -166,4 +171,18 @@ class _SearchPageState extends State<SearchPage> {
           Text(c.title)
         ],
       );
+  //searches for the
+  void searchFunction(String s) {
+    //starts the searchList with the full list
+    searchList = cocktailList;
+
+    final filteredSearch = searchList.where((cocktail) {
+      final titleLower = cocktail.title.toLowerCase();
+      final searchLower = s.toLowerCase();
+      return titleLower.contains(searchLower);
+    }).toList();
+    setState(() {
+      searchList = filteredSearch;
+    });
+  }
 }
