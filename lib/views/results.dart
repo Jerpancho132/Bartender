@@ -11,7 +11,20 @@ class Results extends StatefulWidget {
 class _ResultsState extends State<Results> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return MaterialApp(
+        home: Scaffold(
+      backgroundColor: const Color(0xFFE8DFDA),
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        title: const Center(
+          child: Text('Results'),
+        ),
+        backgroundColor: const Color(0xffA63542),
+      ),
+      body: Container(
+        margin: EdgeInsets.only(top: 10),
         child: widget.result.isNotEmpty
             ? GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -22,7 +35,9 @@ class _ResultsState extends State<Results> {
                 })
             : const Center(
                 child: Text("Nothing"),
-              ));
+              ),
+      ),
+    ));
   }
 
   Widget cocktailContainer(Cocktail c) => Column(
