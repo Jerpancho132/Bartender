@@ -167,7 +167,10 @@ class _SearchPageState extends State<SearchPage> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3, childAspectRatio: 3),
+                                crossAxisCount: 4,
+                                childAspectRatio: 2,
+                                mainAxisSpacing: 4,
+                                crossAxisSpacing: 4),
                         itemCount: ingredients.length,
                         itemBuilder: (BuildContext c, index) {
                           //replace this with buttons that will add
@@ -176,7 +179,8 @@ class _SearchPageState extends State<SearchPage> {
                         })
                     : const Center(
                         child: Text('No Ingredients'),
-                      )
+                      ),
+                //setup next grid view for next category
               ],
             )
           ],
