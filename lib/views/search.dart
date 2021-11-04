@@ -60,6 +60,18 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
+  //gets cocktails by a given ingredient
+  Future<List> getCocktailsbyIngredient(String i) async {
+    final response = await http
+        .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/ingredient/${i}'));
+    if (response.statusCode == 200) {
+      Iterable list = json.decode(response.body);
+      return list.map((e) => e['id']).toList();
+    } else {
+      throw Exception('Could not get cocktails by ingredients');
+    }
+  }
+
   //gets all the list of possible ingredients from the database
   Future<List> getIngredients() async {
     final response =
@@ -101,17 +113,19 @@ class _SearchPageState extends State<SearchPage> {
 
   //list of every possible ingredients in the database;
   List ingredients = [];
+
   //added list of ingredients to filter by;
-  List filterIngredientsList = ['lmao'];
-  //main only for reference
+  List _ingredientsFilter = [];
+  //initial list only for reference
   List<Cocktail> cocktailList = [];
-  //this is used for searching the list
+  //this is used for filtering the list from given categories
   List<Cocktail> searchList = [];
   final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFFE8DFDA),
         appBar: AppBar(
           backgroundColor: const Color(0xffA63542),
@@ -137,16 +151,17 @@ class _SearchPageState extends State<SearchPage> {
                   decoration: const InputDecoration(
                       hintText: "Search for Cocktail",
                       contentPadding: EdgeInsets.only(left: 10)),
-                  onSubmitted: searchFunction),
+                  onChanged: searchFunction),
             ),
             //should create a grid view here that builds the
             //list but shows nothing if the api call gets nothing.
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  searchList = await searchbyIngredients(['Gin', 'Lime']);
                   //condition if the textfield has an input
                   //or if the filter buttons have been pressed
                   if (_controller.text.isNotEmpty ||
-                      filterIngredientsList.isNotEmpty) {
+                      _ingredientsFilter.isNotEmpty) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -155,7 +170,7 @@ class _SearchPageState extends State<SearchPage> {
                     print('list is empty');
                   }
                 },
-                child: Text('Search')),
+                child: const Text('Search')),
             //set up a list view for each type of filter categories
             //first category is ingredients, then age-range, then location
             ListView(
@@ -231,5 +246,31 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       searchList = filteredSearch;
     });
+  }
+
+  //function to filter list by ingredients;
+  Future<List<Cocktail>> searchbyIngredients(List i) async {
+    List ids = [];
+    if (i.isNotEmpty) {
+      if (searchList.isNotEmpty) {
+        for (int x = 0; x < i.length; x++) {
+          ids.addAll(await getCocktailsbyIngredient(i[x]));
+        }
+        //makes ids distinct
+        ids = ids.toSet().toList();
+        //filters the searchlist which is already filtered by
+        //searchFunction and further filters it by ingredients
+        final _filteredSearch = searchList.where((cocktail) {
+          return ids.contains(cocktail.id);
+        }).toList();
+        return _filteredSearch;
+      } else {
+        //just return the search list unfiltered
+        return searchList;
+      }
+    } else {
+      //returns search list unfiltered
+      return searchList;
+    }
   }
 }
