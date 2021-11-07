@@ -163,7 +163,8 @@ class _SearchPageState extends State<SearchPage> {
                       //initialize a new list that first takes in the search list
                       List<Cocktail> filter = searchList;
                       //Filter by given ingredients
-                      filter = await searchbyIngredients(_ingredientsFilter);
+                      filter =
+                          await searchbyIngredients(filter, _ingredientsFilter);
                       //condition if the textfield has an input
                       //or if the filter buttons have been pressed
                       if (filter.isNotEmpty) {
@@ -271,7 +272,6 @@ class _SearchPageState extends State<SearchPage> {
               _ingredientsFilter.remove(i);
             }
             print(_ingredientsFilter);
-            print(searchList);
           });
         },
         child: Container(
@@ -308,7 +308,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   //function to filter list by ingredients;
-  Future<List<Cocktail>> searchbyIngredients(List i) async {
+  Future<List<Cocktail>> searchbyIngredients(List<Cocktail> f, List i) async {
     List ids = [];
     if (i.isNotEmpty) {
       if (searchList.isNotEmpty) {
@@ -319,17 +319,17 @@ class _SearchPageState extends State<SearchPage> {
         ids = ids.toSet().toList();
         //filters the searchlist which has already been filtered by
         //searchFunction and further filters it by ingredients
-        final _filteredSearch = searchList.where((cocktail) {
+        final _filteredSearch = f.where((cocktail) {
           return ids.contains(cocktail.id);
         }).toList();
         return _filteredSearch;
       } else {
         //just return the search list unfiltered
-        return searchList;
+        return f;
       }
     } else {
       //returns search list unfiltered
-      return searchList;
+      return f;
     }
   }
 }
