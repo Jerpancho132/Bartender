@@ -79,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
     final response =
         await http.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/'));
     if (response.statusCode == 200) {
-      Iterable data = json.decode(response.body);
+      final data = json.decode(response.body);
       return data.map((e) => e['title']).toList();
     } else {
       throw Exception('could not get ingredients');
@@ -101,7 +101,8 @@ class _SearchPageState extends State<SearchPage> {
     final result = await getIngredients();
     setState(() {
       //initialize ingredients list
-      ingredients = result;
+      //double dot is cascade notation
+      ingredients = result..sort();
     });
   }
 
