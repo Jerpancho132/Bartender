@@ -49,9 +49,9 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  Future<List<Cocktail>> getCocktails() async {
+  Future<List<Cocktail>> getCocktails(http.Client client) async {
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/'));
+        await client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/'));
 
     if (response.statusCode == 200) {
       //gets json turn it to a iterable list
@@ -88,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
 
   //places the promise object into a list
   void setCocktails() async {
-    final result = await getCocktails();
+    final result = await getCocktails(http.Client());
     setState(() {
       //initialize both base
       cocktailList = result;
