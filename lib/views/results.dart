@@ -24,7 +24,7 @@ class _ResultsState extends State<Results> {
         backgroundColor: const Color(0xffA63542),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         child: widget.result.isNotEmpty
             ? GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

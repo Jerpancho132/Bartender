@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:app/views/favorites.dart';
 import 'package:app/views/inventory.dart';
 import 'package:app/views/results.dart';
@@ -8,6 +7,7 @@ import 'package:app/views/home.dart';
 import 'package:app/models/cocktail.dart';
 import 'package:flutter/painting.dart';
 import 'package:http/http.dart' as http;
+import 'package:app/resources/api_calls.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -49,43 +49,6 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  Future<List<Cocktail>> getCocktails(http.Client client) async {
-    final response =
-        await client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/'));
-
-    if (response.statusCode == 200) {
-      //gets json turn it to a iterable list
-      Iterable list = json.decode(response.body);
-      return list.map((e) => Cocktail.fromJson(e)).toList();
-    } else {
-      throw Exception('did not get response');
-    }
-  }
-
-  //gets cocktails by a given ingredient
-  Future<List> getCocktailsbyIngredient(String i) async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/ingredient/${i}'));
-    if (response.statusCode == 200) {
-      Iterable list = json.decode(response.body);
-      return list.map((e) => e['id']).toList();
-    } else {
-      throw Exception('Could not get cocktails by ingredients');
-    }
-  }
-
-  //gets all the list of possible ingredients from the database
-  Future<List> getIngredients() async {
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/'));
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data.map((e) => e['title']).toList();
-    } else {
-      throw Exception('could not get ingredients');
-    }
-  }
-
   //places the promise object into a list
   void setCocktails() async {
     final result = await getCocktails(http.Client());
@@ -98,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
 
   //places the promise ingredient into a list
   void setIngredients() async {
-    final result = await getIngredients();
+    final result = await getIngredients(http.Client());
     setState(() {
       //initialize ingredients list
       //double dot is cascade notation
@@ -316,7 +279,7 @@ class _SearchPageState extends State<SearchPage> {
     if (i.isNotEmpty) {
       if (searchList.isNotEmpty) {
         for (int x = 0; x < i.length; x++) {
-          ids.addAll(await getCocktailsbyIngredient(i[x]));
+          ids.addAll(await getCocktailsbyIngredient(http.Client(), i[x]));
         }
         //makes ids distinct
         ids = ids.toSet().toList();

@@ -1,4 +1,3 @@
-import 'package:app/views/Widgets/cocktail_card.dart';
 import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
 import 'package:app/views/favorites.dart';
