@@ -4,14 +4,13 @@ class Cocktail {
   final String image;
   final String glasstype;
   final String instruction;
-  
+
   Cocktail(
       {required this.id,
       required this.title,
       required this.image,
       required this.glasstype,
-      required this.instruction
-      });
+      required this.instruction});
 
   factory Cocktail.fromJson(Map<String, dynamic> json) {
     return Cocktail(
@@ -21,4 +20,14 @@ class Cocktail {
         glasstype: json['glasstype'],
         instruction: json['instruction']);
   }
+
+  int get cocktailId => id;
+
+  String get name => title;
+
+  String get imageUrl => image;
+
+  String get glass => glasstype;
+
+  String get cocktailInstruction => instruction;
 }
