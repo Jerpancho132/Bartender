@@ -204,9 +204,11 @@ class _SearchPageState extends State<SearchPage> {
                 //should create a grid view here that builds the
                 //list of ingredients but shows nothing if the api call gets nothing.
                 const Padding(padding: EdgeInsets.only(top: 10)),
+                //this is the gridview for the ingredients filter buttons
                 ingredients.isNotEmpty
                     ? GridView.builder(
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4,
