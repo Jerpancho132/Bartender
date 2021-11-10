@@ -11,8 +11,7 @@ class Results extends StatefulWidget {
 class _ResultsState extends State<Results> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
         leading: BackButton(
@@ -37,7 +36,7 @@ class _ResultsState extends State<Results> {
                 child: Text("Nothing"),
               ),
       ),
-    ));
+    );
   }
 
   Widget cocktailContainer(Cocktail c) => Column(
