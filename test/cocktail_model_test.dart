@@ -73,7 +73,7 @@ void main() {
 
       final test = Cocktail.fromJson(jsonDecode(json));
 
-      //should expect a cocktail from converted from a given json body
+      //should expect a cocktail object converted from a given json body
       expect(test, isA<Cocktail>());
       expect(test.cocktailId, 1);
       expect(test.name, "cosmopolitan");
