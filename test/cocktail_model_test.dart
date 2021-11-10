@@ -6,7 +6,7 @@ void main() {
   group('test Cocktail model getters', () {
     test('Create new Cocktail', () {
       //simple test of generating new Cocktail object
-      Cocktail test = Cocktail(
+      final test = Cocktail(
           id: 1,
           title: "title",
           image: "image",
@@ -17,7 +17,7 @@ void main() {
     });
     test('get id', () {
       //simple test of id getter
-      Cocktail test = Cocktail(
+      final test = Cocktail(
           id: 2,
           title: "title",
           image: "image",
@@ -27,7 +27,7 @@ void main() {
     });
     test('get title', () {
       //simple test of title getter
-      Cocktail test = Cocktail(
+      final test = Cocktail(
           id: 3,
           title: "new title",
           image: "image",
@@ -37,7 +37,7 @@ void main() {
     });
     test('get image', () {
       //simple test of imageURL getter
-      Cocktail test = Cocktail(
+      final test = Cocktail(
           id: 4,
           title: "title",
           image: "new image",
@@ -47,7 +47,7 @@ void main() {
     });
     test('get glasstype', () {
       //simple test of glasstype getter
-      Cocktail test = Cocktail(
+      final test = Cocktail(
           id: 2,
           title: "title",
           image: "image",
@@ -57,7 +57,7 @@ void main() {
     });
     test('get instructions', () {
       //simple test of instruction getter
-      Cocktail test = Cocktail(
+      final test = Cocktail(
           id: 2,
           title: "title",
           image: "image",
