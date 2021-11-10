@@ -32,7 +32,7 @@ Future<List> getIngredients(http.Client client) async {
   final response =
       await client.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/'));
   if (response.statusCode == 200) {
-    final data = json.decode(response.body);
+    Iterable data = json.decode(response.body);
     return data.map((e) => e['title']).toList();
   } else {
     throw Exception('could not get ingredients');
