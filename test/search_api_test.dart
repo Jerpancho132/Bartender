@@ -1,5 +1,7 @@
 import 'package:app/models/cocktail.dart';
 import 'package:app/resources/api_calls.dart';
+import 'package:app/views/search.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';

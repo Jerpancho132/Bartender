@@ -11,7 +11,6 @@ import 'package:app/resources/api_calls.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
-
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -112,7 +111,7 @@ class _SearchPageState extends State<SearchPage> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: TextField(
-                      key: const Key("searchbar"),
+                      key: const Key("searchfield"),
                       //this is the search bar that will filter out the dataset
                       controller: _controller,
                       decoration: const InputDecoration(
