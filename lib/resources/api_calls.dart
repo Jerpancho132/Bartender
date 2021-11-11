@@ -21,6 +21,7 @@ Future<List> getCocktailsbyIngredient(http.Client client, String i) async {
       .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/ingredient/$i'));
   if (response.statusCode == 200) {
     Iterable list = json.decode(response.body);
+    //returns id of cocktail by that ingredient
     return list.map((e) => e['id']).toList();
   } else {
     throw Exception('Could not get cocktails by ingredients');
