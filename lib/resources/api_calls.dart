@@ -27,6 +27,8 @@ Future<List> getCocktailsbyIngredient(http.Client client, String i) async {
     throw Exception('Could not get cocktails by ingredients');
   }
 }
+//get cocktails by glass type
+
 
 //gets all the list of possible ingredients from the database
 Future<List> getIngredients(http.Client client) async {

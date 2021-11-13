@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:app/models/cocktail.dart';
 import 'package:flutter/painting.dart';
-import 'package:http/http.dart' as http;
 import 'package:app/resources/api_calls.dart';
+import 'package:app/global.dart' as global;
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
 
   //places the promise object into a list
   void setCocktails() async {
-    final result = await getCocktails(http.Client());
+    final result = await getCocktails(global.client);
     setState(() {
       //initialize both base
       cocktailList = result;
@@ -60,7 +60,7 @@ class _SearchPageState extends State<SearchPage> {
 
   //places the promise ingredient into a list
   void setIngredients() async {
-    final result = await getIngredients(http.Client());
+    final result = await getIngredients(global.client);
     setState(() {
       //initialize ingredients list
       //double dot is cascade notation
@@ -147,7 +147,6 @@ class _SearchPageState extends State<SearchPage> {
                                   .hideCurrentSnackBar();
                             },
                           ));
-
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
@@ -289,7 +288,7 @@ class _SearchPageState extends State<SearchPage> {
     if (i.isNotEmpty) {
       if (f.isNotEmpty) {
         for (int x = 0; x < i.length; x++) {
-          ids.addAll(await getCocktailsbyIngredient(http.Client(), i[x]));
+          ids.addAll(await getCocktailsbyIngredient(global.client, i[x]));
         }
         //makes ids distinct
         ids = ids.toSet().toList();
