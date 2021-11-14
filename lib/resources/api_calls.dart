@@ -27,8 +27,19 @@ Future<List> getCocktailsbyIngredient(http.Client client, String i) async {
     throw Exception('Could not get cocktails by ingredients');
   }
 }
-//get cocktails by glass type
 
+//get cocktails by glass type
+Future<List> getCocktailsByGlass(http.Client client, String g) async {
+  final response = await client
+      .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/glass/$g'));
+  if (response.statusCode == 200) {
+    //gets json turn it to a iterable list
+    Iterable list = json.decode(response.body);
+    return list.map((e) => e['id']).toList();
+  } else {
+    throw Exception('did not get response');
+  }
+}
 
 //gets all the list of possible ingredients from the database
 Future<List> getIngredients(http.Client client) async {

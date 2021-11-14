@@ -58,7 +58,7 @@ void main() {
               ]''', 200));
       expect(await getCocktailsbyIngredient(client, i), isA<List>());
     });
-    test('test getIngredients ThrowException', () {
+    test('test getCocktailByIngredients ThrowException', () {
       final client = MockClient();
       String i = "vodka";
       when(client.get(
@@ -66,6 +66,26 @@ void main() {
           .thenAnswer(
               (realInvocation) async => http.Response('Error Response', 500));
       expect(getCocktailsbyIngredient(client, i), throwsException);
+    });
+    test('test getCocktailByGlass', () async {
+      final client = MockClient();
+      String i = "cocktail glass";
+      //mockito providing a successful response of a correct json body
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/glass/$i')))
+          .thenAnswer((realInvocation) async =>
+              http.Response('''[{"id": 1, "title":"cosmopolitan"},
+              {"id":2,"title": "Long Island"}
+              ]''', 200));
+
+      expect(await getCocktailsByGlass(client, i), isA<List>());
+    });
+    test('test getCocktailByGlass ThrowException', () {
+      final client = MockClient();
+      String i = "not vodka";
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/glass/$i')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getCocktailsByGlass(client, i), throwsException);
     });
   });
 }

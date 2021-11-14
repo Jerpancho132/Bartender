@@ -79,8 +79,31 @@ class _SearchPageState extends State<SearchPage> {
   //list of every possible ingredients in the database initialized
   List ingredients = [];
 
+  List glass = [
+    'cocktail glass',
+    'shot glass',
+    'martini glass',
+    'highball glass',
+    'collins glass',
+    'old-fashioned glass',
+    'sour glass',
+    'champagne flute',
+    'margarita glass',
+    'pilsner glass',
+    'goupe glass',
+    'beer mug',
+    'copper mug',
+    'pint glass',
+    'hurricane glass',
+    'wine glass'
+  ];
+
+  //cocktail glass,shot glass,martini glass,highball glass,collins glass,old-fashioned glass,sour glass,champagne flute
+  //margarita glass, pilsner glass,coupe glass,beer mug,copper mug,pint glass,hurricane glass, wine glass
+
   //added list of ingredients to filter by;
   List _ingredientsFilter = [];
+  List _glassFilter = [];
   //initial list only for reference
   List<Cocktail> cocktailList = [];
   //this is used for filtering the list from given categories
@@ -124,31 +147,27 @@ class _SearchPageState extends State<SearchPage> {
                   onPressed: () async {
                     //initialize a new list that first takes in the search list
                     List<Cocktail> filter = searchList;
+                    //snackbar in case there the item returned empty
+                    final snackBar = SnackBar(
+                        content:
+                            const Text('Found no results from your search.'),
+                        action: SnackBarAction(
+                          label: 'hide',
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          },
+                        ));
                     //Filter by given ingredients
                     filter =
                         await searchbyIngredients(filter, _ingredientsFilter);
                     //condition if the textfield has an input
                     //or if the filter buttons have been pressed
-                    if (filter.isNotEmpty) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Results(result: filter)));
-                    } else {
-                      //shows a small notification bar in the bottom
-                      //search result came out empty.
-                      final snackBar = SnackBar(
-                          content:
-                              const Text('Found no results from your search.'),
-                          action: SnackBarAction(
-                            label: 'hide',
-                            onPressed: () {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                            },
-                          ));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
+                    filter.isNotEmpty
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Results(result: filter)))
+                        : ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   child: const Text('Search')),
               const Padding(padding: EdgeInsets.only(right: 10))
@@ -164,7 +183,8 @@ class _SearchPageState extends State<SearchPage> {
           const Padding(padding: EdgeInsets.only(top: 10)),
           //set up a list view for each type of filter categories
           //first category is ingredients, then age-range, then location
-          ListView(
+          Expanded(
+              child: ListView(
             shrinkWrap: true,
             children: [
               //setup a grid view of ingredient options
@@ -193,14 +213,36 @@ class _SearchPageState extends State<SearchPage> {
                       itemBuilder: (BuildContext c, index) {
                         //replace this with buttons that will add
                         //them to the filter list
-                        return ingredientCard(ingredients[index]);
+                        return filterButtons(
+                            _ingredientsFilter, ingredients[index]);
                       })
                   : const Center(
                       child: Text('No ingredients data found'),
                     ),
-              //setup next grid view for next category
+              const Center(
+                  child: Text(
+                'Glass',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              )),
+              //should create a grid view here that builds the
+              //types of glass
+              const Padding(padding: EdgeInsets.only(top: 10)),
+
+              GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 2,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4),
+                  itemCount: glass.length,
+                  itemBuilder: (BuildContext c, index) =>
+                      filterButtons(_glassFilter, glass[index])),
             ],
-          )
+          )),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -235,34 +277,27 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   //filter button widget for each ingredient
-  Widget ingredientCard(String i) => GestureDetector(
+  Widget filterButtons(List f, String i) => GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
           setState(() {
             //if clicked add to filters list
-            if (!_ingredientsFilter.contains(i)) {
-              _ingredientsFilter.add(i);
-            } else {
-              //else remove from filters list
-              _ingredientsFilter.remove(i);
-            }
-            print(_ingredientsFilter);
+            addToFilter(f, i);
           });
+          print(f);
         },
         child: Container(
-            padding: const EdgeInsets.all(5),
-            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(1),
+            margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: _ingredientsFilter.contains(i)
-                  ? Colors.red.shade700
-                  : Colors.red.shade300,
+              color: f.contains(i) ? Colors.red.shade700 : Colors.red.shade300,
               borderRadius: BorderRadius.circular(15),
             ),
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 i,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 14),
               ),
             )),
       );
@@ -280,6 +315,17 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       searchList = filteredSearch;
     });
+  }
+
+  //takes in a the filter list of varying category and the input;
+  void addToFilter(List f, String x) {
+    //if clicked add to filter list
+    if (!f.contains(x)) {
+      f.add(x);
+    } else {
+      //else remove from filters list
+      f.remove(x);
+    }
   }
 
   //function to filter list by ingredients;
@@ -307,4 +353,5 @@ class _SearchPageState extends State<SearchPage> {
       return f;
     }
   }
+  //glasses
 }
