@@ -73,9 +73,7 @@ void main() {
       //mockito providing a successful response of a correct json body
       when(client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/glass/$i')))
           .thenAnswer((realInvocation) async =>
-              http.Response('''[{"id": 1, "title":"cosmopolitan"},
-              {"id":2,"title": "Long Island"}
-              ]''', 200));
+              http.Response('[{"id": 1, "title":"cosmopolitan"}]', 200));
 
       expect(await getCocktailsByGlass(client, i), isA<List>());
     });

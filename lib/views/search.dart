@@ -160,6 +160,8 @@ class _SearchPageState extends State<SearchPage> {
                     //Filter by given ingredients
                     filter =
                         await searchbyIngredients(filter, _ingredientsFilter);
+                    //Filter by given glass types
+                    filter = await searchByGlass(filter, _glassFilter);
                     //condition if the textfield has an input
                     //or if the filter buttons have been pressed
                     filter.isNotEmpty
@@ -279,9 +281,9 @@ class _SearchPageState extends State<SearchPage> {
   //filter button widget for each ingredient
   Widget filterButtons(List f, String i) => GestureDetector(
         behavior: HitTestBehavior.opaque,
+        //if clicked add to filters list
         onTap: () {
           setState(() {
-            //if clicked add to filters list
             addToFilter(f, i);
           });
           print(f);
@@ -353,5 +355,30 @@ class _SearchPageState extends State<SearchPage> {
       return f;
     }
   }
+
   //glasses
+  Future<List<Cocktail>> searchByGlass(List<Cocktail> f, List g) async {
+    List ids = [];
+    if (g.isNotEmpty) {
+      if (f.isNotEmpty) {
+        for (int x = 0; x < g.length; x++) {
+          ids.addAll(await getCocktailsByGlass(global.client, g[x]));
+        }
+        //makes ids distinct
+        ids = ids.toSet().toList();
+        //filters the searchlist which has already been filtered by
+        //searchFunction and further filters it by ingredients
+        final _filteredSearch = f.where((cocktail) {
+          return ids.contains(cocktail.id);
+        }).toList();
+        return _filteredSearch;
+      } else {
+        //just return the empty list if empty
+        return f;
+      }
+    } else {
+      //returns search list empty if nothing to filter by
+      return f;
+    }
+  }
 }

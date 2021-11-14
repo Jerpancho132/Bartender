@@ -13,6 +13,7 @@ void main() {
   //overrides test mocking from flutter test package
   //setUpAll(() => HttpOverrides.global = null);
   global.client = MockClient();
+
   when(global.client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/')))
       .thenAnswer((realInvocation) async => http.Response(
           '''[{"id": 1, "title": "cocktail", "image": "cocktail image", "glasstype": "highball glass", "instruction": "something"},
@@ -23,6 +24,16 @@ void main() {
           '''[{"id": 1, "title":"Lime", "image":"an image", "description":"a description"},
               {"id": 2, "title":"white rum", "image":"another image", "description":"another description"}
               ]''', 200));
+  when(global.client.get(
+          Uri.parse('http://10.0.2.2:8080/api/cocktails/ingredient/vodka')))
+      .thenAnswer((realInvocation) async =>
+          http.Response('''[{"id": 1, "title":"cosmopolitan"},
+              {"id":2,"title": "Long Island"}
+              ]''', 200));
+  when(global.client.get(
+          Uri.parse('http://10.0.2.2:8080/api/cocktails/glass/cocktail glass')))
+      .thenAnswer((realInvocation) async =>
+          http.Response('[{"id": 1, "title":"cosmopolitan"}]', 200));
   //instead try to create a mockclient by making httpclient a global variable
   testWidgets('test search page', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: SearchPage()));
@@ -33,5 +44,6 @@ void main() {
     //expects to find a textfield
     expect(findTextField, findsOneWidget);
     expect(find.text('Lime'), findsOneWidget);
+    expect(find.text('cocktail glass'), findsOneWidget);
   });
 }
