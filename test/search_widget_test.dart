@@ -35,7 +35,7 @@ void main() {
       .thenAnswer((realInvocation) async =>
           http.Response('[{"id": 1, "title":"cosmopolitan"}]', 200));
   //instead try to create a mockclient by making httpclient a global variable
-  testWidgets('test search page', (tester) async {
+  testWidgets('test search page and filter buttons', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: SearchPage()));
 
     final findTextField = find.byKey(const Key('searchfield'));
@@ -45,5 +45,12 @@ void main() {
     expect(findTextField, findsOneWidget);
     expect(find.text('Lime'), findsOneWidget);
     expect(find.text('cocktail glass'), findsOneWidget);
+  });
+  testWidgets('test button to navigate to next page', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: SearchPage()));
+
+    final findSearchButton = find.byKey(const Key('searchButton'));
+    await tester.pumpAndSettle();
+    expect(findSearchButton, findsOneWidget);
   });
 }

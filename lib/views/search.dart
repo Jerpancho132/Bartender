@@ -48,6 +48,14 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  static const navigateResultsPage = Key('navigateToResults');
+
+  void _navigateToResultsPage(BuildContext context) {
+    final route =
+        MaterialPageRoute(builder: (context) => Results(result: filter));
+    Navigator.of(context).push(route);
+  }
+
   //places the promise object into a list
   void setCocktails() async {
     final result = await getCocktails(global.client);
@@ -108,6 +116,7 @@ class _SearchPageState extends State<SearchPage> {
   List<Cocktail> cocktailList = [];
   //this is used for filtering the list from given categories
   List<Cocktail> searchList = [];
+  List<Cocktail> filter = [];
   final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -144,9 +153,10 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               ElevatedButton(
+                  key: navigateResultsPage,
                   onPressed: () async {
                     //initialize a new list that first takes in the search list
-                    List<Cocktail> filter = searchList;
+                    filter = searchList;
                     //snackbar in case there the item returned empty
                     final snackBar = SnackBar(
                         content:
@@ -165,10 +175,7 @@ class _SearchPageState extends State<SearchPage> {
                     //condition if the textfield has an input
                     //or if the filter buttons have been pressed
                     filter.isNotEmpty
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Results(result: filter)))
+                        ? _navigateToResultsPage(context)
                         : ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   child: const Text('Search')),
