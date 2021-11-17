@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'package:app/models/cocktail.dart';
+import 'package:http/http.dart' as http;
 import 'package:app/views/Widgets/cocktail_card.dart';
 import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
 import 'package:app/views/favorites.dart';
 import 'package:flutter/material.dart';
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,146 +16,97 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final int _selectedIndex = 0;
-  void _onItemTapped(int index) {
+  //code for floating navbar
+  int _index = 0;
+  final List<Widget> _options = <Widget>[
+    const HomePage(),
+    const SearchPage(),
+    const FavoritesPage(),
+    const InventoryPage()
+  ];
+
+  void _onItemTap(int index) {
     setState(() {
-      switch (index) {
-        case 1:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const SearchPage()),
-            );
-          }
-          break;
-        case 2:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const FavoritesPage()),
-            );
-          }
-          break;
-        case 3:
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const InventoryPage()),
-            );
-          }
-          break;
-      }
+      _index = index;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
+      );
     });
   }
+
+  //code for retrieving cocktail list from databse
+  Future<List<Cocktail>> fetchCocktail() async {
+    var url = "http://10.0.2.2:8080/api/cocktails";
+    var response = await http.get(Uri.parse(url));
+
+    var cocktails = <Cocktail>[];
+
+    if (response.statusCode == 200) {
+      var cocktailsJson = json.decode(response.body);
+      for (var cocktailJson in cocktailsJson) {
+        cocktails.add(Cocktail.fromJson(cocktailJson));
+      }
+    }
+    return cocktails;
+  }
+
+  @override
+  void initState() {
+    fetchCocktail().then((value) {
+      setState(() {
+        _cocktails.addAll(value);
+      });
+    });
+  }
+
+  final List<Cocktail> _cocktails = <Cocktail>[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
+        backgroundColor: const Color(0xffA63542),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Icon(Icons.local_drink),
             SizedBox(width: 10),
-            Text('Home Page'),
+            Text('Popular Drinks'),
           ],
         ),
       ),
-      body: Column(
-          //local drinks
-          children: [
-            Row(
-              children: const [
-                Text("Local Drinks",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 36,
-                        letterSpacing: 2,
-                        color: Color(0xffA63542))),
-              ],
-            ),
-            SizedBox(
-              height: 200,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  RecipeCard(
-                    title: 'Cocktail 1',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                  RecipeCard(
-                    title: 'Cocktail 2',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              children: const [
-                Text("Popular Drinks",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 36,
-                        letterSpacing: 2,
-                        color: Color(0xffA63542))),
-              ],
-            ),
-            SizedBox(
-              height: 200,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  RecipeCard(
-                    title: 'Cocktail 3',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                  RecipeCard(
-                    title: 'Cocktail 4',
-                    rating: '4.9',
-                    cookTime: '30 min',
-                    thumbnailUrl:
-                        'https://lh3.googleusercontent.com/ei5eF1LRFkkcekhjdR_8XgOqgdjpomf-rda_vvh7jIauCgLlEWORINSKMRR6I6iTcxxZL9riJwFqKMvK0ixS0xwnRHGMY4I5Zw=s360',
-                  ),
-                ],
-              ),
-            )
-          ]),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xffA63542),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: ('Home'),
-            backgroundColor: Color(0xffA63542),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: ('Search'),
-              backgroundColor: Color(0xffA63542)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.star),
-              label: ('Favorites'),
-              backgroundColor: Color(0xffA63542)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: ('Inventory'),
-              backgroundColor: Color(0xffA63542)),
+      body: GridView.builder(
+          itemCount: _cocktails.length,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          primary: false,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
+          itemBuilder: (BuildContext context, int index) {
+            return Center(
+                child: CocktailCard(
+              cocktailName: _cocktails[index].title,
+              thumbnailUrl: _cocktails[index].image,
+              instructions: _cocktails[index].instruction,
+            ));
+          }),
+      bottomNavigationBar: FloatingNavbar(
+        onTap: _onItemTap,
+        currentIndex: _index,
+        items: [
+          FloatingNavbarItem(icon: Icons.home, title: 'Home'),
+          FloatingNavbarItem(icon: Icons.search, title: 'Search'),
+          FloatingNavbarItem(icon: Icons.star, title: 'Favorites'),
+          FloatingNavbarItem(icon: Icons.local_drink, title: 'My Bar'),
         ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: const Color(0xffE8DFDA),
-        onTap: _onItemTapped,
+        backgroundColor: const Color(0xffA63542),
+        selectedBackgroundColor: const Color(0xffE8DFDA),
+        unselectedItemColor: Colors.black,
+        //margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 50),
+        borderRadius: 20,
+        //doesnt seem to have border & border color
       ),
     );
   }
