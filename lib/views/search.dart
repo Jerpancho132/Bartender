@@ -48,8 +48,6 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  static const navigateResultsPage = Key('navigateToResults');
-
   void _navigateToResultsPage(BuildContext context) {
     final route =
         MaterialPageRoute(builder: (context) => Results(result: filter));
@@ -153,7 +151,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               ElevatedButton(
-                  key: navigateResultsPage,
+                  key: const Key('navigateToResults'),
                   onPressed: () async {
                     //initialize a new list that first takes in the search list
                     filter = searchList;
