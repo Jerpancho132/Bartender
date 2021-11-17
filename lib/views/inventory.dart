@@ -5,6 +5,11 @@ import 'package:app/views/search.dart';
 import 'package:app/models/inventory_model.dart';
 import 'package:app/views/favorites.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:csv/csv.dart';
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key}) : super(key: key);
@@ -14,6 +19,7 @@ class InventoryPage extends StatefulWidget {
 }
 
 class _InventoryState extends State<InventoryPage> {
+  dynamic listinventory;
   final int _selectedIndex = 3;
   bool editable = false;
   void _onItemTapped(int index) {
@@ -45,6 +51,92 @@ class _InventoryState extends State<InventoryPage> {
           break;
       }
     });
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationSupportDirectory(); //file path
+
+    return directory.path; //returns file path
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/inv.txt'); //make a path variable
+  }
+
+  Future<void> listFile() async {
+    final file = await _localFile;
+
+    final _datafile = file.openRead();
+    listinventory = await _datafile
+    .transform(utf8.decoder)
+    .transform(const CsvToListConverter())
+    .toList();
+  }
+
+  Future<List<MyInventory>> _inventorylist() async {
+    List<MyInventory> catalog = <MyInventory>[];
+    final file = await _localFile;
+    final contents = await file.readAsString().then((p) {
+      for (String i in const LineSplitter().convert(p)) {
+        catalog.add(MyInventory(i, 0, 'oz'));
+      }
+    });
+    return catalog;
+  }
+
+  Future<File> writeFile(String name, int amt, String measurement) async {
+    final file = await _localFile;
+    String v = amt.toString();
+
+    String product = ',' + name + ' ' + v + ' ' + measurement;
+    return file.writeAsString(product, mode: FileMode.append);  //writes the string in the function to the file
+  }
+
+  _setup() async {
+    List<MyInventory> catalog = await _inventorylist();
+    setState(() {
+      items = catalog;
+    });
+  }
+
+  Future<File> deletefromfile(String object) async {
+    String products = '';
+    print(object);
+    int count = 0;
+    final file = await _localFile;
+    final _myFile = File('$file/inv.txt');
+
+    final _datafile = file.openRead();
+    listinventory = await _datafile
+    .transform(utf8.decoder)
+    .transform(const CsvToListConverter())
+    .toList();
+
+    for (var i = 0; i < listinventory[0].length; i++) {
+      if (listinventory[0][i] == object || listinventory[0][i] == ''){
+      }
+      else{
+        if (count == 0 && listinventory[0][i] != object) {
+          products += listinventory[0][i];
+          count++;
+        }
+        else {
+          products += ',' + listinventory[0][i];
+          count++;
+        }
+      }
+    }
+
+    return file.writeAsString(products);
+
+  }
+
+  void initState() {
+    super.initState(
+      
+    );
+    listFile();
   }
 
   // these data should be grabbed from a database when implemented
@@ -117,11 +209,30 @@ class _InventoryState extends State<InventoryPage> {
                 ])),
               ),
             ),
-            Expanded(
+            listinventory == null ? Container (): Expanded(
                 child: ListView.builder(
-                    itemCount: items.length,
+                    itemCount: listinventory[0].length,
                     itemBuilder: (context, index) {
-                      return listOfIngredients(index);
+                      //return listOfIngredients(index);
+                      return ListTile(
+                        title: Row(
+                          children: [
+                            Expanded(child: Text(listinventory[0][index])),
+                            Expanded(child: IconButton(
+                              key: const Key("deleteButton"),
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                setState(() {
+                                  deletefromfile(listinventory[0][index]);
+                                  listFile();
+                                });
+                              },
+                            )),
+                          ],
+                        ),
+                        //leading: Icon(Icons.invert_colors),
+                        //title: Text(listinventory[0][index]),
+                      );
                     })),
           ],
         ),
@@ -216,6 +327,10 @@ class _InventoryState extends State<InventoryPage> {
           shape: MaterialStateProperty.all(const CircleBorder())),
       onPressed: () {
         setState(() {
+          writeFile(selectedIngredient, amnt, relatedMeasurement);
+          _inventorylist();
+          _setup();
+          listFile();
           aCtrl.clear();
           selectedIngredient != null
               ? items.add(
