@@ -86,23 +86,95 @@ void main() {
       expect(getCocktailsByGlass(client, i), throwsException);
     });
     //test byAlcoholic
-
+    test('test getCocktailByAlcoholic', () async {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/alcohol/1')))
+          .thenAnswer((realInvocation) async => http.Response(
+              '''[{"id": 1, "title":"cosmopolitan"},{"id":2 , "title":"Mimosa"}]''',
+              200));
+      expect(await getCocktailsByAlcoholic(client), isA<List>());
+    });
     //test byAlcoholic Throw Exception
-
+    test('test getCocktailByAlcohol ThrowException', () {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/alcohol/1')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getCocktailsByAlcoholic(client), throwsException);
+    });
     //test byNonAlcoholic
-
+    test('test getCocktailByNonAlcoholic', () async {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/alcohol/0')))
+          .thenAnswer((realInvocation) async => http.Response(
+              '''[{"id": 3, "title":"fruit punch"},{"id":4 , "title":"watermelon lemonade"}]''',
+              200));
+      expect(await getCocktailsByNonAlcoholic(client), isA<List>());
+    });
     //test byNonAlcoholic Throw Exception
-
+    test('test getCocktailByNonAlcoholic ThrowException', () {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/alcohol/0')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getCocktailsByNonAlcoholic(client), throwsException);
+    });
     //test by classical
-
+    test('test getCocktailByClassic', () async {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/classic/1')))
+          .thenAnswer((realInvocation) async => http.Response(
+              '''[{"id": 1, "title":"cosmopolitan"},{"id":2 , "title":"Mimosa"}]''',
+              200));
+      expect(await getCocktailsByClassic(client), isA<List>());
+    });
     //test by classical Throw Exception
-
+    test('test getCocktailByClassic ThrowException', () {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/classic/1')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getCocktailsByClassic(client), throwsException);
+    });
     //test by Tropical
-
+    test('test getCocktailByTropical', () async {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/tropical/1')))
+          .thenAnswer((realInvocation) async =>
+              http.Response('''[{"id": 1, "title":"cosmopolitan"}]''', 200));
+      expect(await getCocktailsByTropical(client), isA<List>());
+    });
     //test by Tropical Throw Exception
-
+    test('test getCocktailByTropical ThrowException', () {
+      final client = MockClient();
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/tropical/1')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getCocktailsByTropical(client), throwsException);
+    });
     //test by local
-
+    test('test getCocktailByLocal', () async {
+      final client = MockClient();
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/local/1')))
+          .thenAnswer((realInvocation) async =>
+              http.Response('''[{"id":21, "title": "local drink"}]''', 200));
+      expect(await getCocktailsByLocal(client), isA<List>());
+    });
     //test by local Throw Exception
+    test('test getCocktailByTropical ThrowException', () {
+      final client = MockClient();
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/local/1')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getCocktailsByLocal(client), throwsException);
+    });
   });
 }

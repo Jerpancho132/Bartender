@@ -328,7 +328,7 @@ class _SearchPageState extends State<SearchPage> {
           setState(() {
             addToFilter(f, i);
           });
-          print(f);
+          //print(f);
         },
         child: Container(
             padding: const EdgeInsets.all(1),
@@ -355,8 +355,8 @@ class _SearchPageState extends State<SearchPage> {
           } else {
             type.val = 0;
           }
-          print(i);
-          print(type.val);
+          //print(i);
+          //print(type.val);
         },
         child: Container(
             padding: const EdgeInsets.all(1),
@@ -376,7 +376,7 @@ class _SearchPageState extends State<SearchPage> {
   //searches for the list of cocktail by input string
   void searchFunction(String s) {
     //starts the searchList with the full list
-    print(searchList.map((e) => e.title).toList());
+    //print(searchList.map((e) => e.title).toList());
     searchList = cocktailList;
 
     final filteredSearch = searchList.where((cocktail) {
