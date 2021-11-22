@@ -104,12 +104,20 @@ class _SearchPageState extends State<SearchPage> {
     'wine glass'
   ];
 
+  List type = [];
+
   //cocktail glass,shot glass,martini glass,highball glass,collins glass,old-fashioned glass,sour glass,champagne flute
   //margarita glass, pilsner glass,coupe glass,beer mug,copper mug,pint glass,hurricane glass, wine glass
 
   //added list of ingredients to filter by;
   List _ingredientsFilter = [];
   List _glassFilter = [];
+  //types
+  PrimitiveWrapper alcohol = PrimitiveWrapper(0);
+  PrimitiveWrapper nonAlcoholic = PrimitiveWrapper(0);
+  PrimitiveWrapper classic = PrimitiveWrapper(0);
+  PrimitiveWrapper tropical = PrimitiveWrapper(0);
+  PrimitiveWrapper local = PrimitiveWrapper(0);
   //initial list only for reference
   List<Cocktail> cocktailList = [];
   //this is used for filtering the list from given categories
@@ -170,6 +178,13 @@ class _SearchPageState extends State<SearchPage> {
                         await searchbyIngredients(filter, _ingredientsFilter);
                     //Filter by given glass types
                     filter = await searchByGlass(filter, _glassFilter);
+                    //filter by types if it is 1
+                    //else just return same list;
+                    filter = await searchByAlcoholic(filter, alcohol);
+                    filter = await searchByNonAlcoholic(filter, nonAlcoholic);
+                    filter = await searchByClassic(filter, classic);
+                    filter = await searchByTropical(filter, tropical);
+                    filter = await searchByLocal(filter, local);
                     //condition if the textfield has an input
                     //or if the filter buttons have been pressed
                     filter.isNotEmpty
@@ -248,6 +263,28 @@ class _SearchPageState extends State<SearchPage> {
                   itemCount: glass.length,
                   itemBuilder: (BuildContext c, index) =>
                       filterButtons(_glassFilter, glass[index])),
+              const Center(
+                  child: Text(
+                'Type',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              )),
+              GridView(
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    childAspectRatio: 2,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4),
+                children: [
+                  filterTypeButtons(alcohol, "alcoholic"),
+                  filterTypeButtons(nonAlcoholic, "non-alcoholic"),
+                  filterTypeButtons(classic, "classic"),
+                  filterTypeButtons(tropical, "tropical"),
+                  filterTypeButtons(local, "local"),
+                ],
+              )
             ],
           )),
         ],
@@ -298,6 +335,34 @@ class _SearchPageState extends State<SearchPage> {
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: f.contains(i) ? Colors.red.shade700 : Colors.red.shade300,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                i,
+                style: const TextStyle(fontSize: 14),
+              ),
+            )),
+      );
+  Widget filterTypeButtons(PrimitiveWrapper type, String i) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        //if clicked add to filters list
+        onTap: () {
+          setState(() {});
+          if (type.val == 0) {
+            type.val = 1;
+          } else {
+            type.val = 0;
+          }
+          print(i);
+          print(type.val);
+        },
+        child: Container(
+            padding: const EdgeInsets.all(1),
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: type.val == 1 ? Colors.red.shade700 : Colors.red.shade300,
               borderRadius: BorderRadius.circular(15),
             ),
             child: FittedBox(
@@ -386,4 +451,85 @@ class _SearchPageState extends State<SearchPage> {
       return f;
     }
   }
+
+  Future<List<Cocktail>> searchByAlcoholic(
+      List<Cocktail> f, PrimitiveWrapper a) async {
+    if (a.val == 1) {
+      if (f.isNotEmpty) {
+        List ids = await getCocktailsByAlcoholic(global.client);
+        final _filteredSearch =
+            f.where((cocktail) => ids.contains(cocktail.id)).toList();
+        return _filteredSearch;
+      } else {
+        return f;
+      }
+    }
+    return f;
+  }
+
+  Future<List<Cocktail>> searchByNonAlcoholic(
+      List<Cocktail> f, PrimitiveWrapper a) async {
+    if (a.val == 1) {
+      if (f.isNotEmpty) {
+        List ids = await getCocktailsByNonAlcoholic(global.client);
+        final _filteredSearch =
+            f.where((cocktail) => ids.contains(cocktail.id)).toList();
+        return _filteredSearch;
+      } else {
+        return f;
+      }
+    }
+    return f;
+  }
+
+  Future<List<Cocktail>> searchByClassic(
+      List<Cocktail> f, PrimitiveWrapper a) async {
+    if (a.val == 1) {
+      if (f.isNotEmpty) {
+        List ids = await getCocktailsByClassic(global.client);
+        final _filteredSearch =
+            f.where((cocktail) => ids.contains(cocktail.id)).toList();
+        return _filteredSearch;
+      } else {
+        return f;
+      }
+    }
+    return f;
+  }
+
+  Future<List<Cocktail>> searchByTropical(
+      List<Cocktail> f, PrimitiveWrapper a) async {
+    if (a.val == 1) {
+      if (f.isNotEmpty) {
+        List ids = await getCocktailsByTropical(global.client);
+        final _filteredSearch =
+            f.where((cocktail) => ids.contains(cocktail.id)).toList();
+        return _filteredSearch;
+      } else {
+        return f;
+      }
+    }
+    return f;
+  }
+
+  Future<List<Cocktail>> searchByLocal(
+      List<Cocktail> f, PrimitiveWrapper a) async {
+    if (a.val == 1) {
+      if (f.isNotEmpty) {
+        List ids = await getCocktailsByLocal(global.client);
+        final _filteredSearch =
+            f.where((cocktail) => ids.contains(cocktail.id)).toList();
+        return _filteredSearch;
+      } else {
+        return f;
+      }
+    }
+    return f;
+  }
+}
+
+//allows us to modify a primitive datatype by reference
+class PrimitiveWrapper {
+  int val;
+  PrimitiveWrapper(this.val);
 }

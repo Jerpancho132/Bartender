@@ -85,5 +85,24 @@ void main() {
               (realInvocation) async => http.Response('Error Response', 500));
       expect(getCocktailsByGlass(client, i), throwsException);
     });
+    //test byAlcoholic
+
+    //test byAlcoholic Throw Exception
+
+    //test byNonAlcoholic
+
+    //test byNonAlcoholic Throw Exception
+
+    //test by classical
+
+    //test by classical Throw Exception
+
+    //test by Tropical
+
+    //test by Tropical Throw Exception
+
+    //test by local
+
+    //test by local Throw Exception
   });
 }

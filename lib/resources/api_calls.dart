@@ -41,6 +41,76 @@ Future<List> getCocktailsByGlass(http.Client client, String g) async {
   }
 }
 
+//test
+//get cocktails by Alcoholic drinks
+Future<List> getCocktailsByAlcoholic(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/alcohol/1'));
+  if (response.statusCode == 200) {
+    //gets json turn it to a iterable list
+    Iterable list = json.decode(response.body);
+    return list.map((e) => e['id']).toList();
+  } else {
+    throw Exception('did not get response');
+  }
+}
+
+//test
+//get cocktails by NonAlcoholic drinks
+Future<List> getCocktailsByNonAlcoholic(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/alcohol/0'));
+  if (response.statusCode == 200) {
+    //gets json turn it to a iterable list
+    Iterable list = json.decode(response.body);
+    return list.map((e) => e['id']).toList();
+  } else {
+    throw Exception('did not get response');
+  }
+}
+
+//test
+//get cocktails by classical drinks
+Future<List> getCocktailsByClassic(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/classic/1'));
+  if (response.statusCode == 200) {
+    //gets json turn it to a iterable list
+    Iterable list = json.decode(response.body);
+    return list.map((e) => e['id']).toList();
+  } else {
+    throw Exception('did not get response');
+  }
+}
+
+//test
+//get cocktails by classical drinks
+Future<List> getCocktailsByTropical(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/tropical/1'));
+  if (response.statusCode == 200) {
+    //gets json turn it to a iterable list
+    Iterable list = json.decode(response.body);
+    return list.map((e) => e['id']).toList();
+  } else {
+    throw Exception('did not get response');
+  }
+}
+
+//test
+//get cocktails by classical drinks
+Future<List> getCocktailsByLocal(http.Client client) async {
+  final response =
+      await client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/local/1'));
+  if (response.statusCode == 200) {
+    //gets json turn it to a iterable list
+    Iterable list = json.decode(response.body);
+    return list.map((e) => e['id']).toList();
+  } else {
+    throw Exception('did not get response');
+  }
+}
+
 //gets all the list of possible ingredients from the database
 Future<List> getIngredients(http.Client client) async {
   final response =
