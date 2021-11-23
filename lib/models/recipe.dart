@@ -1,6 +1,6 @@
 class Recipe {
   final String ingredient;
-  final double amount;
+  final num amount;
   final String unit;
 
   Recipe({

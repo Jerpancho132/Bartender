@@ -13,28 +13,23 @@ class IngredientCard extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          //add link to ingredients page here later if we get to it
-          Navigator.pop(
-            context,
-          );
-        },
-        child: Container(
-          //padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xffD98C82),
-            borderRadius: BorderRadius.circular(15),
-          ),
+    print(ingredient);
+    return Container(
+        width: 112,
+        height: 25,
+        padding: const EdgeInsets.all(2),
+        margin: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color: const Color(0xffD98C82),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
           child: Row(
             children: [
-              const SizedBox(width: 6),
-              Text(ingredient,
-                  style: GoogleFonts.sansita(
-                      textStyle: const TextStyle(color: Colors.black),
-                      letterSpacing: .5,
-                      fontSize: 15)),
+              Text(ingredient),
+              Text(amount.toStringAsFixed(2)),
+              Text(unit)
             ],
           ),
         ));

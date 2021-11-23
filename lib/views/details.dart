@@ -28,33 +28,38 @@ class _DetailsState extends State<Details> {
   bool selected = false;
   //code for retrieving cocktail list from databse
   Future<List<Recipe>> fetchIngredients() async {
-    var url = "http://10.0.2.2:8080/api/ingredients/cocktail/cosmopolitan";
+    var cocktailName = widget.title;
+    var url = "http://10.0.2.2:8080/api/ingredients/cocktail/$cocktailName";
     var response = await http.get(Uri.parse(url));
 
-    var ingredients = <Recipe>[];
-
     if (response.statusCode == 200) {
-      var ingredientsJson = json.decode(response.body);
-      for (var ingredientJson in ingredientsJson) {
-        ingredients.add(Recipe.fromJson(ingredientJson));
-      }
+      Iterable ingredientsJson = json.decode(response.body);
+      return ingredientsJson.map((e) => Recipe.fromJson(e)).toList();
+    } else {
+      throw Exception('Could not get data');
     }
-    return ingredients;
+  }
+
+  void setRecipe() async {
+    final result = await fetchIngredients();
+    setState(() {
+      _ingredients = result;
+    });
+    // print(_ingredients.map((e) => e.ingredient));
   }
 
   @override
   void initState() {
-    fetchIngredients().then((value) {
-      setState(() {
-        _ingredients.addAll(value);
-      });
-    });
+    super.initState();
+    setRecipe();
   }
 
-  final List<Recipe> _ingredients = <Recipe>[];
+  List<Recipe> _ingredients = <Recipe>[];
 
   @override
   Widget build(BuildContext context) {
+    print("current length is: ");
+    print(_ingredients.length);
     return Scaffold(
       backgroundColor: const Color(0xffE8DFDA),
       body: detailLayout(widget.title, widget.imgUrl, widget.instructions),
@@ -125,26 +130,23 @@ class _DetailsState extends State<Details> {
                               color: Color(0xff2A8676),
                               letterSpacing: .5,
                               fontSize: 30))),
-                  Text(_ingredients[2].ingredient,
-                      style: GoogleFonts.sansita(
-                          textStyle: const TextStyle(
-                              color: Color(0xff2A8676),
-                              letterSpacing: .5,
-                              fontSize: 30))),
-                  /*GridView.builder(
-                      itemCount: _ingredients.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 10),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Center(
-                            child: IngredientCard(
-                          ingredient: _ingredients[index].ingredient,
-                          amount: _ingredients[index].amount,
-                          unit: _ingredients[index].unit,
-                        ));
-                      }), */
-
+                  Expanded(
+                    child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _ingredients.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 3,
+                            crossAxisSpacing: 2,
+                            crossAxisCount: 3),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Center(
+                              child: IngredientCard(
+                            ingredient: _ingredients[index].ingredient,
+                            amount: _ingredients[index].amount.toDouble(),
+                            unit: _ingredients[index].unit,
+                          ));
+                        }),
+                  ),
                   Text("Instructions",
                       style: GoogleFonts.sansita(
                           textStyle: const TextStyle(
