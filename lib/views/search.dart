@@ -239,7 +239,7 @@ class _SearchPageState extends State<SearchPage> {
                             _ingredientsFilter, ingredients[index]);
                       })
                   : const Center(
-                      child: Text('No ingredients data found'),
+                      child: Text('Error Loading Ingredients'),
                     ),
               const Center(
                   child: Text(
