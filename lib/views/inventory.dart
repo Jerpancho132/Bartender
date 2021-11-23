@@ -10,6 +10,8 @@ import 'package:csv/csv.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'package:app/global.dart' as global;
+import 'package:app/resources/api_calls.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class InventoryPage extends StatefulWidget {
 }
 
 class _InventoryState extends State<InventoryPage> {
+  final StreamController _streamController = StreamController();
   dynamic listinventory;
   final int _selectedIndex = 3;
   bool editable = false;
@@ -53,6 +56,33 @@ class _InventoryState extends State<InventoryPage> {
     });
   }
 
+  void setIngredients() async {
+    final result = await getIngredients(global.client);
+    var l = List<String>.from(result);
+    setState(() {
+      //initialize ingredients list
+      //double dot is cascade notation
+      ingredients = l;
+    });
+  }
+
+  void setMeasurements() async {
+    final result = await getMeasurements(global.client);
+    var l = List<String>.from(result);
+    setState(() {
+      //initialize ingredients list
+      //double dot is cascade notation
+      measurement = l;
+    });
+  }
+
+  update() async{
+    setState(() {
+      ingredients;
+      measurement;
+    });
+  }
+
   Future<String> get _localPath async {
     final directory = await getApplicationSupportDirectory(); //file path
 
@@ -66,12 +96,15 @@ class _InventoryState extends State<InventoryPage> {
 
   Future<void> listFile() async {
     final file = await _localFile;
-
+    dynamic data;
     final _datafile = file.openRead();
-    listinventory = await _datafile
+    data = await _datafile
     .transform(utf8.decoder)
     .transform(const CsvToListConverter())
     .toList();
+    setState(() {
+      listinventory = data;
+    });
   }
 
   Future<List<MyInventory>> _inventorylist() async {
@@ -101,6 +134,7 @@ class _InventoryState extends State<InventoryPage> {
   }
 
   Future<File> deletefromfile(String object) async {
+    dynamic _delete;
     String products = '';
     print(object);
     int count = 0;
@@ -108,21 +142,22 @@ class _InventoryState extends State<InventoryPage> {
     final _myFile = File('$file/inv.txt');
 
     final _datafile = file.openRead();
-    listinventory = await _datafile
+    _delete = await _datafile
     .transform(utf8.decoder)
     .transform(const CsvToListConverter())
     .toList();
 
-    for (var i = 0; i < listinventory[0].length; i++) {
-      if (listinventory[0][i] == object || listinventory[0][i] == ''){
+    for (var i = 0; i < _delete[0].length; i++) {
+      if (_delete[0][i] == object || _delete[0][i] == ''){
+        print(_delete[0][i]);
       }
       else{
-        if (count == 0 && listinventory[0][i] != object) {
-          products += listinventory[0][i];
+        if (count == 0 && _delete[0][i] != object) {
+          products += _delete[0][i];
           count++;
         }
         else {
-          products += ',' + listinventory[0][i];
+          products += ',' + _delete[0][i];
           count++;
         }
       }
@@ -132,12 +167,16 @@ class _InventoryState extends State<InventoryPage> {
 
   }
 
+  @override
   void initState() {
-    super.initState(
-      
-    );
+    setIngredients();
+    setMeasurements();
+    super.initState();
     listFile();
   }
+
+  List<String> ingredients = [];
+  List<String> measurement = [];
 
   // these data should be grabbed from a database when implemented
   List<MyInventory> items = <MyInventory>[
@@ -211,20 +250,24 @@ class _InventoryState extends State<InventoryPage> {
             ),
             listinventory == null ? Container (): Expanded(
                 child: ListView.builder(
+                    key: Key(listinventory[0].length.toString()),
                     itemCount: listinventory[0].length,
                     itemBuilder: (context, index) {
                       //return listOfIngredients(index);
                       return ListTile(
+                        key: Key("List"),
                         title: Row(
                           children: [
                             Expanded(child: Text(listinventory[0][index])),
                             Expanded(child: IconButton(
-                              key: const Key("deleteButton"),
+                              // ignore: prefer_const_constructors
+                              key: Key("deleteButton"),
                               icon: const Icon(Icons.delete),
                               onPressed: () {
                                 setState(() {
                                   deletefromfile(listinventory[0][index]);
                                   listFile();
+                                  _setup();
                                 });
                               },
                             )),
@@ -264,7 +307,7 @@ class _InventoryState extends State<InventoryPage> {
   }
 
   //widget to insert ingredients you own.
-  Widget ingredientsDropdownField() => StreamBuilder<QuerySnapshot>(
+  /*Widget ingredientsDropdownField() => StreamBuilder<QuerySnapshot>(
         //grabs data from inventory collection
         stream: db.collection("Inventory").snapshots(),
         builder: (context, snapshot) {
@@ -301,6 +344,31 @@ class _InventoryState extends State<InventoryPage> {
           }
         },
       );
+    */
+
+  Widget ingredientsDropdownField() {
+    return DropdownButton(
+      dropdownColor: const Color(0xFF31A471),
+      style: const TextStyle(color: Colors.white),
+      items: ingredients.map((String value) {
+        return DropdownMenuItem(
+          child: Text(value), value: value);
+      }).toList(),
+      value: selectedIngredient,
+      onChanged: (dynamic val) {
+        print(val);
+        setState(() {
+          selectedIngredient = val;
+          relatedMeasurement = measurement[ingredients.indexOf(val)];
+        });
+      },
+      isExpanded: true,
+              hint: const Text(
+                "Choose Ingredient",
+                style: TextStyle(color: Colors.white),
+              ),
+    );
+  }
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
         key: const Key("amountText"),
@@ -327,6 +395,9 @@ class _InventoryState extends State<InventoryPage> {
           shape: MaterialStateProperty.all(const CircleBorder())),
       onPressed: () {
         setState(() {
+          print(selectedIngredient,);
+          print(amnt);
+          print(relatedMeasurement);
           writeFile(selectedIngredient, amnt, relatedMeasurement);
           _inventorylist();
           _setup();
