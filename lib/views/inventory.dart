@@ -48,7 +48,7 @@ class _InventoryState extends State<InventoryPage> {
     setState(() {
       //initialize ingredients list
       //double dot is cascade notation
-      ingredients = l;
+      ingredients = l..sort();
     });
   }
 
@@ -62,7 +62,7 @@ class _InventoryState extends State<InventoryPage> {
     });
   }
 
-  update() async{
+  update() async {
     setState(() {
       ingredients;
       measurement;
@@ -77,7 +77,7 @@ class _InventoryState extends State<InventoryPage> {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/inv.txt'); //make a path variable
+    return File('$path/inven.txt'); //make a path variable
   }
 
   Future<void> listFile() async {
@@ -85,9 +85,9 @@ class _InventoryState extends State<InventoryPage> {
     dynamic data;
     final _datafile = file.openRead();
     data = await _datafile
-    .transform(utf8.decoder)
-    .transform(const CsvToListConverter())
-    .toList();
+        .transform(utf8.decoder)
+        .transform(const CsvToListConverter())
+        .toList();
     setState(() {
       listinventory = data;
     });
@@ -109,7 +109,8 @@ class _InventoryState extends State<InventoryPage> {
     String v = amt.toString();
 
     String product = ',' + name + ' ' + v + ' ' + measurement;
-    return file.writeAsString(product, mode: FileMode.append);  //writes the string in the function to the file
+    return file.writeAsString(product,
+        mode: FileMode.append); //writes the string in the function to the file
   }
 
   _setup() async {
@@ -129,20 +130,18 @@ class _InventoryState extends State<InventoryPage> {
 
     final _datafile = file.openRead();
     _delete = await _datafile
-    .transform(utf8.decoder)
-    .transform(const CsvToListConverter())
-    .toList();
+        .transform(utf8.decoder)
+        .transform(const CsvToListConverter())
+        .toList();
 
     for (var i = 0; i < _delete[0].length; i++) {
-      if (_delete[0][i] == object || _delete[0][i] == ''){
+      if (_delete[0][i] == object || _delete[0][i] == '') {
         print(_delete[0][i]);
-      }
-      else{
+      } else {
         if (count == 0 && _delete[0][i] != object) {
           products += _delete[0][i];
           count++;
-        }
-        else {
+        } else {
           products += ',' + _delete[0][i];
           count++;
         }
@@ -150,7 +149,6 @@ class _InventoryState extends State<InventoryPage> {
     }
 
     return file.writeAsString(products);
-
   }
 
   @override
@@ -183,90 +181,93 @@ class _InventoryState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-        backgroundColor: const Color(0xFFA4BFB3),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: const Text(
-            "Inventory",
-            style: TextStyle(fontFamily: 'Roboto', fontSize: 32),
-          ),
-          elevation: 0,
+    return Scaffold(
+      backgroundColor: const Color(0xFFA4BFB3),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "Inventory",
+          style: TextStyle(fontFamily: 'Roboto', fontSize: 32),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Card(
-                color: const Color(0xFF2A8676),
-                child: ListTile(
-                    title: Row(children: [
-                  Expanded(
-                    flex: 3,
-                    child: SizedBox(
-                      child: ingredientsDropdownField(),
-                      height: 50,
-                    ),
+        elevation: 0,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Card(
+              color: const Color(0xFF2A8676),
+              child: ListTile(
+                  title: Row(children: [
+                Expanded(
+                  flex: 3,
+                  child: SizedBox(
+                    child: ingredientsDropdownField(),
+                    height: 50,
                   ),
-                  //refactored widget for inputting ingredients
-                  const Padding(
-                      padding: EdgeInsets.only(
-                          right: 10)), //seperate ingredient and amount
-                  Expanded(
-                    child: SizedBox(
-                      child: amountTextfield(),
-                      height: 30,
-                    ),
+                ),
+                //refactored widget for inputting ingredients
+                const Padding(
+                    padding: EdgeInsets.only(
+                        right: 10)), //seperate ingredient and amount
+                Expanded(
+                  child: SizedBox(
+                    child: amountTextfield(),
+                    height: 30,
                   ),
-                  Expanded(
-                      child: SizedBox(
-                    child: relatedMeasurement != null
-                        ? Text(
-                            relatedMeasurement,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white),
-                          )
-                        : const Text(""),
-                  )),
-                  //refactored widget for amount of items in bottom
-                  Expanded(
-                      child:
-                          insertItemButton()) //refactored widget find in bottom
-                ])),
-              ),
+                ),
+                Expanded(
+                    child: SizedBox(
+                  child: relatedMeasurement != null
+                      ? Text(
+                          relatedMeasurement,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.white),
+                        )
+                      : const Text(""),
+                )),
+                //refactored widget for amount of items in bottom
+                Expanded(
+                    child:
+                        insertItemButton()) //refactored widget find in bottom
+              ])),
             ),
-            listinventory == null ? Container (): Expanded(
-                child: ListView.builder(
-                    key: Key(listinventory[0].length.toString()),
-                    itemCount: listinventory[0].length,
-                    itemBuilder: (context, index) {
-                      //return listOfIngredients(index);
-                      return ListTile(
-                        key: Key("List"),
-                        title: Row(
-                          children: [
-                            Expanded(child: Text(listinventory[0][index])),
-                            Expanded(child: IconButton(
-                              // ignore: prefer_const_constructors
-                              key: Key("deleteButton"),
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                setState(() {
-                                  deletefromfile(listinventory[0][index]);
-                                  listFile();
-                                  _setup();
-                                });
-                              },
-                            )),
-                          ],
-                        ),
-                        //leading: Icon(Icons.invert_colors),
-                        //title: Text(listinventory[0][index]),
-                      );
-                    })),
-          ],
-        ),
+          ),
+          listinventory == null
+              ? Container()
+              : Expanded(
+                  child: ListView.builder(
+                      key: Key(listinventory[0].length.toString()),
+                      itemCount: listinventory[0].length,
+                      itemBuilder: (context, index) {
+                        //return listOfIngredients(index);
+                        return ListTile(
+                          key: Key("List"),
+                          title: Row(
+                            children: [
+                              Expanded(child: Text(listinventory[0][index])),
+                              Expanded(
+                                  child: IconButton(
+                                // ignore: prefer_const_constructors
+                                key: Key("deleteButton"),
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  setState(() {
+                                    deletefromfile(listinventory[0][index]);
+                                    listFile();
+                                    _setup();
+                                  });
+                                },
+                              )),
+                            ],
+                          ),
+                          //leading: Icon(Icons.invert_colors),
+                          //title: Text(listinventory[0][index]),
+                        );
+                      })),
+        ],
+      ),
       bottomNavigationBar: FloatingNavbar(
         onTap: _onItemTap,
         currentIndex: _index,
@@ -292,8 +293,7 @@ class _InventoryState extends State<InventoryPage> {
       dropdownColor: const Color(0xFF31A471),
       style: const TextStyle(color: Colors.white),
       items: ingredients.map((String value) {
-        return DropdownMenuItem(
-          child: Text(value), value: value);
+        return DropdownMenuItem(child: Text(value), value: value);
       }).toList(),
       value: selectedIngredient,
       onChanged: (dynamic val) {
@@ -304,12 +304,13 @@ class _InventoryState extends State<InventoryPage> {
         });
       },
       isExpanded: true,
-              hint: const Text(
-                "Choose Ingredient",
-                style: TextStyle(color: Colors.white),
-              ),
+      hint: const Text(
+        "Choose Ingredient",
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
+
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
         key: const Key("amountText"),
@@ -336,7 +337,9 @@ class _InventoryState extends State<InventoryPage> {
           shape: MaterialStateProperty.all(const CircleBorder())),
       onPressed: () {
         setState(() {
-          print(selectedIngredient,);
+          print(
+            selectedIngredient,
+          );
           print(amnt);
           print(relatedMeasurement);
           writeFile(selectedIngredient, amnt, relatedMeasurement);
@@ -345,8 +348,7 @@ class _InventoryState extends State<InventoryPage> {
           listFile();
           aCtrl.clear();
           selectedIngredient != null
-              ? items.add(
-                  MyInventory(selectedIngredient, amnt))
+              ? items.add(MyInventory(selectedIngredient, amnt))
               : null;
           amnt = 0;
         });
