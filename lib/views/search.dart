@@ -1,3 +1,4 @@
+import 'package:app/views/dictionary.dart';
 import 'package:app/views/favorites.dart';
 import 'package:app/views/inventory.dart';
 import 'package:app/views/results.dart';
@@ -25,7 +26,8 @@ class _SearchPageState extends State<SearchPage> {
     const HomePage(),
     const SearchPage(),
     const FavoritesPage(),
-    const InventoryPage()
+    const InventoryPage(),
+    const DictionaryPage()
   ];
 
   void _onItemTap(int index) {
@@ -83,7 +85,7 @@ class _SearchPageState extends State<SearchPage> {
     'martini glass',
     'highball glass',
     'collins glass',
-    'old-fashioned glass',
+    'rocks glass',
     'sour glass',
     'champagne flute',
     'margarita glass',
@@ -289,13 +291,14 @@ class _SearchPageState extends State<SearchPage> {
           FloatingNavbarItem(icon: Icons.search, title: 'Search'),
           FloatingNavbarItem(icon: Icons.star, title: 'Favorites'),
           FloatingNavbarItem(icon: Icons.local_drink, title: 'My Bar'),
-          //for dictionary
+          FloatingNavbarItem(icon: Icons.book, title: 'Dictionary'),
         ],
         backgroundColor: const Color(0xffA63542),
         selectedBackgroundColor: const Color(0xffE8DFDA),
         unselectedItemColor: Colors.black,
         //margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 50),
-        borderRadius: 20,
+        borderRadius: 10,
+        fontSize: 10,
         //doesnt seem to have border & border color
       ),
     );
