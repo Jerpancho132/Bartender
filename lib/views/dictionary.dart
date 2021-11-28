@@ -4,6 +4,7 @@ import 'package:app/views/home.dart';
 import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
 import 'package:app/views/favorites.dart';
+import 'package:app/models/ingredient.dart';
 
 class DictionaryPage extends StatefulWidget {
   const DictionaryPage({Key? key}) : super(key: key);
@@ -32,16 +33,42 @@ class _DictionaryPageState extends State<DictionaryPage> {
     });
   }
 
+  Ingredient test = Ingredient(
+      id: 1,
+      title: "Vodka",
+      measurement: "oz",
+      image: "https://www.thecocktaildb.com/images/ingredients/Vodka.png",
+      description:
+          "Vodka is a distilled beverage composed primarily of water and ethanol, sometimes with traces of impurities and flavorings.");
+  Ingredient test2 = Ingredient(
+      id: 2,
+      title: "Scotch",
+      measurement: "oz",
+      image: "https://www.thecocktaildb.com/images/ingredients/Scotch.png",
+      description:
+          "Scotch whisky, often simply called Scotch, is malt whisky or grain whisky made in Scotland.");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Text(
-          'test',
-          style: TextStyle(color: Colors.black),
+        padding: EdgeInsets.only(top: 25),
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            const Text(
+              'Dictionary',
+              style: TextStyle(color: Colors.black, fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+            const Padding(padding: EdgeInsets.all(10)),
+            Expanded(
+                child: ExpansionTile(
+              title: const Text('Ingredients'),
+              children: [ingredientsTile(test), ingredientsTile(test2)],
+            )),
+          ],
         ),
       ),
-      
       bottomNavigationBar: FloatingNavbar(
         onTap: _onItemTap,
         currentIndex: _index,
@@ -62,4 +89,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
       ),
     );
   }
+
+  Widget ingredientsTile(Ingredient i) => InkWell(
+        onTap: () {
+          print(i.id);
+          print(i.description);
+        },
+        child: ListTile(
+          title: Text(i.title),
+          trailing: const Icon(Icons.keyboard_arrow_right),
+        ),
+      );
 }

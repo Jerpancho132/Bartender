@@ -9,8 +9,8 @@ class Ingredient {
       {required this.id,
       required this.title,
       required this.measurement,
-      this.image = "",
-      this.description = ""});
+      required this.image,
+      required this.description});
 
   factory Ingredient.fromJson(Map<String, dynamic> json) {
     return Ingredient(
