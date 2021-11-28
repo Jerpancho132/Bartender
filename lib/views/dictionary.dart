@@ -1,3 +1,4 @@
+import 'package:app/views/ingredient_view.dart';
 import 'package:flutter/material.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:app/views/home.dart';
@@ -31,6 +32,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
         MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
       );
     });
+  }
+
+  void _navigateToDetails(Ingredient i) {
+    final route =
+        MaterialPageRoute(builder: (context) => IngredientDetailsPage(test: i));
+    Navigator.of(context).push(route);
   }
 
   Ingredient test = Ingredient(
@@ -90,15 +97,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 
-  Widget ingredientsTile(Ingredient i) => InkWell(
+  Widget ingredientsTile(Ingredient i) => ListTile(
         onTap: () {
-          print(i.id);
-          print(i.description);
+          _navigateToDetails(i);
         },
-        child: ListTile(
-          leading: Image(image: NetworkImage(i.image)),
-          title: Text(i.title),
-          trailing: const Icon(Icons.keyboard_arrow_right),
-        ),
+        leading: Image(image: NetworkImage(i.image)),
+        title: Text(i.title),
+        trailing: const Icon(Icons.keyboard_arrow_right),
       );
 }
