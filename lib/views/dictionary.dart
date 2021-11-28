@@ -96,6 +96,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           print(i.description);
         },
         child: ListTile(
+          leading: Image(image: NetworkImage(i.image)),
           title: Text(i.title),
           trailing: const Icon(Icons.keyboard_arrow_right),
         ),
