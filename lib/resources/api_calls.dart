@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:app/models/cocktail.dart';
+import 'package:app/models/ingredient.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Cocktail>> getCocktails(http.Client client) async {
@@ -118,6 +119,18 @@ Future<List> getIngredients(http.Client client) async {
   if (response.statusCode == 200) {
     Iterable data = json.decode(response.body);
     return data.map((e) => e['title']).toList();
+  } else {
+    throw Exception('could not get ingredients');
+  }
+}
+
+//gets all the list of possible ingredients from the database converted to ingredients model
+Future<List> getIngredientsModel(http.Client client) async {
+  final response =
+      await client.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/'));
+  if (response.statusCode == 200) {
+    Iterable data = json.decode(response.body);
+    return data.map((e) => Ingredient.fromJson(e)).toList();
   } else {
     throw Exception('could not get ingredients');
   }

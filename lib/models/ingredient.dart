@@ -20,4 +20,6 @@ class Ingredient {
         image: json["image"],
         description: json["description"]);
   }
+
+  toList() {}
 }
