@@ -136,6 +136,18 @@ Future<List> getIngredientsModel(http.Client client) async {
   }
 }
 
+//gets all the list of possible ingredients from the database converted to ingredients model
+Future<Ingredient> getSingleIngredient(http.Client client, String i) async {
+  final response = await client
+      .get(Uri.parse('http://10.0.2.2:8080/api/ingredients/name/$i'));
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    return Ingredient.fromJson(data);
+  } else {
+    throw Exception('could not get ingredients');
+  }
+}
+
 //combine later with getIngredients
 Future<List> getMeasurements(http.Client client) async {
   final response =
