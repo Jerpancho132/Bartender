@@ -66,20 +66,21 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color(0xffE8DFDA),
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          'Dictionary',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: Container(
         padding: EdgeInsets.only(top: 25),
         alignment: Alignment.center,
         child: Column(
           children: [
-            const Flexible(
-              child: Text(
-                'Dictionary',
-                style: TextStyle(color: Colors.black, fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Spacer(),
             MediaQuery.removePadding(
               removeTop: true,
               context: context,
@@ -94,7 +95,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       context: context,
                       child: ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: ingredients.length,
                           itemBuilder: (BuildContext c, index) {
                             return ingredientsTile(ingredients[index], index);
