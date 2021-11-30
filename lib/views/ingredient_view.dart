@@ -3,7 +3,9 @@ import 'package:app/models/ingredient.dart';
 
 class IngredientDetailsPage extends StatefulWidget {
   final Ingredient test;
-  const IngredientDetailsPage({Key? key, required this.test}) : super(key: key);
+  final int num;
+  const IngredientDetailsPage({Key? key, required this.test, required this.num})
+      : super(key: key);
 
   @override
   _IngredientDetailsPageState createState() => _IngredientDetailsPageState();
@@ -19,7 +21,7 @@ class _IngredientDetailsPageState extends State<IngredientDetailsPage> {
         child: Column(
           children: [
             Text(
-              widget.test.id.toString(),
+              widget.num.toString(),
               style: TextStyle(color: Colors.black),
             ),
             Image(image: NetworkImage(widget.test.image)),

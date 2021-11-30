@@ -6,6 +6,8 @@ import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
 import 'package:app/views/favorites.dart';
 import 'package:app/models/ingredient.dart';
+import 'package:app/resources/api_calls.dart';
+import 'package:app/global.dart';
 
 class DictionaryPage extends StatefulWidget {
   const DictionaryPage({Key? key}) : super(key: key);
@@ -25,54 +27,81 @@ class _DictionaryPageState extends State<DictionaryPage> {
   ];
 
   void _onItemTap(int index) {
-    setState(() {
-      _index = index;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
-      );
-    });
+    if (index != _index) {
+      setState(() {
+        _index = index;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
+        );
+      });
+    }
   }
 
-  void _navigateToDetails(Ingredient i) {
-    final route =
-        MaterialPageRoute(builder: (context) => IngredientDetailsPage(test: i));
+  void _navigateToDetails(Ingredient i, int index) {
+    final route = MaterialPageRoute(
+        builder: (context) => IngredientDetailsPage(test: i, num: index + 1));
     Navigator.of(context).push(route);
   }
 
-  Ingredient test = Ingredient(
-      id: 1,
-      title: "Vodka",
-      measurement: "oz",
-      image: "https://www.thecocktaildb.com/images/ingredients/Vodka.png",
-      description:
-          "Vodka is a distilled beverage composed primarily of water and ethanol, sometimes with traces of impurities and flavorings.");
-  Ingredient test2 = Ingredient(
-      id: 2,
-      title: "Scotch",
-      measurement: "oz",
-      image: "https://www.thecocktaildb.com/images/ingredients/Scotch.png",
-      description:
-          "Scotch whisky, often simply called Scotch, is malt whisky or grain whisky made in Scotland.");
+  void setIngredients() async {
+    final result = await getIngredientsModel(client);
+    setState(() {
+      ingredients = result
+        ..sort((a, b) => a.title
+            .toString()
+            .toLowerCase()
+            .compareTo(b.title.toString().toLowerCase()));
+    });
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setIngredients();
+  }
+
+  List ingredients = [];
+  final _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.only(top: 25),
         alignment: Alignment.center,
         child: Column(
           children: [
-            const Text(
-              'Dictionary',
-              style: TextStyle(color: Colors.black, fontSize: 20),
-              textAlign: TextAlign.center,
+            const Flexible(
+              child: Text(
+                'Dictionary',
+                style: TextStyle(color: Colors.black, fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
             ),
-            const Padding(padding: EdgeInsets.all(10)),
-            Expanded(
-                child: ExpansionTile(
-              title: const Text('Ingredients'),
-              children: [ingredientsTile(test), ingredientsTile(test2)],
-            )),
+            Spacer(),
+            MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+              child: Expanded(
+                flex: 30,
+                child: ListView(children: [
+                  const ListTile(
+                    title: Text("Ingredients"),
+                  ),
+                  MediaQuery.removePadding(
+                      removeTop: true,
+                      context: context,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: ingredients.length,
+                          itemBuilder: (BuildContext c, index) {
+                            return ingredientsTile(ingredients[index], index);
+                          })),
+                ]),
+              ),
+            ),
           ],
         ),
       ),
@@ -97,12 +126,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 
-  Widget ingredientsTile(Ingredient i) => ListTile(
+  Widget ingredientsTile(Ingredient i, int index) => ListTile(
         onTap: () {
-          _navigateToDetails(i);
+          _navigateToDetails(i, index);
         },
         leading: Image(image: NetworkImage(i.image)),
-        title: Text(i.title),
+        title: Text(
+          i.title,
+          style: TextStyle(color: Colors.black),
+        ),
         trailing: const Icon(Icons.keyboard_arrow_right),
       );
 }
