@@ -84,12 +84,15 @@ class _DetailsState extends State<Details> {
                 icon: const Icon(Icons.arrow_back),
                 color: Color(0xffA63542),
               ),
-              Text(title,
-                  style: GoogleFonts.sansita(
-                      textStyle: const TextStyle(
-                          color: Color(0xff2A8676),
-                          letterSpacing: .5,
-                          fontSize: 30))),
+              Flexible(
+                child: Text(title,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.sansita(
+                        textStyle: const TextStyle(
+                            color: Color(0xff2A8676),
+                            letterSpacing: .5,
+                            fontSize: 30))),
+              ),
               IconButton(
                 icon: Icon(selected ? Icons.star : Icons.star_border),
                 onPressed: () {
@@ -130,22 +133,27 @@ class _DetailsState extends State<Details> {
                               color: Color(0xff2A8676),
                               letterSpacing: .5,
                               fontSize: 30))),
-                  Expanded(
-                    child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: _ingredients.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 3,
-                            crossAxisSpacing: 2,
-                            crossAxisCount: 3),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Center(
-                              child: IngredientCard(
-                            ingredient: _ingredients[index].ingredient,
-                            amount: _ingredients[index].amount.toDouble(),
-                            unit: _ingredients[index].unit,
-                          ));
-                        }),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: MediaQuery.removePadding(
+                        removeTop: true,
+                        context: context,
+                        child: GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _ingredients.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: 3,
+                                    crossAxisSpacing: 2,
+                                    crossAxisCount: 3),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Center(
+                                  child: IngredientCard(
+                                ingredient: _ingredients[index].ingredient,
+                                amount: _ingredients[index].amount.toDouble(),
+                                unit: _ingredients[index].unit,
+                              ));
+                            })),
                   ),
                   Text("Instructions",
                       style: GoogleFonts.sansita(
