@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,23 +16,22 @@ class IngredientCard extends StatelessWidget {
   Widget build(BuildContext context) {
     print(ingredient);
     return Container(
-        width: 112,
-        height: 25,
-        padding: const EdgeInsets.all(2),
-        margin: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          color: const Color(0xffD98C82),
-          borderRadius: BorderRadius.circular(15),
+      width: 150,
+      height: 50,
+      padding: const EdgeInsets.all(2),
+      margin: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: const Color(0xffD98C82),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Align(
+        child: AutoSizeText(
+          '$ingredient ${amount.toStringAsFixed(2)}-$unit',
+          maxLines: 3,
+          minFontSize: 10,
+          textAlign: TextAlign.center,
         ),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            children: [
-              Text(ingredient),
-              Text(amount.toStringAsFixed(2)),
-              Text(unit)
-            ],
-          ),
-        ));
+      ),
+    );
   }
 }

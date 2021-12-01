@@ -131,10 +131,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
         onTap: () {
           _navigateToDetails(i, index);
         },
-        leading: Image(image: NetworkImage(i.image)),
+        leading: SizedBox(
+          child: Image(
+              height: 55, width: 55, image: NetworkImage(i.image, scale: 2)),
+        ),
         title: Text(
           i.title,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         trailing: const Icon(Icons.keyboard_arrow_right),
       );

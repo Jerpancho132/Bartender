@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^2.1.0
   http: ^0.13.4
   csv: ^5.0.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

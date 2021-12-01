@@ -2,6 +2,7 @@ import 'package:app/views/dictionary.dart';
 import 'package:app/views/favorites.dart';
 import 'package:app/views/inventory.dart';
 import 'package:app/views/results.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
@@ -11,6 +12,7 @@ import 'package:app/resources/api_calls.dart';
 import 'package:app/global.dart' as global;
 
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'package:flutter/rendering.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -321,11 +323,15 @@ class _SearchPageState extends State<SearchPage> {
               color: f.contains(i) ? Colors.red.shade700 : Colors.red.shade300,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
+            //flutter plugin for auto sizing text
+            child: Align(
+              alignment: Alignment.center,
+              child: AutoSizeText(
                 i,
-                style: const TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+                minFontSize: 10,
+                maxLines: 2,
               ),
             )),
       );
@@ -349,11 +355,16 @@ class _SearchPageState extends State<SearchPage> {
               color: type.val == 1 ? Colors.red.shade700 : Colors.red.shade300,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
+            child: Align(
+              alignment: Alignment.center,
+              child: AutoSizeText(
                 i,
-                style: const TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+                minFontSize: 10,
+                maxLines: 2,
               ),
             )),
       );
