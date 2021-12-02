@@ -1,4 +1,5 @@
 import 'package:app/models/cocktail.dart';
+import 'package:app/models/ingredient.dart';
 import 'package:app/resources/api_calls.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -176,7 +177,60 @@ void main() {
               (realInvocation) async => http.Response('Error Response', 500));
       expect(getCocktailsByLocal(client), throwsException);
     });
+    //test ingredients model
+    test('test getIngredientsModel', () async {
+      final client = MockClient();
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/')))
+          .thenAnswer((realInvocation) async => http.Response(
+              '''[{"id": 1, "title": "vodka", "measurement": "oz", "image": "https://www.thecocktaildb.com/images/ingredients/Vodka.png","description": "Vodka is a distilled beverage composed primarily of water and ethanol, sometimes with traces of impurities and flavorings."},
+              {"id": 2, "title": "Cointreau", "measurement": "oz", "image": "https://www.thecocktaildb.com/images/ingredients/Cointreau.png","description": "Cointreau is an orange-flavoured triple sec liqueur."}]''',
+              200));
+      expect(await getIngredientsModel(client), isA<List<Ingredient>>());
+    });
+    test('test getIngredientsModel throws Exception', () {
+      final client = MockClient();
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getIngredientsModel(client), throwsException);
+    });
+    //test getting single ingredient
+    test('test getSingleIngredient', () async {
+      final client = MockClient();
+      String i = 'Vodka';
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/ingredients/name/$i')))
+          .thenAnswer((realInvocation) async => http.Response(
+              '{"id": 1, "title":"Vodka","measurement":"oz","image":"https://www.thecocktaildb.com/images/ingredients/Vodka.png", "description": "Vodka is a distilled beverage composed primarily of water and ethanol, sometimes with traces of impurities and flavorings."}',
+              200));
+      expect(await getSingleIngredient(client, i), isA<Ingredient>());
+    });
 
+    test('test getSingleIngredient throws exception', () {
+      final client = MockClient();
+      String i = 'Vodka';
+      when(client
+              .get(Uri.parse('http://10.0.2.2:8080/api/ingredients/name/$i')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getSingleIngredient(client, i), throwsException);
+    });
     //test measurement api
+    test('test getMeasurements', () async {
+      final client = MockClient();
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/')))
+          .thenAnswer((realInvocation) async => http.Response(
+              '''[{"id": 1, "title": "vodka", "measurement": "oz", "image": "https://www.thecocktaildb.com/images/ingredients/Vodka.png","description": "Vodka is a distilled beverage composed primarily of water and ethanol, sometimes with traces of impurities and flavorings."},
+              {"id": 2, "title": "Cointreau", "measurement": "oz", "image": "https://www.thecocktaildb.com/images/ingredients/Cointreau.png","description": "Cointreau is an orange-flavoured triple sec liqueur."}]''',
+              200));
+      expect(await getMeasurements(client), isA<List>());
+    });
+    test('test getMeasurements throws exception', () {
+      final client = MockClient();
+      when(client.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/')))
+          .thenAnswer(
+              (realInvocation) async => http.Response('Error Response', 500));
+      expect(getMeasurements(client), throwsException);
+    });
   });
 }
