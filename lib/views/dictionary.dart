@@ -86,21 +86,25 @@ class _DictionaryPageState extends State<DictionaryPage> {
               context: context,
               child: Expanded(
                 flex: 30,
-                child: ListView(children: [
-                  const ListTile(
-                    title: Text("Ingredients"),
-                  ),
-                  MediaQuery.removePadding(
-                      removeTop: true,
-                      context: context,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: ingredients.length,
-                          itemBuilder: (BuildContext c, index) {
-                            return ingredientsTile(ingredients[index], index);
-                          })),
-                ]),
+                child: ScrollConfiguration(
+                    behavior:
+                        const ScrollBehavior().copyWith(overscroll: false),
+                    child: ListView(children: [
+                      const ListTile(
+                        title: Text("Ingredients"),
+                      ),
+                      MediaQuery.removePadding(
+                          removeTop: true,
+                          context: context,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: ingredients.length,
+                              itemBuilder: (BuildContext c, index) {
+                                return ingredientsTile(
+                                    ingredients[index], index);
+                              })),
+                    ])),
               ),
             ),
           ],
