@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:app/models/cocktail.dart';
-import 'package:http/http.dart' as http;
 import 'package:app/views/Widgets/cocktail_card.dart';
 import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
@@ -38,22 +36,6 @@ class _HomePageState extends State<HomePage> {
       );
     });
   }
-
-  //code for retrieving cocktail list from databse
-  // Future<List<Cocktail>> fetchCocktail() async {
-  //   var url = "http://10.0.2.2:8080/api/cocktails";
-  //   var response = await http.get(Uri.parse(url));
-
-  //   var cocktails = <Cocktail>[];
-
-  //   if (response.statusCode == 200) {
-  //     var cocktailsJson = json.decode(response.body);
-  //     for (var cocktailJson in cocktailsJson) {
-  //       cocktails.add(Cocktail.fromJson(cocktailJson));
-  //     }
-  //   }
-  //   return cocktails;
-  // }
 
   @override
   void initState() {

@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app/models/recipe.dart';
-
+import 'package:app/resources/api_calls.dart';
+import 'package:app/global.dart' as global;
 import 'Widgets/ingredient_card.dart';
 
 class Details extends StatefulWidget {
@@ -26,22 +25,9 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   //variables to be replaced by database implementation
   bool selected = false;
-  //code for retrieving cocktail list from databse
-  Future<List<Recipe>> fetchIngredients() async {
-    var cocktailName = widget.title;
-    var url = "http://10.0.2.2:8080/api/ingredients/cocktail/$cocktailName";
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      Iterable ingredientsJson = json.decode(response.body);
-      return ingredientsJson.map((e) => Recipe.fromJson(e)).toList();
-    } else {
-      throw Exception('Could not get data');
-    }
-  }
 
   void setRecipe() async {
-    final result = await fetchIngredients();
+    final result = await fetchIngredients(global.client, widget.title);
     setState(() {
       _ingredients = result;
     });
