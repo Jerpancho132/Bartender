@@ -3,11 +3,13 @@ import 'package:app/views/details.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CocktailCard extends StatelessWidget {
+  final int cocktailId;
   final String cocktailName;
   final String thumbnailUrl;
   final String instructions;
   const CocktailCard({
     Key? key,
+    required this.cocktailId,
     required this.cocktailName,
     required this.thumbnailUrl,
     required this.instructions,
@@ -20,6 +22,7 @@ class CocktailCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => Details(
+                    id: cocktailId,
                     title: cocktailName,
                     imgUrl: thumbnailUrl,
                     instructions: instructions,

@@ -8,11 +8,13 @@ import 'package:app/global.dart' as global;
 import 'Widgets/ingredient_card.dart';
 
 class Details extends StatefulWidget {
+  final int id;
   final String title;
   final String imgUrl;
   final String instructions;
   const Details(
       {Key? key,
+      required this.id,
       required this.title,
       required this.imgUrl,
       required this.instructions})

@@ -75,6 +75,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (BuildContext context, int index) {
             return Center(
                 child: CocktailCard(
+              cocktailId: _cocktails[index].id,
               cocktailName: _cocktails[index].title,
               thumbnailUrl: _cocktails[index].image,
               instructions: _cocktails[index].instruction,
