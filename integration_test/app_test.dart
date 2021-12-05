@@ -3,6 +3,6 @@ import 'package:integration_test/integration_test.dart';
 
 void main() {
   testWidgets("failing test example", (WidgetTester tester) async {
-    expect(2 + 2, equals(5));
+    expect(2 + 3, equals(5));
   });
 }
