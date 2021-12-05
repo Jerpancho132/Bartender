@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
         backgroundColor: const Color(0xFFD98C82),
         body: Center(
+          key: const Key('HomeScreen'),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const <Widget>[
