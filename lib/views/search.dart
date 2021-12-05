@@ -82,22 +82,22 @@ class _SearchPageState extends State<SearchPage> {
   List ingredients = [];
 
   List glass = [
-    'cocktail glass',
-    'highball glass',
-    'champagne flute',
-    'copper mug',
-    'margarita glass',
-    'rocks glass',
-    'martini glass',
-    'beer mug',
-    'collins glass',
-    'shot glass',
-    'wine glass',
-    'sour glass',
-    'brandy snifter',
-    'cordial galss',
-    'coffee cup',
-    'coffee mug'
+    'Cocktail glass',
+    'Highball glass',
+    'Champagne flute',
+    'Copper mug',
+    'Margarita glass',
+    'Rocks glass',
+    'Martini glass',
+    'Beer mug',
+    'Collins glass',
+    'Shot glass',
+    'Wine glass',
+    'Sour glass',
+    'Brandy snifter',
+    'Cordial galss',
+    'Coffee cup',
+    'Coffee mug'
   ];
 
   List type = [];
@@ -207,6 +207,55 @@ class _SearchPageState extends State<SearchPage> {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
+                      //type
+                      const Center(
+                          child: Text(
+                        'Type',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )),
+                      GridView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 2,
+                                mainAxisSpacing: 4,
+                                crossAxisSpacing: 4),
+                        children: [
+                          filterTypeButtons(alcohol, "Alcoholic"),
+                          filterTypeButtons(nonAlcoholic, "Non-Alcoholic"),
+                          filterTypeButtons(classic, "Classic"),
+                          filterTypeButtons(tropical, "Tropical"),
+                          filterTypeButtons(local, "Local"),
+                        ],
+                      ),
+                      //glass type
+                      const Center(
+                          child: Text(
+                        'Glass',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )),
+                      //should create a grid view here that builds the
+                      //types of glass
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+
+                      GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  childAspectRatio: 2,
+                                  mainAxisSpacing: 4,
+                                  crossAxisSpacing: 4),
+                          itemCount: glass.length,
+                          itemBuilder: (BuildContext c, index) =>
+                              filterButtons(_glassFilter, glass[index])),
                       //setup a grid view of ingredient options
                       const Center(
                           child: Text(
@@ -239,53 +288,6 @@ class _SearchPageState extends State<SearchPage> {
                           : const Center(
                               child: Text('Error Loading Ingredients'),
                             ),
-                      const Center(
-                          child: Text(
-                        'Glass',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      )),
-                      //should create a grid view here that builds the
-                      //types of glass
-                      const Padding(padding: EdgeInsets.only(top: 10)),
-
-                      GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  childAspectRatio: 2,
-                                  mainAxisSpacing: 4,
-                                  crossAxisSpacing: 4),
-                          itemCount: glass.length,
-                          itemBuilder: (BuildContext c, index) =>
-                              filterButtons(_glassFilter, glass[index])),
-                      const Center(
-                          child: Text(
-                        'Type',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      )),
-                      GridView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: 2,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4),
-                        children: [
-                          filterTypeButtons(alcohol, "alcoholic"),
-                          filterTypeButtons(nonAlcoholic, "non-alcoholic"),
-                          filterTypeButtons(classic, "classic"),
-                          filterTypeButtons(tropical, "tropical"),
-                          filterTypeButtons(local, "local"),
-                        ],
-                      )
                     ],
                   ))),
         ],
