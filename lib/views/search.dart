@@ -83,21 +83,21 @@ class _SearchPageState extends State<SearchPage> {
 
   List glass = [
     'cocktail glass',
-    'shot glass',
-    'martini glass',
     'highball glass',
-    'collins glass',
-    'rocks glass',
-    'sour glass',
     'champagne flute',
-    'margarita glass',
-    'pilsner glass',
-    'goupe glass',
-    'beer mug',
     'copper mug',
-    'pint glass',
-    'hurricane glass',
-    'wine glass'
+    'margarita glass',
+    'rocks glass',
+    'martini glass',
+    'beer mug',
+    'collins glass',
+    'shot glass',
+    'wine glass',
+    'sour glass',
+    'brandy snifter',
+    'cordial galss',
+    'coffee cup',
+    'coffee mug'
   ];
 
   List type = [];
@@ -106,8 +106,8 @@ class _SearchPageState extends State<SearchPage> {
   //margarita glass, pilsner glass,coupe glass,beer mug,copper mug,pint glass,hurricane glass, wine glass
 
   //added list of ingredients to filter by;
-  List _ingredientsFilter = [];
-  List _glassFilter = [];
+  final List _ingredientsFilter = [];
+  final List _glassFilter = [];
   //types
   PrimitiveWrapper alcohol = PrimitiveWrapper(0);
   PrimitiveWrapper nonAlcoholic = PrimitiveWrapper(0);
