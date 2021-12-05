@@ -23,13 +23,15 @@ class FavoritesPageState extends State<FavoritesPage> {
   ];
 
   void _onItemTap(int index) {
-    setState(() {
-      _index = index;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
-      );
-    });
+    if (index != _index) {
+      setState(() {
+        _index = index;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
+        );
+      });
+    }
   }
 
   @override

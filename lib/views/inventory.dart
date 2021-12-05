@@ -35,13 +35,15 @@ class _InventoryState extends State<InventoryPage> {
   final int _selectedIndex = 3;
   bool editable = false;
   void _onItemTap(int index) {
-    setState(() {
-      _index = index;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
-      );
-    });
+    if (index != _index) {
+      setState(() {
+        _index = index;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
+        );
+      });
+    }
   }
 
   void setIngredients() async {
