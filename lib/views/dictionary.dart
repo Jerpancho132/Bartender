@@ -1,5 +1,5 @@
 import 'package:app/models/description.dart';
-import 'package:app/views/ingredient_view.dart';
+import 'package:app/views/dictionary_view.dart';
 import 'package:flutter/material.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:app/views/home.dart';
@@ -40,9 +40,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
     }
   }
 
-  void _navigateToDetails(Ingredient i, int index) {
+  void _navigateToDetails(
+      String name, String image, String description, int index) {
     final route = MaterialPageRoute(
-        builder: (context) => IngredientDetailsPage(test: i, num: index + 1));
+        builder: (context) => IngredientDetailsPage(
+              num: index + 1,
+              name: name,
+              image: image,
+              description: description,
+            ));
     Navigator.of(context).push(route);
   }
 
@@ -150,7 +156,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   Widget ingredientsTile(Ingredient i, int index) => ListTile(
         onTap: () {
-          _navigateToDetails(i, index);
+          _navigateToDetails(i.title, i.image, i.description, index);
         },
         leading: SizedBox(
           child: Image(
@@ -164,8 +170,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
       );
   Widget descriptionTile(Description i, int index) => ListTile(
         onTap: () {
-          //_navigateToDetails(i, index);
-          print(i.getDescription);
+          _navigateToDetails(i.name, i.image, i.description, index);
         },
         leading: i.image.isNotEmpty
             ? SizedBox(
@@ -174,7 +179,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     width: 55,
                     image: NetworkImage(i.image, scale: 1)),
               )
-            : null,
+            : const SizedBox(
+                height: 55,
+                width: 55,
+              ),
         title: Text(
           i.name,
           style: const TextStyle(color: Colors.black),

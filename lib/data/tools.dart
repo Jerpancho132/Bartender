@@ -25,6 +25,7 @@ List<Description> tools = [
           "Using a standard kitchen spoon can be viable for most cases. Bar spoons are specifically tailored towards mixing cocktails with ease."),
   Description(
       name: "Muddler",
+      image: "https://live.staticflickr.com/7030/6476872417_37acf396e3_b.jpg",
       description:
           "A muddler is a bartender's tool for mashing or muddling fruits in order to release their flavor."),
   Description(
