@@ -1,3 +1,4 @@
+import 'package:app/models/description.dart';
 import 'package:app/views/ingredient_view.dart';
 import 'package:flutter/material.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
@@ -8,6 +9,7 @@ import 'package:app/views/favorites.dart';
 import 'package:app/models/ingredient.dart';
 import 'package:app/resources/api_calls.dart';
 import 'package:app/global.dart';
+import 'package:app/data/tools.dart';
 
 class DictionaryPage extends StatefulWidget {
   const DictionaryPage({Key? key}) : super(key: key);
@@ -93,6 +95,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       const ListTile(
                         title: Text("Ingredients"),
                       ),
+                      //ingredients list view
                       MediaQuery.removePadding(
                           removeTop: true,
                           context: context,
@@ -103,6 +106,20 @@ class _DictionaryPageState extends State<DictionaryPage> {
                               itemBuilder: (BuildContext c, index) {
                                 return ingredientsTile(
                                     ingredients[index], index);
+                              })),
+                      const ListTile(
+                        title: Text("Tools"),
+                      ),
+                      //tools list view
+                      MediaQuery.removePadding(
+                          removeTop: true,
+                          context: context,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: tools.length,
+                              itemBuilder: (BuildContext c, index) {
+                                return descriptionTile(tools[index], index);
                               })),
                     ])),
               ),
@@ -137,10 +154,29 @@ class _DictionaryPageState extends State<DictionaryPage> {
         },
         leading: SizedBox(
           child: Image(
-              height: 55, width: 55, image: NetworkImage(i.image, scale: 2)),
+              height: 55, width: 55, image: NetworkImage(i.image, scale: 1)),
         ),
         title: Text(
           i.title,
+          style: const TextStyle(color: Colors.black),
+        ),
+        trailing: const Icon(Icons.keyboard_arrow_right),
+      );
+  Widget descriptionTile(Description i, int index) => ListTile(
+        onTap: () {
+          //_navigateToDetails(i, index);
+          print(i.getDescription);
+        },
+        leading: i.image.isNotEmpty
+            ? SizedBox(
+                child: Image(
+                    height: 55,
+                    width: 55,
+                    image: NetworkImage(i.image, scale: 1)),
+              )
+            : null,
+        title: Text(
+          i.name,
           style: const TextStyle(color: Colors.black),
         ),
         trailing: const Icon(Icons.keyboard_arrow_right),

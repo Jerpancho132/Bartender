@@ -19,8 +19,8 @@ void main() {
 
   when(global.client.get(Uri.parse('http://10.0.2.2:8080/api/cocktails/')))
       .thenAnswer((realInvocation) async => http.Response(
-          '''[{"id": 1, "title": "cocktail", "image": "cocktail image", "glasstype": "highball glass", "instruction": "something"},
-              {"id": 2, "title": "cocktail2", "image": "cocktail image2", "glasstype": "highball glass2", "instruction": "something2"}]''',
+          '''[{"id": 1, "title": "cocktail", "image": "cocktail image", "glasstype": "Highball glass", "instruction": "something"},
+              {"id": 2, "title": "cocktail2", "image": "cocktail image2", "glasstype": "Cocktail glass", "instruction": "something2"}]''',
           200));
   when(global.client.get(Uri.parse('http://10.0.2.2:8080/api/ingredients/')))
       .thenAnswer((realInvocation) async => http.Response(
@@ -34,7 +34,7 @@ void main() {
               {"id":2,"title": "Long Island"}
               ]''', 200));
   when(global.client.get(
-          Uri.parse('http://10.0.2.2:8080/api/cocktails/glass/cocktail glass')))
+          Uri.parse('http://10.0.2.2:8080/api/cocktails/glass/Cocktail glass')))
       .thenAnswer((realInvocation) async =>
           http.Response('[{"id": 1, "title":"cosmopolitan"}]', 200));
   //instead try to create a mockclient by making httpclient a global variable
@@ -42,14 +42,23 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: SearchPage()));
 
     final findTextField = find.byKey(const Key('searchfield'));
+    final findScrollable = find.byKey(const Key("Scrollable"));
+    final findGlass = find.byKey(const Key("key-Cocktail glass"));
+    final findAlcoholic = find.byKey(const Key("key-Alcoholic"));
+    final findIngredient = find.byKey(const Key('key-Lime'));
     //reload page
     await tester.pumpAndSettle();
     //expects to find a textfield
     expect(findTextField, findsOneWidget);
-    //expects to find a filter button with keyword lime
-    expect(find.text('Lime'), findsOneWidget);
+    expect(findScrollable, findsOneWidget);
+    //expects to find a filter button with of type alcoholic
+    expect(findAlcoholic, findsOneWidget);
     //expects to find a filter button with keyword cocktail glass
-    expect(find.text('cocktail glass'), findsOneWidget);
+    expect(findGlass, findsOneWidget);
+    //drag down until you find the visible ingredient button
+    await tester.dragUntilVisible(
+        findIngredient, findScrollable, const Offset(0, -250));
+    expect(findIngredient, findsOneWidget);
   });
   testWidgets('test button to navigate to next page', (tester) async {
     mockNetworkImagesFor(() async {
@@ -112,14 +121,19 @@ void main() {
       await tester.pumpWidget(MaterialApp(
           home: const SearchPage(), navigatorObservers: [mockObserver]));
       await tester.pumpAndSettle();
+      //keys
+      final findScrollable = find.byKey(const Key("Scrollable"));
+      final findIngredient = find.byKey(const Key("key-Lime"));
       //find a search button
       final findSearchButton = find.byKey(const Key('navigateToResults'));
       expect(findSearchButton, findsOneWidget);
-      //find the text field by key
-      final findFilterButton = find.text('Lime');
-      expect(findFilterButton, findsOneWidget);
+
+      //scroll until you find key
+      await tester.dragUntilVisible(
+          findIngredient, findScrollable, const Offset(0, -250));
+      expect(findIngredient, findsOneWidget);
       //tap the filter button and tap the search button
-      await tester.tap(findFilterButton);
+      await tester.tap(findIngredient);
       await tester.pumpAndSettle();
       await tester.tap(findSearchButton);
       await tester.pumpAndSettle();
@@ -137,8 +151,8 @@ void main() {
       //find a search button
       final findSearchButton = find.byKey(const Key('navigateToResults'));
       expect(findSearchButton, findsOneWidget);
-      //find the text field by key
-      final findFilterButton = find.text('cocktail glass');
+      //find the glass filter button
+      final findFilterButton = find.byKey(const Key("key-Cocktail glass"));
       expect(findFilterButton, findsOneWidget);
       //tap the filter button and tap the search button
       await tester.tap(findFilterButton);

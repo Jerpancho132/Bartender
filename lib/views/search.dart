@@ -205,6 +205,7 @@ class _SearchPageState extends State<SearchPage> {
               child: ScrollConfiguration(
                   behavior: const ScrollBehavior().copyWith(overscroll: false),
                   child: ListView(
+                    key: const Key('Scrollable'),
                     shrinkWrap: true,
                     children: [
                       //type
@@ -315,6 +316,7 @@ class _SearchPageState extends State<SearchPage> {
 
   //filter button widget for each ingredient
   Widget filterButtons(List f, String i) => GestureDetector(
+        key: Key('key-$i'),
         behavior: HitTestBehavior.opaque,
         //if clicked add to filters list
         onTap: () {
@@ -343,6 +345,7 @@ class _SearchPageState extends State<SearchPage> {
             )),
       );
   Widget filterTypeButtons(PrimitiveWrapper type, String i) => GestureDetector(
+        key: Key('key-$i'),
         behavior: HitTestBehavior.opaque,
         //if clicked add to filters list
         onTap: () {
