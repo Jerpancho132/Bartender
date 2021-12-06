@@ -4,6 +4,11 @@ import 'package:app/views/inventory.dart';
 import 'package:flutter/material.dart';
 import 'package:app/views/home.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'package:app/models/cocktail.dart';
+import 'package:app/resources/api_calls.dart';
+import 'package:app/global.dart' as global;
+import 'package:app/resources/favorites_helper.dart';
+import 'package:app/views/Widgets/cocktail_card.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
@@ -13,6 +18,8 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class FavoritesPageState extends State<FavoritesPage> {
+  List<Cocktail> cocktails = [];
+  List<int> ids = [];
   int _index = 2;
   final List<Widget> _options = <Widget>[
     const HomePage(),
@@ -34,6 +41,41 @@ class FavoritesPageState extends State<FavoritesPage> {
     }
   }
 
+  favoritescocktails() async {
+    final data = await DatabaseHelper.instance.getList();
+    List<int> c = [];
+    for (var i = 0; i < data.length; i++) {
+      c.add(data[i]['id']);
+    }
+    setState(() {
+      ids = c;
+    });
+  }
+
+  void searchbyId() async {
+    final data = await DatabaseHelper.instance.getList();
+    List<int> c = [];
+    for (var i = 0; i < data.length; i++) {
+      c.add(data[i]['id']);
+    }
+    List<Cocktail> d = [];
+    for (var i = 0; i < c.length; i++) {
+      var x = await getSingleCocktailById(global.client, c[i]);
+      d.add(x);
+    }
+    setState(() {
+      cocktails = d;
+    });
+    print(c);
+    print(cocktails);
+  }
+
+  @override
+  void initState() {
+    searchbyId();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +90,22 @@ class FavoritesPageState extends State<FavoritesPage> {
           ],
         ),
       ),
+      body: GridView.builder(
+          itemCount: cocktails.length,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          primary: false,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
+          itemBuilder: (BuildContext context, int index) {
+            return Center(
+                child: CocktailCard(
+              cocktailId: cocktails[index].id,
+              cocktailName: cocktails[index].title,
+              thumbnailUrl: cocktails[index].image,
+              instructions: cocktails[index].instruction,
+            ));
+          }),
       bottomNavigationBar: FloatingNavbar(
         onTap: _onItemTap,
         currentIndex: _index,

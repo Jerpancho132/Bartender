@@ -6,6 +6,8 @@ import 'package:app/models/recipe.dart';
 import 'package:app/resources/api_calls.dart';
 import 'package:app/global.dart' as global;
 import 'Widgets/ingredient_card.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:app/resources/favorites_helper.dart';
 
 class Details extends StatefulWidget {
   final int id;
@@ -25,6 +27,7 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
+  List<int> ids = [];
   //variables to be replaced by database implementation
   bool selected = false;
 
@@ -36,10 +39,51 @@ class _DetailsState extends State<Details> {
     // print(_ingredients.map((e) => e.ingredient));
   }
 
+  favoritescocktails(int id) async {
+    final data = await DatabaseHelper.instance.getList();
+    List<int> c = [];
+    for (var i = 0; i < data.length; i++) {
+      c.add(data[i]['id']);
+    }
+    for (var i = 0; i < c.length; i++) {
+      if (c[i] == id) {
+        setState(() {
+          selected = true;
+        });
+      }
+    }
+    setState(() {
+      ids = c;
+    });
+  }
+
+  insertFavorite(int id,bool val) async {
+    Database db = await DatabaseHelper.instance.database;
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnId2 : id
+    };
+    if (val == true){
+      for (var i = 0; i < ids.length; i++) {
+        if (id == widget.id) {
+          await db.delete(
+            'cocktails',
+            where: 'id = ?',
+            whereArgs: [id]
+          );
+        }
+      }
+    }
+    else {
+      await db.insert(DatabaseHelper.table, row);
+    }
+    print(await db.query(DatabaseHelper.table));
+  }
+
   @override
   void initState() {
     super.initState();
     setRecipe();
+    favoritescocktails(widget.id);
   }
 
   List<Recipe> _ingredients = <Recipe>[];
@@ -65,7 +109,7 @@ class _DetailsState extends State<Details> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 },
                 padding: const EdgeInsets.only(top: 25),
                 iconSize: 35,
@@ -85,6 +129,7 @@ class _DetailsState extends State<Details> {
                 icon: Icon(selected ? Icons.star : Icons.star_border),
                 onPressed: () {
                   setState(() {
+                    insertFavorite(widget.id, selected);
                     selected = !selected;
                   });
                 },

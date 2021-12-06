@@ -1,8 +1,12 @@
 class MyInventory {
   String ingredient;
   int amount;
+  String measurement;
+  MyInventory(this.ingredient, this.amount, this.measurement);
 
-  MyInventory(this.ingredient, this.amount);
+  void changeAmount(int a) {
+    amount = a;
+  }
 
   String get getIngredient {
     return ingredient;
@@ -10,5 +14,9 @@ class MyInventory {
 
   int get getAmount {
     return amount;
+  }
+
+  String get getMeasurement {
+    return measurement;
   }
 }
