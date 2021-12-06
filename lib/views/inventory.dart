@@ -24,14 +24,13 @@ class InventoryPage extends StatefulWidget {
 
 class _InventoryState extends State<InventoryPage> {
   dynamic listinventory;
-  final int _selectedIndex = 3;
   bool editable = false;
   List<Cocktail> filter = [];
   List<Cocktail> cocktailList = [];
   List<Cocktail> searchList = [];
   List _ingredientsFilter = [];
 
-  int _index = 0;
+  int _index = 3;
   final List<Widget> _options = <Widget>[
     const HomePage(),
     const SearchPage(),
@@ -41,13 +40,15 @@ class _InventoryState extends State<InventoryPage> {
   ];
 
   void _onItemTap(int index) {
-    setState(() {
-      _index = index;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
-      );
-    });
+    if (index != _index) {
+      setState(() {
+        _index = index;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => _options.elementAt(_index)),
+        );
+      });
+    }
   }
 
   void _navigateToResultsPage(BuildContext context) {
@@ -279,7 +280,7 @@ class _InventoryState extends State<InventoryPage> {
       ),
       bottomNavigationBar: FloatingNavbar(
         onTap: _onItemTap,
-        currentIndex: _selectedIndex,
+        currentIndex: _index,
         items: [
           FloatingNavbarItem(icon: Icons.home, title: 'Home'),
           FloatingNavbarItem(icon: Icons.search, title: 'Search'),
