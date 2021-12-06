@@ -200,9 +200,7 @@ class _SearchPageState extends State<SearchPage> {
           const Center(
               child: Text(
             'Filters',
-            style: TextStyle(
-              fontSize: 25,
-            ),
+            style: TextStyle(fontSize: 25, color: Colors.black),
           )),
           const Padding(padding: EdgeInsets.only(top: 10)),
           //set up a list view for each type of filter categories
@@ -218,9 +216,7 @@ class _SearchPageState extends State<SearchPage> {
                       const Center(
                           child: Text(
                         'Type',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        style: TextStyle(fontSize: 20, color: Colors.black),
                       )),
                       GridView(
                         shrinkWrap: true,
@@ -243,9 +239,7 @@ class _SearchPageState extends State<SearchPage> {
                       const Center(
                           child: Text(
                         'Glass',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        style: TextStyle(fontSize: 20, color: Colors.black),
                       )),
                       //should create a grid view here that builds the
                       //types of glass
@@ -267,9 +261,7 @@ class _SearchPageState extends State<SearchPage> {
                       const Center(
                           child: Text(
                         'Ingredients',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        style: TextStyle(fontSize: 20, color: Colors.black),
                       )),
                       //should create a grid view here that builds the
                       //list of ingredients but shows nothing if the api call gets nothing.
@@ -344,8 +336,8 @@ class _SearchPageState extends State<SearchPage> {
               child: AutoSizeText(
                 i,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-                minFontSize: 10,
+                style: const TextStyle(fontSize: 13),
+                minFontSize: 11,
                 maxLines: 2,
               ),
             )),
@@ -377,9 +369,9 @@ class _SearchPageState extends State<SearchPage> {
                 i,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                 ),
-                minFontSize: 10,
+                minFontSize: 11,
                 maxLines: 2,
               ),
             )),
