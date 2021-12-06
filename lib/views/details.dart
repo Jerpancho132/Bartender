@@ -57,23 +57,16 @@ class _DetailsState extends State<Details> {
     });
   }
 
-  insertFavorite(int id,bool val) async {
+  insertFavorite(int id, bool val) async {
     Database db = await DatabaseHelper.instance.database;
-    Map<String, dynamic> row = {
-      DatabaseHelper.columnId2 : id
-    };
-    if (val == true){
+    Map<String, dynamic> row = {DatabaseHelper.columnId2: id};
+    if (val == true) {
       for (var i = 0; i < ids.length; i++) {
         if (id == widget.id) {
-          await db.delete(
-            'cocktails',
-            where: 'id = ?',
-            whereArgs: [id]
-          );
+          await db.delete('cocktails', where: 'id = ?', whereArgs: [id]);
         }
       }
-    }
-    else {
+    } else {
       await db.insert(DatabaseHelper.table, row);
     }
     print(await db.query(DatabaseHelper.table));

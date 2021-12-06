@@ -81,13 +81,13 @@ class FavoritesPageState extends State<FavoritesPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.local_drink),
-            SizedBox(width: 10),
-            Text('Favorites'),
-          ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Favorites",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),
       ),
       body: GridView.builder(

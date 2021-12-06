@@ -15,13 +15,15 @@ class _ResultsState extends State<Results> {
     return Scaffold(
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => Navigator.pop(context, false),
+        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "Search Page",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),
-        title: const Center(
-          child: Text('Results'),
-        ),
-        backgroundColor: const Color(0xffA63542),
+        elevation: 0,
       ),
       body: Container(
         margin: const EdgeInsets.only(top: 10),

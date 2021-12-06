@@ -1,5 +1,6 @@
 import 'package:app/models/description.dart';
 import 'package:app/views/dictionary_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:app/views/home.dart';
@@ -10,6 +11,7 @@ import 'package:app/models/ingredient.dart';
 import 'package:app/resources/api_calls.dart';
 import 'package:app/global.dart';
 import 'package:app/data/tools.dart';
+import 'package:flutter/painting.dart';
 
 class DictionaryPage extends StatefulWidget {
   const DictionaryPage({Key? key}) : super(key: key);
@@ -76,16 +78,16 @@ class _DictionaryPageState extends State<DictionaryPage> {
     return Scaffold(
       backgroundColor: const Color(0xffE8DFDA),
       appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
         backgroundColor: Colors.transparent,
+        centerTitle: true,
         title: const Text(
-          'Dictionary',
-          style: TextStyle(color: Colors.black),
+          "Inventory",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),
+        elevation: 0,
       ),
       body: Container(
-        padding: EdgeInsets.only(top: 25),
         alignment: Alignment.center,
         child: Column(
           children: [
@@ -99,7 +101,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         const ScrollBehavior().copyWith(overscroll: false),
                     child: ListView(children: [
                       const ListTile(
-                        title: Text("Ingredients"),
+                        title: Text(
+                          "Ingredients",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       //ingredients list view
                       MediaQuery.removePadding(
@@ -114,7 +120,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                     ingredients[index], index);
                               })),
                       const ListTile(
-                        title: Text("Tools"),
+                        title: Text(
+                          "Tools",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       //tools list view
                       MediaQuery.removePadding(
@@ -158,10 +168,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
         onTap: () {
           _navigateToDetails(i.title, i.image, i.description, index);
         },
-        leading: SizedBox(
-          child: Image(
-              height: 55, width: 55, image: NetworkImage(i.image, scale: 1)),
-        ),
+        // leading: SizedBox(
+        //   child: Image(
+        //       height: 55, width: 55, image: NetworkImage(i.image, scale: 1)),
+        // ),
         title: Text(
           i.title,
           style: const TextStyle(color: Colors.black),
@@ -172,17 +182,17 @@ class _DictionaryPageState extends State<DictionaryPage> {
         onTap: () {
           _navigateToDetails(i.name, i.image, i.description, index);
         },
-        leading: i.image.isNotEmpty
-            ? SizedBox(
-                child: Image(
-                    height: 55,
-                    width: 55,
-                    image: NetworkImage(i.image, scale: 1)),
-              )
-            : const SizedBox(
-                height: 55,
-                width: 55,
-              ),
+        // leading: i.image.isNotEmpty
+        //     ? SizedBox(
+        //         child: Image(
+        //             height: 55,
+        //             width: 55,
+        //             image: NetworkImage(i.image, scale: 1)),
+        //       )
+        //     : const SizedBox(
+        //         height: 55,
+        //         width: 55,
+        //       ),
         title: Text(
           i.name,
           style: const TextStyle(color: Colors.black),

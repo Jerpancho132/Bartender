@@ -55,15 +55,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
-        backgroundColor: const Color(0xffA63542),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.local_drink),
-            SizedBox(width: 10),
-            Text('Popular Drinks'),
-          ],
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "All Drinks",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),
+        elevation: 0,
       ),
       body: GridView.builder(
           itemCount: _cocktails.length,

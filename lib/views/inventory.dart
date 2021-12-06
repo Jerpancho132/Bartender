@@ -85,7 +85,7 @@ class _InventoryState extends State<InventoryPage> {
     });
   }
 
-  update() async{
+  update() async {
     setState(() {
       ingredients;
       measurement;
@@ -95,20 +95,15 @@ class _InventoryState extends State<InventoryPage> {
   _insert(String p, int a, String m) async {
     Database db = await DatabaseHelper.instance.database;
     Map<String, dynamic> row = {
-      DatabaseHelper.columnName : p,
-      DatabaseHelper.columnAmount : a,
-      DatabaseHelper.columnMeasurement : m,
+      DatabaseHelper.columnName: p,
+      DatabaseHelper.columnAmount: a,
+      DatabaseHelper.columnMeasurement: m,
     };
 
     for (var i = 0; i < _ingredientsFilter.length; i++) {
       if (_ingredientsFilter[i] == p) {
-        await db.update(
-          'my_table', 
-          row,
-          where: 'name = ?',
-          whereArgs: [p]
-          );
-          return;
+        await db.update('my_table', row, where: 'name = ?', whereArgs: [p]);
+        return;
       }
     }
 
@@ -145,7 +140,7 @@ class _InventoryState extends State<InventoryPage> {
     );
   }
 
-   Future<List<Cocktail>> searchbyIngredients(List<Cocktail> f, List i) async {
+  Future<List<Cocktail>> searchbyIngredients(List<Cocktail> f, List i) async {
     List ids = [];
     if (i.isNotEmpty) {
       if (f.isNotEmpty) {
@@ -197,91 +192,92 @@ class _InventoryState extends State<InventoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xFFA4BFB3),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: const Text(
-            "Inventory",
-            style: TextStyle(fontFamily: 'Roboto', fontSize: 32),
-          ),
-          elevation: 0,
+      backgroundColor: const Color(0xffE8DFDA),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "Inventory",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Card(
-                color: const Color(0xFF2A8676),
-                child: ListTile(
-                    title: Row(children: [
-                  Expanded(
-                    flex: 3,
-                    child: SizedBox(
-                      child: ingredientsDropdownField(),
-                      height: 50,
-                    ),
+        elevation: 0,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Card(
+              color: const Color(0xffA63542),
+              child: ListTile(
+                  title: Row(children: [
+                Expanded(
+                  flex: 3,
+                  child: SizedBox(
+                    child: ingredientsDropdownField(),
+                    height: 50,
                   ),
-                  //refactored widget for inputting ingredients
-                  const Padding(
-                      padding: EdgeInsets.only(
-                          right: 10)), //seperate ingredient and amount
-                  Expanded(
-                    child: SizedBox(
-                      child: amountTextfield(),
-                      height: 30,
-                    ),
+                ),
+                //refactored widget for inputting ingredients
+                const Padding(
+                    padding: EdgeInsets.only(
+                        right: 10)), //seperate ingredient and amount
+                Expanded(
+                  child: SizedBox(
+                    child: amountTextfield(),
+                    height: 30,
                   ),
-                  Expanded(
-                      child: SizedBox(
-                    child: relatedMeasurement != null
-                        ? Text(
-                            relatedMeasurement,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white),
-                          )
-                        : const Text(""),
-                  )),
-                  //refactored widget for amount of items in bottom
-                  Expanded(
-                      child:
-                          insertItemButton()) //refactored widget find in bottom
-                ])),
-              ),
+                ),
+                Expanded(
+                    child: SizedBox(
+                  child: relatedMeasurement != null
+                      ? Text(
+                          relatedMeasurement,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.white),
+                        )
+                      : const Text(""),
+                )),
+                //refactored widget for amount of items in bottom
+                Expanded(
+                    child:
+                        insertItemButton()) //refactored widget find in bottom
+              ])),
             ),
-            ElevatedButton(
-                  key: const Key('navigateToResults'),
-                  onPressed: () async {
-                    //initialize a new list that first takes in the search list
-                    filter = searchList;
-                    //snackbar in case there the item returned empty
-                    final snackBar = SnackBar(
-                        content:
-                            const Text('Found no results from your search.'),
-                        action: SnackBarAction(
-                          label: 'hide',
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          },
-                        ));
-                    //Filter by given ingredients
-                    filter = await searchbyIngredients(filter, _ingredientsFilter);
-                    print(filter);
-                    filter.isNotEmpty
-                        ? _navigateToResultsPage(context)
-                        : ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
-                  child: const Text('See Recommended Cocktails')),
-            Expanded(
+          ),
+          ElevatedButton(
+              key: const Key('navigateToResults'),
+              style: ElevatedButton.styleFrom(primary: Color(0xffA63542)),
+              onPressed: () async {
+                //initialize a new list that first takes in the search list
+                filter = searchList;
+                //snackbar in case there the item returned empty
+                final snackBar = SnackBar(
+                    content: const Text('Found no results from your search.'),
+                    action: SnackBarAction(
+                      label: 'hide',
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      },
+                    ));
+                //Filter by given ingredients
+                filter = await searchbyIngredients(filter, _ingredientsFilter);
+                print(filter);
+                filter.isNotEmpty
+                    ? _navigateToResultsPage(context)
+                    : ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              child: const Text('See Recommended Cocktails')),
+          Expanded(
               child: ListView.builder(
                   key: Key(items.length.toString()),
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      return listOfIngredients(index);
-                    })),
-          ],
-        ),
-        bottomNavigationBar: FloatingNavbar(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return listOfIngredients(index);
+                  })),
+        ],
+      ),
+      bottomNavigationBar: FloatingNavbar(
         onTap: _onItemTap,
         currentIndex: _selectedIndex,
         items: [
@@ -298,7 +294,8 @@ class _InventoryState extends State<InventoryPage> {
         borderRadius: 10,
         fontSize: 10,
         //doesnt seem to have border & border color
-      ),);
+      ),
+    );
   }
 
   Widget ingredientsDropdownField() {
@@ -306,8 +303,7 @@ class _InventoryState extends State<InventoryPage> {
       dropdownColor: const Color(0xFF31A471),
       style: const TextStyle(color: Colors.white),
       items: ingredients.map((String value) {
-        return DropdownMenuItem(
-          child: Text(value), value: value);
+        return DropdownMenuItem(child: Text(value), value: value);
       }).toList(),
       value: selectedIngredient,
       onChanged: (dynamic val) {
@@ -318,12 +314,13 @@ class _InventoryState extends State<InventoryPage> {
         });
       },
       isExpanded: true,
-              hint: const Text(
-                "Choose Ingredient",
-                style: TextStyle(color: Colors.white),
-              ),
+      hint: const Text(
+        "Choose Ingredient",
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
+
   //widget to insert given amount of ingredient.
   Widget amountTextfield() => TextField(
         key: const Key("amountText"),
@@ -346,7 +343,8 @@ class _InventoryState extends State<InventoryPage> {
   Widget insertItemButton() => ElevatedButton(
       key: const Key("insertButton"),
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xFF31A471)),
+          alignment: Alignment.center,
+          backgroundColor: MaterialStateProperty.all(const Color(0xffD98C82)),
           shape: MaterialStateProperty.all(const CircleBorder())),
       onPressed: () {
         setState(() {
@@ -373,7 +371,7 @@ class _InventoryState extends State<InventoryPage> {
       );
   Widget listCard(String i, int a, String m, int index) => Card(
         key: Key('List$index'),
-        color: const Color(0xFF2A8676),
+        color: const Color(0xffA63542),
         child: ListTile(
             title: Row(
           children: [

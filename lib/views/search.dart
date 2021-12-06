@@ -128,12 +128,14 @@ class _SearchPageState extends State<SearchPage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFE8DFDA),
       appBar: AppBar(
-        backgroundColor: const Color(0xffA63542),
-        title: Row(
-          children: const [
-            Text('Search Page'),
-          ],
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "Search Page",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -158,6 +160,8 @@ class _SearchPageState extends State<SearchPage> {
               ),
               ElevatedButton(
                   key: const Key('navigateToResults'),
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xffA63542)),
                   onPressed: () async {
                     //initialize a new list that first takes in the search list
                     filter = searchList;
