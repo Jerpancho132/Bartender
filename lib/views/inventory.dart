@@ -105,6 +105,7 @@ class _InventoryState extends State<InventoryPage> {
     for (var i = 0; i < _ingredientsFilter.length; i++) {
       if (_ingredientsFilter[i] == p) {
         await db.update('my_table', row, where: 'name = ?', whereArgs: [p]);
+        repeat++;
       }
     }
 

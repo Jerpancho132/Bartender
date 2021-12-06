@@ -185,3 +185,16 @@ Future<Cocktail> getSingleCocktailById(http.Client client, int id) async {
     throw Exception('did not get response');
   }
 }
+
+Future<List<Cocktail>> getCocktailByInventory(
+    http.Client client, String name, double id) async {
+  final response = await client
+      .get(Uri.parse('http://10.0.2.2:8080/api/cocktails/$name/$id'));
+  if (response.statusCode == 200) {
+    //gets json turn it to a iterable list
+    Iterable body = json.decode(response.body);
+    return body.map((e) => Cocktail.fromJson(e)).toList();
+  } else {
+    throw Exception('did not get response');
+  }
+}
