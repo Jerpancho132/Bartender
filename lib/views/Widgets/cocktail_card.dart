@@ -24,7 +24,8 @@ class _CocktailCardState extends State<CocktailCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final result = await Navigator.of(context).push(
+        await Navigator.push(
+          context,
           MaterialPageRoute(
               builder: (context) => Details(
                     id: widget.cocktailId,
@@ -33,9 +34,6 @@ class _CocktailCardState extends State<CocktailCard> {
                     instructions: widget.instructions,
                   )),
         );
-        if (result) {
-          setState(() {});
-        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),

@@ -39,6 +39,7 @@ dependencies:
   http: ^0.13.4
   csv: ^5.0.1
   auto_size_text: ^3.0.0
+  sqflite:
 
 dev_dependencies:
   integration_test:
