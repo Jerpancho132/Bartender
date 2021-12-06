@@ -32,10 +32,11 @@ class _ResultsState extends State<Results> {
                 itemCount: widget.result.length,
                 itemBuilder: (BuildContext c, i) {
                   return CocktailCard(
-                      cocktailId: widget.result[i].id,
-                      cocktailName: widget.result[i].title,
-                      thumbnailUrl: widget.result[i].image,
-                      instructions: widget.result[i].instruction);
+                    cocktailId: widget.result[i].id,
+                    cocktailName: widget.result[i].name,
+                    thumbnailUrl: widget.result[i].image,
+                    instructions: widget.result[i].instruction,
+                  );
                 })
             : const Center(
                 child: Text("Nothing"),

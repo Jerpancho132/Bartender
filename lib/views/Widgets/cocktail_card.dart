@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app/views/details.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CocktailCard extends StatelessWidget {
+class CocktailCard extends StatefulWidget {
   final int cocktailId;
   final String cocktailName;
   final String thumbnailUrl;
@@ -14,20 +14,28 @@ class CocktailCard extends StatelessWidget {
     required this.thumbnailUrl,
     required this.instructions,
   }) : super(key: key);
+
+  @override
+  State<CocktailCard> createState() => _CocktailCardState();
+}
+
+class _CocktailCardState extends State<CocktailCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
+      onTap: () async {
+        final result = await Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) => Details(
-                    id: cocktailId,
-                    title: cocktailName,
-                    imgUrl: thumbnailUrl,
-                    instructions: instructions,
+                    id: widget.cocktailId,
+                    title: widget.cocktailName,
+                    imgUrl: widget.thumbnailUrl,
+                    instructions: widget.instructions,
                   )),
         );
+        if (result) {
+          setState(() {});
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -48,7 +56,7 @@ class CocktailCard extends StatelessWidget {
             ),
           ],
           image: DecorationImage(
-            image: NetworkImage(thumbnailUrl),
+            image: NetworkImage(widget.thumbnailUrl),
             //cant decide between cover or fill on this one
             fit: BoxFit.fill,
           ),
@@ -58,7 +66,7 @@ class CocktailCard extends StatelessWidget {
             Align(
               child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(cocktailName,
+                  child: Text(widget.cocktailName,
                       style: GoogleFonts.sansita(
                           textStyle: const TextStyle(
                               color: Color(0xff2A8676),
