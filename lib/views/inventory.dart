@@ -94,6 +94,7 @@ class _InventoryState extends State<InventoryPage> {
   }
 
   _insert(String p, int a, String m) async {
+    int repeat = 0;
     Database db = await DatabaseHelper.instance.database;
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: p,
@@ -104,16 +105,18 @@ class _InventoryState extends State<InventoryPage> {
     for (var i = 0; i < _ingredientsFilter.length; i++) {
       if (_ingredientsFilter[i] == p) {
         await db.update('my_table', row, where: 'name = ?', whereArgs: [p]);
-        return;
       }
     }
 
-    await db.insert(DatabaseHelper.table, row);
+    if (repeat == 0) {
+      await db.insert(DatabaseHelper.table, row);
+    }
   }
 
   Future<void> listF() async {
     final datalist = await DatabaseHelper.instance.getList();
     List<MyInventory> data = [];
+    _ingredientsFilter = [];
     String inv = '';
     int a;
     String m;
@@ -125,6 +128,7 @@ class _InventoryState extends State<InventoryPage> {
       _ingredientsFilter.add(datalist[i]['name']);
     }
     setState(() {
+      items = [];
       items = data;
     });
 
@@ -139,6 +143,7 @@ class _InventoryState extends State<InventoryPage> {
       where: 'name = ?',
       whereArgs: [product],
     );
+    _ingredientsFilter.remove(product);
   }
 
   Future<List<Cocktail>> searchbyIngredients(List<Cocktail> f, List i) async {
