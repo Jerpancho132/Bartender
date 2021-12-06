@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:app/models/ingredient.dart';
 
 class IngredientDetailsPage extends StatefulWidget {
   final String name;

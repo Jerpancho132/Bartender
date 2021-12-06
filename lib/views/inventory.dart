@@ -300,7 +300,7 @@ class _InventoryState extends State<InventoryPage> {
 
   Widget ingredientsDropdownField() {
     return DropdownButton(
-      dropdownColor: const Color(0xFF31A471),
+      dropdownColor: const Color(0xFFD98C82),
       style: const TextStyle(color: Colors.white),
       items: ingredients.map((String value) {
         return DropdownMenuItem(child: Text(value), value: value);
