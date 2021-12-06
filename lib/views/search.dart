@@ -131,7 +131,7 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text(
-          "Search Page",
+          "Search",
           style: TextStyle(
               fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),

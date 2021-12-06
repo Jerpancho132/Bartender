@@ -19,7 +19,7 @@ class _ResultsState extends State<Results> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text(
-          "Search Page",
+          "Result",
           style: TextStyle(
               fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),

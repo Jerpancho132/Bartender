@@ -81,7 +81,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text(
-          "Inventory",
+          "Dictionary",
           style: TextStyle(
               fontFamily: 'Roboto', fontSize: 32, color: Colors.black),
         ),
