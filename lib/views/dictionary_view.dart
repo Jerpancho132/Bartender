@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class IngredientDetailsPage extends StatefulWidget {
   final String name;
@@ -40,7 +42,7 @@ class _IngredientDetailsPageState extends State<IngredientDetailsPage> {
             widget.image.isNotEmpty
                 ? Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 350,
+                    height: 300,
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             fit: BoxFit.contain,
@@ -49,14 +51,25 @@ class _IngredientDetailsPageState extends State<IngredientDetailsPage> {
                 : Container(
                     padding: const EdgeInsets.all(10),
                   ), //empty container in case of empty images
-            Text(
-              widget.name,
-              style: const TextStyle(color: Colors.black),
+            const Padding(padding: EdgeInsets.all(7)),
+            Flexible(
+              child: Text(
+                widget.name,
+                style: GoogleFonts.ubuntu(
+                    textStyle: Theme.of(context).textTheme.headline5),
+              ),
             ),
-            Text(
-              widget.description,
-              style: const TextStyle(color: Colors.black),
-            )
+            const Padding(padding: EdgeInsets.all(12)),
+            Flexible(
+                flex: 2,
+                child: AutoSizeText(
+                  widget.description,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.ubuntu(
+                      textStyle: Theme.of(context).textTheme.bodyText1,
+                      fontSize: 15,
+                      height: 1.6),
+                ))
           ],
         ),
       ),

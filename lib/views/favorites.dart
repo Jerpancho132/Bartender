@@ -1,3 +1,4 @@
+import 'package:app/views/details.dart';
 import 'package:app/views/dictionary.dart';
 import 'package:app/views/search.dart';
 import 'package:app/views/inventory.dart';
@@ -8,7 +9,7 @@ import 'package:app/models/cocktail.dart';
 import 'package:app/resources/api_calls.dart';
 import 'package:app/global.dart' as global;
 import 'package:app/resources/favorites_helper.dart';
-import 'package:app/views/Widgets/cocktail_card.dart';
+import 'package:app/views/Widgets/favorites_card.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
@@ -99,12 +100,11 @@ class FavoritesPageState extends State<FavoritesPage> {
               crossAxisCount: 2),
           itemBuilder: (BuildContext context, int index) {
             return Center(
-                child: CocktailCard(
-              cocktailId: cocktails[index].id,
-              cocktailName: cocktails[index].title,
-              thumbnailUrl: cocktails[index].image,
-              instructions: cocktails[index].instruction,
-            ));
+                child: redirectToDetails(
+                    cocktails[index].id,
+                    cocktails[index].name,
+                    cocktails[index].image,
+                    cocktails[index].instruction));
           }),
       bottomNavigationBar: FloatingNavbar(
         onTap: _onItemTap,
@@ -126,4 +126,23 @@ class FavoritesPageState extends State<FavoritesPage> {
       ),
     );
   }
+
+  Widget redirectToDetails(
+          int id, String name, String image, String instructions) =>
+      GestureDetector(
+        onTap: () async {
+          final results = await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Details(
+                  id: id,
+                  title: name,
+                  imgUrl: image,
+                  instructions: instructions)));
+          if (results) {
+            setState(() {
+              searchbyId();
+            });
+          }
+        },
+        child: favoritesCard(id, name, image, instructions, context),
+      );
 }

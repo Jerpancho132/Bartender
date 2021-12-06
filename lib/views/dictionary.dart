@@ -102,6 +102,24 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     child: ListView(children: [
                       const ListTile(
                         title: Text(
+                          "Tools",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      //tools list view
+                      MediaQuery.removePadding(
+                          removeTop: true,
+                          context: context,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: tools.length,
+                              itemBuilder: (BuildContext c, index) {
+                                return descriptionTile(tools[index], index);
+                              })),
+                      const ListTile(
+                        title: Text(
                           "Ingredients",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
@@ -118,24 +136,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                               itemBuilder: (BuildContext c, index) {
                                 return ingredientsTile(
                                     ingredients[index], index);
-                              })),
-                      const ListTile(
-                        title: Text(
-                          "Tools",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      //tools list view
-                      MediaQuery.removePadding(
-                          removeTop: true,
-                          context: context,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: tools.length,
-                              itemBuilder: (BuildContext c, index) {
-                                return descriptionTile(tools[index], index);
                               })),
                     ])),
               ),
@@ -168,6 +168,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         onTap: () {
           _navigateToDetails(i.title, i.image, i.description, index);
         },
+        //removed leading images to reduce lag.
         // leading: SizedBox(
         //   child: Image(
         //       height: 55, width: 55, image: NetworkImage(i.image, scale: 1)),
