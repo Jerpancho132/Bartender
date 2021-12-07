@@ -95,9 +95,8 @@ class _SearchPageState extends State<SearchPage> {
     'Collins glass',
     'Shot glass',
     'Wine glass',
-    'Sour glass',
     'Brandy snifter',
-    'Cordial galss',
+    'Cordial glass',
     'Coffee cup',
     'Coffee mug'
   ];

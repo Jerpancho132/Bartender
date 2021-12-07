@@ -62,13 +62,16 @@ class _IngredientDetailsPageState extends State<IngredientDetailsPage> {
             const Padding(padding: EdgeInsets.all(12)),
             Flexible(
                 flex: 2,
-                child: AutoSizeText(
-                  widget.description,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.ubuntu(
-                      textStyle: Theme.of(context).textTheme.bodyText1,
-                      fontSize: 15,
-                      height: 1.6),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: AutoSizeText(
+                    widget.description,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.ubuntu(
+                        textStyle: Theme.of(context).textTheme.bodyText1,
+                        fontSize: 15,
+                        height: 1.6),
+                  ),
                 ))
           ],
         ),
