@@ -157,6 +157,7 @@ class _DetailsState extends State<Details> {
                                 width: 300,
                                 height: 300,
                                 decoration: BoxDecoration(
+                                    color: Colors.black,
                                     borderRadius: BorderRadius.circular(15),
                                     border: Border.all(
                                       color: Color(0xff2A8676),
