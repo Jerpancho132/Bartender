@@ -104,7 +104,8 @@ class FavoritesPageState extends State<FavoritesPage> {
                     cocktails[index].id,
                     cocktails[index].name,
                     cocktails[index].image,
-                    cocktails[index].instruction));
+                    cocktails[index].instruction,
+                    cocktails[index].glasstype));
           }),
       bottomNavigationBar: FloatingNavbar(
         onTap: _onItemTap,
@@ -127,22 +128,24 @@ class FavoritesPageState extends State<FavoritesPage> {
     );
   }
 
-  Widget redirectToDetails(
-          int id, String name, String image, String instructions) =>
+  Widget redirectToDetails(int id, String name, String image,
+          String instructions, String glass) =>
       GestureDetector(
         onTap: () async {
           final results = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => Details(
-                  id: id,
-                  title: name,
-                  imgUrl: image,
-                  instructions: instructions)));
+                    id: id,
+                    title: name,
+                    imgUrl: image,
+                    instructions: instructions,
+                    glass: glass,
+                  )));
           if (results) {
             setState(() {
               searchbyId();
             });
           }
         },
-        child: favoritesCard(id, name, image, instructions, context),
+        child: favoritesCard(id, name, image, instructions, glass, context),
       );
 }

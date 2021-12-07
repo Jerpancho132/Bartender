@@ -38,6 +38,7 @@ class _ResultsState extends State<Results> {
                     cocktailName: widget.result[i].name,
                     thumbnailUrl: widget.result[i].image,
                     instructions: widget.result[i].instruction,
+                    glassType: widget.result[i].glasstype,
                   );
                 })
             : const Center(

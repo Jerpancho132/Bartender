@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> {
               cocktailName: _cocktails[index].title,
               thumbnailUrl: _cocktails[index].image,
               instructions: _cocktails[index].instruction,
+              glassType: _cocktails[index].glasstype,
             ));
           }),
       bottomNavigationBar: FloatingNavbar(

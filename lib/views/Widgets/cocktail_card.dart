@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CocktailCard extends StatefulWidget {
   final int cocktailId;
+  final String glassType;
   final String cocktailName;
   final String thumbnailUrl;
   final String instructions;
@@ -13,6 +14,7 @@ class CocktailCard extends StatefulWidget {
     required this.cocktailName,
     required this.thumbnailUrl,
     required this.instructions,
+    required this.glassType,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class _CocktailCardState extends State<CocktailCard> {
                     title: widget.cocktailName,
                     imgUrl: widget.thumbnailUrl,
                     instructions: widget.instructions,
+                    glass: widget.glassType,
                   )),
         );
       },

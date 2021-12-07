@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,12 +15,14 @@ class Details extends StatefulWidget {
   final String title;
   final String imgUrl;
   final String instructions;
+  final String glass;
   const Details(
       {Key? key,
       required this.id,
       required this.title,
       required this.imgUrl,
-      required this.instructions})
+      required this.instructions,
+      required this.glass})
       : super(key: key);
 
   @override
@@ -99,114 +102,158 @@ class _DetailsState extends State<Details> {
           crossAxisAlignment: CrossAxisAlignment.start,
           //image detail
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                padding: const EdgeInsets.only(top: 25),
-                iconSize: 35,
-                icon: const Icon(Icons.arrow_back),
-                color: Color(0xffA63542),
-              ),
-              Flexible(
-                child: Text(title,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.sansita(
-                        textStyle: const TextStyle(
-                            color: Color(0xff2A8676),
-                            letterSpacing: .5,
-                            fontSize: 30))),
-              ),
-              IconButton(
-                icon: Icon(selected ? Icons.star : Icons.star_border),
-                onPressed: () {
-                  setState(() {
-                    insertFavorite(widget.id, selected);
-                    selected = !selected;
-                  });
-                },
-                padding: const EdgeInsets.only(top: 25),
-                iconSize: 35,
-                color: Color(0xffA63542),
-              ),
-            ]),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: 300,
-                height: 300,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: Color(0xff2A8676),
-                      width: 3,
+            Flexible(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      padding: const EdgeInsets.only(top: 25),
+                      iconSize: 35,
+                      icon: const Icon(Icons.arrow_back),
+                      color: Color(0xffA63542),
                     ),
-                    image: DecorationImage(
-                        image: NetworkImage(imgUrl), fit: BoxFit.fill)),
-              ),
+                    Flexible(
+                      child: Text(title,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.sansita(
+                              textStyle: const TextStyle(
+                                  color: Color(0xff2A8676),
+                                  letterSpacing: .5,
+                                  fontSize: 30))),
+                    ),
+                    IconButton(
+                      icon: Icon(selected ? Icons.star : Icons.star_border),
+                      onPressed: () {
+                        setState(() {
+                          insertFavorite(widget.id, selected);
+                          selected = !selected;
+                        });
+                      },
+                      padding: const EdgeInsets.only(top: 25),
+                      iconSize: 35,
+                      color: Color(0xffA63542),
+                    ),
+                  ]),
             ),
             //Make new container here so the rest of the view scrolls together
-
             //list of ingredients
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Ingredients",
-                      style: GoogleFonts.sansita(
-                          textStyle: const TextStyle(
-                              color: Color(0xff2A8676),
-                              letterSpacing: .5,
-                              fontSize: 30))),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: MediaQuery.removePadding(
-                        removeTop: true,
-                        context: context,
-                        child: GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: _ingredients.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: 3,
-                                    crossAxisSpacing: 2,
-                                    crossAxisCount: 3),
-                            itemBuilder: (BuildContext context, int index) {
-                              return Center(
-                                  child: IngredientCard(
-                                ingredient: _ingredients[index].ingredient,
-                                amount: _ingredients[index].amount.toDouble(),
-                                unit: _ingredients[index].unit,
-                              ));
-                            })),
-                  ),
-                  Text("Instructions",
-                      style: GoogleFonts.sansita(
-                          textStyle: const TextStyle(
-                              color: Color(0xff2A8676),
-                              letterSpacing: .5,
-                              fontSize: 30))),
-                  Container(
-                    width: 400,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Color(0xffD98C82),
-                      borderRadius: BorderRadius.circular(15),
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 75,
+              child: MediaQuery.removePadding(
+                  removeTop: true,
+                  context: context,
+                  child: SafeArea(
+                    bottom: true,
+                    child: ListView(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 300,
+                            height: 300,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                  color: Color(0xff2A8676),
+                                  width: 3,
+                                ),
+                                image: DecorationImage(
+                                    image: NetworkImage(imgUrl),
+                                    fit: BoxFit.fill)),
+                          ),
+                        ),
+                        Text("Glass",
+                            style: GoogleFonts.sansita(
+                                textStyle: const TextStyle(
+                                    color: Color(0xff2A8676),
+                                    letterSpacing: .5,
+                                    fontSize: 30))),
+                        GridView(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  childAspectRatio: 3,
+                                  crossAxisSpacing: 2,
+                                  crossAxisCount: 3),
+                          children: [glassContainer()],
+                        ),
+                        Text("Ingredients",
+                            style: GoogleFonts.sansita(
+                                textStyle: const TextStyle(
+                                    color: Color(0xff2A8676),
+                                    letterSpacing: .5,
+                                    fontSize: 30))),
+                        MediaQuery.removePadding(
+                            removeTop: true,
+                            context: context,
+                            child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: _ingredients.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        childAspectRatio: 3,
+                                        crossAxisSpacing: 2,
+                                        crossAxisCount: 3),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Center(
+                                      child: IngredientCard(
+                                    ingredient: _ingredients[index].ingredient,
+                                    amount:
+                                        _ingredients[index].amount.toDouble(),
+                                    unit: _ingredients[index].unit,
+                                  ));
+                                })),
+                        Text("Instructions",
+                            style: GoogleFonts.sansita(
+                                textStyle: const TextStyle(
+                                    color: Color(0xff2A8676),
+                                    letterSpacing: .5,
+                                    fontSize: 30))),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          height: MediaQuery.of(context).size.height / 5.2,
+                          alignment: Alignment.topLeft,
+                          decoration: BoxDecoration(
+                            color: Color(0xffD98C82),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: AutoSizeText(inst,
+                              textAlign: TextAlign.left,
+                              style: GoogleFonts.sansita(
+                                  textStyle: const TextStyle(
+                                      color: Colors.black,
+                                      letterSpacing: .5,
+                                      fontSize: 15))),
+                        ),
+                      ],
                     ),
-                    child: Text(inst,
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        style: GoogleFonts.sansita(
-                            textStyle: const TextStyle(
-                                color: Colors.black,
-                                letterSpacing: .5,
-                                fontSize: 15))),
-                  ),
-                ],
-              ),
-            ),
+                  )),
+            )
           ],
         ));
   }
+
+  Widget glassContainer() => Container(
+        width: 30,
+        height: 50,
+        padding: const EdgeInsets.all(2),
+        margin: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color: const Color(0xffD98C82),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Align(
+          child: AutoSizeText(
+            widget.glass,
+            maxLines: 3,
+            minFontSize: 10,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
 }

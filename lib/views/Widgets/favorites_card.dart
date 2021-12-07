@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget favoritesCard(int id, String name, String image, String instructions,
-        BuildContext context) =>
+        String glass, BuildContext context) =>
     Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       width: MediaQuery.of(context).size.width,
