@@ -141,99 +141,104 @@ class _DetailsState extends State<Details> {
             //Make new container here so the rest of the view scrolls together
             //list of ingredients
             SizedBox(
-              height: MediaQuery.of(context).size.height - 75,
-              child: MediaQuery.removePadding(
-                  removeTop: true,
-                  context: context,
-                  child: SafeArea(
-                    bottom: true,
-                    child: ListView(
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: 300,
-                            height: 300,
-                            decoration: BoxDecoration(
+                height: MediaQuery.of(context).size.height - 75,
+                child: ScrollConfiguration(
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  child: MediaQuery.removePadding(
+                      removeTop: true,
+                      context: context,
+                      child: SafeArea(
+                        bottom: true,
+                        child: ListView(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                width: 300,
+                                height: 300,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: Color(0xff2A8676),
+                                      width: 3,
+                                    ),
+                                    image: DecorationImage(
+                                        image: NetworkImage(imgUrl),
+                                        fit: BoxFit.fill)),
+                              ),
+                            ),
+                            Text("Glass",
+                                style: GoogleFonts.sansita(
+                                    textStyle: const TextStyle(
+                                        color: Color(0xff2A8676),
+                                        letterSpacing: .5,
+                                        fontSize: 30))),
+                            GridView(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio: 3,
+                                      crossAxisSpacing: 2,
+                                      crossAxisCount: 3),
+                              children: [glassContainer()],
+                            ),
+                            Text("Ingredients",
+                                style: GoogleFonts.sansita(
+                                    textStyle: const TextStyle(
+                                        color: Color(0xff2A8676),
+                                        letterSpacing: .5,
+                                        fontSize: 30))),
+                            MediaQuery.removePadding(
+                                removeTop: true,
+                                context: context,
+                                child: GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: _ingredients.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            childAspectRatio: 3,
+                                            crossAxisSpacing: 2,
+                                            crossAxisCount: 3),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Center(
+                                          child: IngredientCard(
+                                        ingredient:
+                                            _ingredients[index].ingredient,
+                                        amount: _ingredients[index]
+                                            .amount
+                                            .toDouble(),
+                                        unit: _ingredients[index].unit,
+                                      ));
+                                    })),
+                            Text("Instructions",
+                                style: GoogleFonts.sansita(
+                                    textStyle: const TextStyle(
+                                        color: Color(0xff2A8676),
+                                        letterSpacing: .5,
+                                        fontSize: 30))),
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              height: MediaQuery.of(context).size.height / 5.2,
+                              alignment: Alignment.topLeft,
+                              decoration: BoxDecoration(
+                                color: Color(0xffD98C82),
                                 borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: Color(0xff2A8676),
-                                  width: 3,
-                                ),
-                                image: DecorationImage(
-                                    image: NetworkImage(imgUrl),
-                                    fit: BoxFit.fill)),
-                          ),
+                              ),
+                              child: AutoSizeText(inst,
+                                  textAlign: TextAlign.left,
+                                  style: GoogleFonts.sansita(
+                                      textStyle: const TextStyle(
+                                          color: Colors.black,
+                                          letterSpacing: .5,
+                                          fontSize: 15))),
+                            ),
+                          ],
                         ),
-                        Text("Glass",
-                            style: GoogleFonts.sansita(
-                                textStyle: const TextStyle(
-                                    color: Color(0xff2A8676),
-                                    letterSpacing: .5,
-                                    fontSize: 30))),
-                        GridView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 3,
-                                  crossAxisSpacing: 2,
-                                  crossAxisCount: 3),
-                          children: [glassContainer()],
-                        ),
-                        Text("Ingredients",
-                            style: GoogleFonts.sansita(
-                                textStyle: const TextStyle(
-                                    color: Color(0xff2A8676),
-                                    letterSpacing: .5,
-                                    fontSize: 30))),
-                        MediaQuery.removePadding(
-                            removeTop: true,
-                            context: context,
-                            child: GridView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: _ingredients.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        childAspectRatio: 3,
-                                        crossAxisSpacing: 2,
-                                        crossAxisCount: 3),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Center(
-                                      child: IngredientCard(
-                                    ingredient: _ingredients[index].ingredient,
-                                    amount:
-                                        _ingredients[index].amount.toDouble(),
-                                    unit: _ingredients[index].unit,
-                                  ));
-                                })),
-                        Text("Instructions",
-                            style: GoogleFonts.sansita(
-                                textStyle: const TextStyle(
-                                    color: Color(0xff2A8676),
-                                    letterSpacing: .5,
-                                    fontSize: 30))),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          height: MediaQuery.of(context).size.height / 5.2,
-                          alignment: Alignment.topLeft,
-                          decoration: BoxDecoration(
-                            color: Color(0xffD98C82),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: AutoSizeText(inst,
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.sansita(
-                                  textStyle: const TextStyle(
-                                      color: Colors.black,
-                                      letterSpacing: .5,
-                                      fontSize: 15))),
-                        ),
-                      ],
-                    ),
-                  )),
-            )
+                      )),
+                ))
           ],
         ));
   }
